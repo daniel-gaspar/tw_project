@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Mancala for TW2021/2022</title>
+<link rel="stylesheet" href="files/styles.css" type="text/css">
+<script src="files/scripts.js"></script>
+</head>
+<body>
+	<h1>Mancala</h1>
+
+	<div class="selectionBar">
+		<!--  <button class="selectionBarItem barButton" onClick="openTab('gameRules')">Rules</button>
+		<button class="selectionBarItem barButton" onClick="openTab('gameScores')">Scores</button>
+		<button class="selectionBarItem barButton"
+			onClick="openTab('gameSettings')">Game Settings</button>-->
+		<div 
+	</div>
+	<div id="gameSettings" class="container tab" style="display: none">
+		<form action=settingsRegister method=post>
+			<div id="settingsPits">
+				N# of Pits: <label for="pitsFour">4<br /> <input
+					type="radio" id="pitsFour" value="4" name="settingsPitsRadio" /></label> <label
+					for="pitsSix">6<br /> <input type="radio" id="pitsSix"
+					value="6" name="settingsPitsRadio" /></label> <label for="pitsEight">8<br />
+					<input type="radio" id="pitsEight" value="8"
+					name="settingsPitsRadio" /></label> <label for="pitsTen">10<br />
+					<input type="radio" id="pitsTen" value="10"
+					name="settingsPitsRadio" /></label>
+			</div>
+			<div id="settingsSeeds">
+				Initial Seed N#: <input type="number" id="numberSeeds" />
+			</div>
+			<div id="settingsPlayForm">
+				Play against PC: <input type="radio" id="playPC" value="playPC"
+					name="settingsPlayPCRadio"><label for="playPC">Yes</label>
+				<input type="radio" id="playHuman" value="playHuman"
+					name="settingsPlayPCRadio"><label for="playHuman">No</label>
+			</div>
+			<div id="settingsDifficulty">
+				Difficulty: <select size=1 id="difficultySelector">
+					<option value="1">1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+				</select>
+			</div>
+		</form>
+	</div>
+
+	<div id="authentication"></div>
+	<div id="playTable"></div>
+
+
+</body>
+</html>
