@@ -6,26 +6,25 @@
 <script src="files/scripts.js"></script>
 </head>
 <body>
-	<h1>Mancala</h1>
-
-	<div class="selectionBar">
-		<!--  <button class="selectionBarItem barButton" onClick="openTab('gameRules')">Rules</button>
+	<div class="topBar" id="floatingLoginButton"></div>
+	<div class="topBar" id="selectionBar">
+		<button class="selectionBarItem barButton" onClick="openTab('gameRules')">Rules</button>
 		<button class="selectionBarItem barButton" onClick="openTab('gameScores')">Scores</button>
 		<button class="selectionBarItem barButton"
-			onClick="openTab('gameSettings')">Game Settings</button>-->
-		<div 
+			onClick="openTab('gameSettings')">Game Settings</button>
 	</div>
-	<div id="gameSettings" class="container tab" style="display: none">
+
+	<div id="gameSettings" class="container tab">
 		<form action=settingsRegister method=post>
 			<div id="settingsPits">
-				N# of Pits: <label for="pitsFour">4<br /> <input
-					type="radio" id="pitsFour" value="4" name="settingsPitsRadio" /></label> <label
+				N# of Pits: <span><label for="pitsFour">4<br /> <input
+					type="radio" id="pitsFour" value="4" name="settingsPitsRadio" /></label></span> <span><label
 					for="pitsSix">6<br /> <input type="radio" id="pitsSix"
-					value="6" name="settingsPitsRadio" /></label> <label for="pitsEight">8<br />
+					value="6" name="settingsPitsRadio" /></label></span> <span><label for="pitsEight">8<br />
 					<input type="radio" id="pitsEight" value="8"
-					name="settingsPitsRadio" /></label> <label for="pitsTen">10<br />
+					name="settingsPitsRadio" /></label></span> <span><label for="pitsTen">10<br />
 					<input type="radio" id="pitsTen" value="10"
-					name="settingsPitsRadio" /></label>
+					name="settingsPitsRadio" /></label></span>
 			</div>
 			<div id="settingsSeeds">
 				Initial Seed N#: <input type="number" id="numberSeeds" />
@@ -51,6 +50,11 @@
 
 	<div id="authentication"></div>
 	<div id="playTable"></div>
+
+	<h1>Mancala</h1>
+
+	
+	
 
 
 </body>
