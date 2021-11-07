@@ -1,3 +1,7 @@
-.tab {
+.tab, .rulesListContainer {
     display: none;
+}
+
+#selectionBar {
+    display: flex;
 }

@@ -1,61 +1,241 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<title>Mancala for TW2021/2022</title>
-<link rel="stylesheet" href="files/styles.css" type="text/css">
-<script src="files/scripts.js"></script>
-</head>
-<body>
-	<div class="topBar" id="floatingLoginButton"></div>
-	<div class="topBar" id="selectionBar">
-		<button class="selectionBarItem barButton" onClick="openTab('gameRules')">Rules</button>
-		<button class="selectionBarItem barButton" onClick="openTab('gameScores')">Scores</button>
-		<button class="selectionBarItem barButton"
-			onClick="openTab('gameSettings')">Game Settings</button>
-	</div>
+  <head>
+    <title>Mancala for TW2021/2022</title>
+    <link rel="stylesheet" href="files/styles.css" type="text/css" />
+    <script src="files/scripts.js"></script>
+    <meta charset="UTF-8" />
+  </head>
+  <body>
+    <div class="topBar">
+      <div class="topBarItem" id="floatingLoginButton"></div>
+      <div class="topBarItem" id="selectionBar">
+        <div
+          class="selectionBarItem barButton"
+          onClick="openTab('tabGameRules')"
+        >
+          Rules
+        </div>
+        <div
+          class="selectionBarItem barButton"
+          onClick="openTab('tabGameScores')"
+        >
+          Scores
+        </div>
+        <div
+          class="selectionBarItem barButton"
+          onClick="openTab('tabGameSettings')"
+        >
+          Game Settings
+        </div>
+      </div>
 
-	<div id="gameSettings" class="container tab">
-		<form action=settingsRegister method=post>
-			<div id="settingsPits">
-				N# of Pits: <span><label for="pitsFour">4<br /> <input
-					type="radio" id="pitsFour" value="4" name="settingsPitsRadio" /></label></span> <span><label
-					for="pitsSix">6<br /> <input type="radio" id="pitsSix"
-					value="6" name="settingsPitsRadio" /></label></span> <span><label for="pitsEight">8<br />
-					<input type="radio" id="pitsEight" value="8"
-					name="settingsPitsRadio" /></label></span> <span><label for="pitsTen">10<br />
-					<input type="radio" id="pitsTen" value="10"
-					name="settingsPitsRadio" /></label></span>
-			</div>
-			<div id="settingsSeeds">
-				Initial Seed N#: <input type="number" id="numberSeeds" />
-			</div>
-			<div id="settingsPlayForm">
-				Play against PC: <input type="radio" id="playPC" value="playPC"
-					name="settingsPlayPCRadio"><label for="playPC">Yes</label>
-				<input type="radio" id="playHuman" value="playHuman"
-					name="settingsPlayPCRadio"><label for="playHuman">No</label>
-			</div>
-			<div id="settingsDifficulty">
-				Difficulty: <select size=1 id="difficultySelector">
-					<option value="1">1</option>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-					<option value="6">6</option>
-				</select>
-			</div>
-		</form>
-	</div>
+      <div id="tabGameRules" class="container tab">
+        <div
+          id="tabGameRulesTableToggle"
+          class="rulesList"
+          onClick="toggleRuleDisplay('tabGameRulesTable')"
+        >
+          Table
+        </div>
+        <div id="tabGameRulesTable" class="rulesListContainer">
+          <p>2 sets of central pits aligned</p>
+          <p>Sided by 2 containers - larger pits</p>
+          <p>Each player controls the pits on their side...</p>
+          <p>... as well as the container to their right</p>
+          <p>The number of central cavities may vary</p>
+        </div>
+        <div
+          id="tabGameRulesPiecesToggle"
+          class="rulesList"
+          onClick="toggleRuleDisplay('tabGameRulesPieces')"
+        >
+          Pieces
+        </div>
+        <div id="tabGameRulesPieces" class="rulesListContainer">
+          <p>The pieces are named seeds</p>
+          <p>Visually represented by discs or elipses</p>
+          <p>They should be displayed inside the pits</p>
+        </div>
+        <div
+          id="tabGameRulesStartToggle"
+          class="rulesList"
+          onClick="toggleRuleDisplay('tabGameRulesStart')"
+        >
+          Start
+        </div>
+        <div id="tabGameRulesStart" class="rulesListContainer">
+          <p>The containers are empty (without seeds)</p>
+          <p>The remaining pits have the same amount of seeds</p>
+        </div>
+        <div
+          id="tabGameRulesPlayToggle"
+          class="rulesList"
+          onClick="toggleRuleDisplay('tabGameRulesPlay')"
+        >
+          Play
+        </div>
+        <div id="tabGameRulesPlay" class="rulesListContainer">
+          <p>Players seed their seeds alternatedly</p>
+          <p>On their turn, they seed starting with one of their pits</p>
+          <p>Depending on the last seed played, they might</p>
+          <p>play again</p>
+          <p>take the opponent's seeds</p>
+          <p>The game is over once one of the players has no seeds left</p>
+        </div>
+        <div
+          id="tabGameRulesSeedToggle"
+          class="rulesList"
+          onClick="toggleRuleDisplay('tabGameRulesSeed')"
+        >
+          Seed
+        </div>
+        <div id="tabGameRulesSeed" class="rulesListContainer">
+          <p>Choose a pit from your side (other than the container)</p>
+          <p>Take all the N seeds from that pit</p>
+          <p>Place 1 seed in the following N pits</p>
+          <p>Seeding is done counter-clockwise</p>
+        </div>
+        <div
+          id="tabGameRulesContinueSeedingToggle"
+          class="rulesList"
+          onClick="toggleRuleDisplay('tabGameRulesContinueSeeding')"
+        >
+          Continue Seeding
+        </div>
+        <div id="tabGameRulesContinueSeeding" class="rulesListContainer">
+          <p>If the next pit is your container, seed it too</p>
+          <p>If there are seeds remaining, continue on the opponent's side</p>
+          <p>If the opponent's container is reached, don't seed</p>
+          <p>But continue on your own side, if you still have seeds left</p>
+        </div>
+        <div
+          id="tabGameRulesLastContainerToggle"
+          class="rulesList"
+          onClick="toggleRuleDisplay('tabGameRulesLastContainer')"
+        >
+          Last Container
+        </div>
+        <div id="tabGameRulesLastContainer" class="rulesListContainer">
+          <p>Play again if the last seed is placed on your own container</p>
+          <p>
+            Seeding a pit now empty, the last seed is placed on the container
+            and you play again
+          </p>
+        </div>
+        <div
+          id="tabGameRulesLastEmptyToggle"
+          class="rulesList"
+          onClick="toggleRuleDisplay('tabGameRulesLastEmpty')"
+        >
+          Last Seed
+        </div>
+        <div id="tabGameRulesLastEmpty" class="rulesListContainer">
+          <p>
+            If the last seed lands in one of your empty pits, transfer the seeds
+            to your container, from:
+          </p>
+          <p>the opposite pit, of the opponent</p>
+          <p>as well as that last seed seeded.</p>
+        </div>
+        <div
+          id="tabGameRulesEndToggle"
+          class="rulesList"
+          onClick="toggleRuleDisplay('tabGameRulesEnd')"
+        >
+          End
+        </div>
+        <div id="tabGameRulesEnd" class="rulesListContainer">
+          <p>
+            The game is over once one of the players is unable to continue
+            playing
+          </p>
+          <p>... because all of their pits are empty</p>
+          <p>The other player takes all the seeds in their pits...</p>
+          <p>... which are placed in their container</p>
+          <p>
+            The winning player is the one with a higher number of seeds in their
+            container
+          </p>
+        </div>
+      </div>
+      <div id="tabGameScores" class="container tab"></div>
+      <div id="tabGameSettings" class="container tab">
+        <form action="settingsRegister" method="post">
+          <div id="settingsPits">
+            N# of Pits:
+            <span
+              ><label for="pitsFour"
+                >4<br />
+                <input
+                  type="radio"
+                  id="pitsFour"
+                  value="4"
+                  name="settingsPitsRadio" /></label
+            ></span>
+            <span
+              ><label for="pitsSix"
+                >6<br />
+                <input
+                  type="radio"
+                  id="pitsSix"
+                  value="6"
+                  name="settingsPitsRadio" /></label
+            ></span>
+            <span
+              ><label for="pitsEight"
+                >8<br />
+                <input
+                  type="radio"
+                  id="pitsEight"
+                  value="8"
+                  name="settingsPitsRadio" /></label
+            ></span>
+            <span
+              ><label for="pitsTen"
+                >10<br />
+                <input
+                  type="radio"
+                  id="pitsTen"
+                  value="10"
+                  name="settingsPitsRadio" /></label
+            ></span>
+          </div>
+          <div id="settingsSeeds">
+            Initial Seed N#: <input type="number" id="numberSeeds" />
+          </div>
+          <div id="settingsPlayForm">
+            Play against PC:
+            <input
+              type="radio"
+              id="playPC"
+              value="playPC"
+              name="settingsPlayPCRadio"
+            /><label for="playPC">Yes</label>
+            <input
+              type="radio"
+              id="playHuman"
+              value="playHuman"
+              name="settingsPlayPCRadio"
+            /><label for="playHuman">No</label>
+          </div>
+          <div id="settingsDifficulty">
+            Difficulty:
+            <select size="1" id="difficultySelector">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+        </form>
+      </div>
+    </div>
 
-	<div id="authentication"></div>
-	<div id="playTable"></div>
+    <h1>Mancala</h1>
 
-	<h1>Mancala</h1>
-
-	
-	
-
-
-</body>
+    <div id="playTable"></div>
+  </body>
 </html>
