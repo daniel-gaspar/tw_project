@@ -28,16 +28,20 @@ function openTab(tabName) {
 }
 
 function toggleRuleDisplay(ruleName) {
-  const x = document.getElementById(ruleName)
-  if (x.style.display == "none") {
-    x.style.display = "block";
+  const x = document.getElementById(ruleName);
+  if(x.className == "rulesListContainer.displayed") {
+    x.className = "rulesListContainer";
   }
-  else { x.style.display = "none"; }
+  else{
+    x.className = x.className + ".displayed";
+  }
 }
 
-function animateFloatingLoginButton() {
-  const x = document.getElementById("floatingLoginButton");
+function animateAuthAreaButton() {
+  const x = document.getElementById("authAreaButton");
+  const y = document.getElementById("authArea");
   x.classList.toggle('open');
+  y.classList.toggle('open');
 }
 
 function slideMenu(){

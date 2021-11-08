@@ -1,90 +1,22 @@
-#tabGameRules {
-    position:absolute;
-    opacity:.9;
-    z-index:888; /*so its above the content but below the burger button*/
-    height:100vh;
-    width: 30vw;
-    left:-30vw;
-    transition:1s;
-    background-color:black;
-    color:white;
-}
-
-#tabGameRules.open {
-    left:0;
-}
-
-#tabGameScores {
-    position:absolute;
-    opacity:.9;
-    z-index:888; /*so its above the content but below the burger button*/
-    height:100vh;
-    width: 30vw;
-    top:-100vw;
-    transition:1s;
-    background-color:black;
-    color:white;
-}
-
-#tabGameScores.open{
-    top:5vw;
-}
-
-#tabGameSettings {
-    position:absolute;
-    opacity:.9;
-    z-index:888; /*so its above the content but below the burger button*/
-    height:100vh;
-    width: 30vw;
-    left:-30vw;
-    transition:1s;
-    background-color:black;
-    color:white;
-}
-
-#tabGameSettings.open {
-    left:0;
-}
-
-.rulesListContainer {
-    display: none;
-}
-
 .topBar {
-  position:relative;
+  height: 30px;
+  position: relative;
   z-index: 9999;
   display: flex;
 }
 
-#selectionBar {
-  display: flex;
-  margin-left: 10px;
-}
-
-.topBar {
-  display: flex;
-}
-
-.selectionBarItem {
-  background: orange;
-  border: 2px;
-  border-style: solid;
-  border-radius: 10px;
-  padding: 2px;
-}
-
-#floatingLoginButton {
+#authAreaButton {
   display: inline-block;
-  height: 15px;
+  height: 30px;
   width: 20px;
   margin-right: 10px;
 }
 
-#floatingLoginButton:hover {
+#authAreaButton:hover {
   cursor: pointer;
 }
 
-#floatingLoginButton > span {
+#authAreaButton > span {
   display: block;
   height: 3px;
   margin-top: 4px;
@@ -96,37 +28,134 @@
   transition-duration: 1s;
 }
 
-#floatingLoginButton.open > span:first-child {
+#authAreaButton.open > span:first-child {
   -webkit-transform: translateY(6px) rotate(45deg); /* Chrome, Safari, Opera */
   transform: translateY(6px) rotate(45deg);
 }
 
-#floatingLoginButton.open > span:nth-child(2) {
+#authAreaButton.open > span:nth-child(2) {
   -webkit-transform: rotateY(90deg); /* Safari */
   transform: rotateY(90deg);
   /* rotates the second child on the Y AXIS ONLY 90 degrees so it disappears into a point */
 }
 
-#floatingLoginButton.open > span:last-child {
+#authAreaButton.open > span:last-child {
   -webkit-transform: translateY(-6px) rotate(-45deg); /* Chrome, Safari, Opera */
   transform: translateY(-6px) rotate(-45deg);
 }
 
-@keyframes opentab {
-    0% {
-        top: -1024px/3;
-    }    
-    100% {
-        top: 0;
-    }
+#selectionBar {
+  display: flex;
+  margin-left: 10px;
 }
 
-@keyframes closetab {
-    0% {
-        top: 0;
-    }
-    100% {
-        top: -1024px/3;
-    }
+#authArea{
+  position: absolute;
+  opacity: 0.9;
+  z-index: 888;
+  height: 10vw;
+  width: 30vw;
+  top: -20vw;
+  left: -20vw;
+  transition: 1s;
+  background-color: black;
+  color: white;
 }
 
+#authArea.open {
+  top: 40px;
+  left: 5px;
+}
+
+#authAreaLoginButton {
+  width: 100px;
+  height: 20px;
+  text-align: center;
+  vertical-align: auto;
+  border: 2px;
+  border-style: solid;
+  background:white;
+  color: black;
+  align-self: center;
+}
+
+.tempFloatingTab {
+  position: absolute;
+  opacity: 0.9;
+  z-index: 888;
+  height: 50vw;
+  width: 50vw;
+  top: -50vw;
+  transition: 1s;
+  background-color: black;
+  color: white;
+}
+
+.selectionBarItem {
+  background: orange;
+  border: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  padding: 2px;
+  width: 100px;
+  text-align: center;
+}
+
+#tabGameRules {
+  left: 50px;
+}
+
+#tabGameRules.open {
+  top: 40px;
+}
+
+.rulesListContainer {
+  display: none;
+}
+
+.rulesListContainer.displayed {
+  display: block;
+}
+
+#tabGameScores {
+  left: 155px;
+}
+
+#tabGameScores.open {
+  top: 40px;
+}
+
+#tabGameSettings {
+  left: 265px;
+}
+
+#tabGameSettings.open {
+  top: 40px;
+}
+
+#settingsPits {
+  display: flex;
+}
+
+.settingsPitsSpans {
+  text-align: center;
+  vertical-align: bottom;
+}
+
+.pageContent {
+  display: flex;
+}
+
+.pageContentItem {
+  border: 2px;
+  border-style: solid;
+  height: 35vw;
+}
+
+#playTable {
+  width: 70vw;
+}
+
+#gameStatus{
+  width: 30vw;
+}

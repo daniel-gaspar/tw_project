@@ -8,7 +8,7 @@
   </head>
   <body>
     <div class="topBar">
-      <div class="topBarItem" id="floatingLoginButton" onClick="animateFloatingLoginButton()">
+      <div class="topBarItem" id="authAreaButton" onClick="animateAuthAreaButton()">
         <span></span>
         <span></span>
         <span></span>
@@ -34,7 +34,13 @@
         </div>
       </div>
     </div>
-    <div id="tabGameRules" class="container tab">
+    <div id="authArea">
+      <p>Username: <input type="text" id="authUsername"></input></p>
+      <p>Password: <input type="password" id="authPassword"></input></p>
+      <div id="authAreaLoginButton">Login</div>
+    </div>
+
+    <div id="tabGameRules" class="tempFloatingTab">
       <div
         id="tabGameRulesTableToggle"
         class="rulesList"
@@ -163,41 +169,41 @@
         </p>
       </div>
     </div>
-    <div id="tabGameScores" class="container tab"></div>
-    <div id="tabGameSettings" class="container tab">
+    <div id="tabGameScores" class="tempFloatingTab"></div>
+    <div id="tabGameSettings" class="tempFloatingTab">
       <form action="settingsRegister" method="post">
         <div id="settingsPits">
-          N# of Pits:
-          <span
+          <span class="settingsPitsSpans">N# of Pits:</span>
+          <span class="settingsPitsSpans"
             ><label for="pitsFour"
-              >4<br />
+              > 4<br />
               <input
                 type="radio"
                 id="pitsFour"
                 value="4"
                 name="settingsPitsRadio" /></label
           ></span>
-          <span
+          <span class="settingsPitsSpans"
             ><label for="pitsSix"
-              >6<br />
+              > 6<br />
               <input
                 type="radio"
                 id="pitsSix"
                 value="6"
                 name="settingsPitsRadio" /></label
           ></span>
-          <span
+          <span class="settingsPitsSpans"
             ><label for="pitsEight"
-              >8<br />
+              > 8<br />
               <input
                 type="radio"
                 id="pitsEight"
                 value="8"
                 name="settingsPitsRadio" /></label
           ></span>
-          <span
+          <span class="settingsPitsSpans"
             ><label for="pitsTen"
-              >10<br />
+              > 10<br />
               <input
                 type="radio"
                 id="pitsTen"
@@ -239,6 +245,10 @@
 
     <h1>Mancala</h1>
 
-    <div id="playTable"></div>
+    <div class="pageContent">
+    <div id="playTable" class="pageContentItem"></div>
+    <div id="gameStatus" class="pageContentItem"></div>
+    </div>
+
   </body>
 </html>
