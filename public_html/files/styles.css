@@ -50,16 +50,17 @@
 }
 
 #authArea{
+  display: inline-block;
   position: absolute;
   opacity: 0.9;
   z-index: 888;
-  height: 10vw;
-  width: 30vw;
   top: -20vw;
   left: -20vw;
   transition: 1s;
   background-color: black;
   color: white;
+  border-radius: 10px;
+  border-top-left-radius: 0px;
 }
 
 #authArea.open {
@@ -71,7 +72,7 @@
   width: 100px;
   height: 20px;
   text-align: center;
-  vertical-align: auto;
+  vertical-align: middle;
   border: 2px;
   border-style: solid;
   background:white;
@@ -80,15 +81,18 @@
 }
 
 .tempFloatingTab {
+  display: inline-block;
   position: absolute;
   opacity: 0.9;
   z-index: 888;
-  height: 50vw;
-  width: 50vw;
-  top: -50vw;
+  top: -50%;
   transition: 1s;
   background-color: black;
   color: white;
+  border-radius: 10px;
+  border-top-left-radius: 0px;
+  overflow: auto;
+  padding: 5px;
 }
 
 .selectionBarItem {
@@ -144,18 +148,61 @@
 
 .pageContent {
   display: flex;
+  background: black;
 }
 
 .pageContentItem {
-  border: 2px;
-  border-style: solid;
-  height: 35vw;
+  margin: 2px;
+  background: white;
+  height: 50vh;
 }
 
 #playTable {
-  width: 70vw;
+  margin-right: 1px;
+  width: 70%;
+}
+
+#gameBoard {
+  top: 50%;
+  left: 50%;
+  border: 1px;
+  border-style: solid;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.storeOpponent, .storePlayer {
+  border: 1px;
+  border-style: solid;
+  height: 50px;
+  width: 50px;
+}
+
+.gamePitsOpponent, .gamePitsPlayer {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.gamePitsOpponent {
+  flex-direction: row-reverse;
+}
+
+.pitPlayer, .pitOpponent {
+  border: 1px;
+  border-style: solid;
+  height: 25px;
+  width: 25px;
+}
+
+.seed {
+  position: relative;
+  border: 1px;
+  border-style: solid;
+  height: 2px;
+  width: 2px;
 }
 
 #gameStatus{
-  width: 30vw;
+  margin-left: 1px;
+  width: 30%;
 }

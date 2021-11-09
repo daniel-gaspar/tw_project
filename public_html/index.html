@@ -8,7 +8,11 @@
   </head>
   <body>
     <div class="topBar">
-      <div class="topBarItem" id="authAreaButton" onClick="animateAuthAreaButton()">
+      <div
+        class="topBarItem"
+        id="authAreaButton"
+        onClick="toggleElementDisplayOpen('authAreaButton','open');toggleElementDisplayOpen('authArea','open')"
+      >
         <span></span>
         <span></span>
         <span></span>
@@ -16,27 +20,27 @@
       <div class="topBarItem" id="selectionBar">
         <div
           class="selectionBarItem barButton"
-          onClick="openTab('tabGameRules')"
+          onClick="toggleElementDisplayOpen('tabGameRules','open')"
         >
           Rules
         </div>
         <div
           class="selectionBarItem barButton"
-          onClick="openTab('tabGameScores')"
+          onClick="toggleElementDisplayOpen('tabGameScores','open')"
         >
           Scores
         </div>
         <div
           class="selectionBarItem barButton"
-          onClick="openTab('tabGameSettings')"
+          onClick="toggleElementDisplayOpen('tabGameSettings','open')"
         >
           Game Settings
         </div>
       </div>
     </div>
     <div id="authArea">
-      <p>Username: <input type="text" id="authUsername"></input></p>
-      <p>Password: <input type="password" id="authPassword"></input></p>
+      <p>Username: <input type="text" id="authUsername" /></p>
+      <p>Password: <input type="password" id="authPassword" /></p>
       <div id="authAreaLoginButton">Login</div>
     </div>
 
@@ -44,7 +48,7 @@
       <div
         id="tabGameRulesTableToggle"
         class="rulesList"
-        onClick="toggleRuleDisplay('tabGameRulesTable')"
+        onClick="toggleElementDisplayOpen('tabGameRulesTable','displayed')"
       >
         Table
       </div>
@@ -58,7 +62,7 @@
       <div
         id="tabGameRulesPiecesToggle"
         class="rulesList"
-        onClick="toggleRuleDisplay('tabGameRulesPieces')"
+        onClick="toggleElementDisplayOpen('tabGameRulesPieces','displayed')"
       >
         Pieces
       </div>
@@ -70,7 +74,7 @@
       <div
         id="tabGameRulesStartToggle"
         class="rulesList"
-        onClick="toggleRuleDisplay('tabGameRulesStart')"
+        onClick="toggleElementDisplayOpen('tabGameRulesStart','displayed')"
       >
         Start
       </div>
@@ -81,7 +85,7 @@
       <div
         id="tabGameRulesPlayToggle"
         class="rulesList"
-        onClick="toggleRuleDisplay('tabGameRulesPlay')"
+        onClick="toggleElementDisplayOpen('tabGameRulesPlay','displayed')"
       >
         Play
       </div>
@@ -96,7 +100,7 @@
       <div
         id="tabGameRulesSeedToggle"
         class="rulesList"
-        onClick="toggleRuleDisplay('tabGameRulesSeed')"
+        onClick="toggleElementDisplayOpen('tabGameRulesSeed','displayed')"
       >
         Seed
       </div>
@@ -109,7 +113,7 @@
       <div
         id="tabGameRulesContinueSeedingToggle"
         class="rulesList"
-        onClick="toggleRuleDisplay('tabGameRulesContinueSeeding')"
+        onClick="toggleElementDisplayOpen('tabGameRulesContinueSeeding','displayed')"
       >
         Continue Seeding
       </div>
@@ -122,21 +126,21 @@
       <div
         id="tabGameRulesLastContainerToggle"
         class="rulesList"
-        onClick="toggleRuleDisplay('tabGameRulesLastContainer')"
+        onClick="toggleElementDisplayOpen('tabGameRulesLastContainer','displayed')"
       >
         Last Container
       </div>
       <div id="tabGameRulesLastContainer" class="rulesListContainer">
         <p>Play again if the last seed is placed on your own container</p>
         <p>
-          Seeding a pit now empty, the last seed is placed on the container
-          and you play again
+          Seeding a pit now empty, the last seed is placed on the container and
+          you play again
         </p>
       </div>
       <div
         id="tabGameRulesLastEmptyToggle"
         class="rulesList"
-        onClick="toggleRuleDisplay('tabGameRulesLastEmpty')"
+        onClick="toggleElementDisplayOpen('tabGameRulesLastEmpty','displayed')"
       >
         Last Seed
       </div>
@@ -151,14 +155,13 @@
       <div
         id="tabGameRulesEndToggle"
         class="rulesList"
-        onClick="toggleRuleDisplay('tabGameRulesEnd')"
+        onClick="toggleElementDisplayOpen('tabGameRulesEnd','displayed')"
       >
         End
       </div>
       <div id="tabGameRulesEnd" class="rulesListContainer">
         <p>
-          The game is over once one of the players is unable to continue
-          playing
+          The game is over once one of the players is unable to continue playing
         </p>
         <p>... because all of their pits are empty</p>
         <p>The other player takes all the seeds in their pits...</p>
@@ -173,10 +176,10 @@
     <div id="tabGameSettings" class="tempFloatingTab">
       <form action="settingsRegister" method="post">
         <div id="settingsPits">
-          <span class="settingsPitsSpans">N# of Pits:</span>
+          <span class="settingsPitsSpans"><br />N# of Pits:</span>
           <span class="settingsPitsSpans"
-            ><label for="pitsFour"
-              > 4<br />
+            ><label for="pitsFour">
+              4<br />
               <input
                 type="radio"
                 id="pitsFour"
@@ -184,8 +187,8 @@
                 name="settingsPitsRadio" /></label
           ></span>
           <span class="settingsPitsSpans"
-            ><label for="pitsSix"
-              > 6<br />
+            ><label for="pitsSix">
+              6<br />
               <input
                 type="radio"
                 id="pitsSix"
@@ -193,8 +196,8 @@
                 name="settingsPitsRadio" /></label
           ></span>
           <span class="settingsPitsSpans"
-            ><label for="pitsEight"
-              > 8<br />
+            ><label for="pitsEight">
+              8<br />
               <input
                 type="radio"
                 id="pitsEight"
@@ -202,8 +205,8 @@
                 name="settingsPitsRadio" /></label
           ></span>
           <span class="settingsPitsSpans"
-            ><label for="pitsTen"
-              > 10<br />
+            ><label for="pitsTen">
+              10<br />
               <input
                 type="radio"
                 id="pitsTen"
@@ -212,7 +215,7 @@
           ></span>
         </div>
         <div id="settingsSeeds">
-          Initial Seed N#: <input type="number" id="numberSeeds" />
+          Initial Seed N#: <input type="number" name="numberSeeds" id="numberSeeds" min="1" />
         </div>
         <div id="settingsPlayForm">
           Play against PC:
@@ -231,7 +234,7 @@
         </div>
         <div id="settingsDifficulty">
           Difficulty:
-          <select size="1" id="difficultySelector">
+          <select size="1" name="difficultySelector" id="difficultySelector">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -240,15 +243,33 @@
             <option value="6">6</option>
           </select>
         </div>
+        <div id="settingsGameStarter">
+          Who Starts the Game:
+          <input
+            type="radio"
+            id="gameStartPlayer"
+            value="gameStartedByPlayer"
+            name="settingsFirstTurnRadio"
+          /><label for="gameStartPlayer">Player</label>
+          <input
+            type="radio"
+            id="gameStartOpponent"
+            value="gameStartedByOpponent"
+            name="settingsFirstTurnRadio"
+          /><label for="gameStartOpponent">Opponent</label>
+        </div>
+        <div id="settingsStartGameButton" onClick="startGame()" >Start Game</div>
       </form>
     </div>
 
     <h1>Mancala</h1>
 
     <div class="pageContent">
-    <div id="playTable" class="pageContentItem"></div>
-    <div id="gameStatus" class="pageContentItem"></div>
+      <div id="playTable" class="pageContentItem">
+        <div id="gameBoard">
+        </div>
+      </div>
+      <div id="gameStatus" class="pageContentItem"></div>
     </div>
-
   </body>
 </html>
