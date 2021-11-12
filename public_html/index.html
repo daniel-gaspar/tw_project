@@ -9,7 +9,7 @@
   <body>
     <div class="topBar">
       <div
-        class="topBarItem"
+        class="topBarItem clickable"
         id="authAreaButton"
         onClick="toggleElementDisplayOpen('authAreaButton','open');toggleElementDisplayOpen('authArea','open')"
       >
@@ -19,19 +19,19 @@
       </div>
       <div class="topBarItem" id="selectionBar">
         <div
-          class="selectionBarItem barButton"
+          class="selectionBarItem barButton clickable"
           onClick="toggleElementDisplayOpen('tabGameRules','open')"
         >
           Rules
         </div>
         <div
-          class="selectionBarItem barButton"
+          class="selectionBarItem barButton clickable"
           onClick="toggleElementDisplayOpen('tabGameScores','open')"
         >
           Scores
         </div>
         <div
-          class="selectionBarItem barButton"
+          class="selectionBarItem barButton clickable"
           onClick="toggleElementDisplayOpen('tabGameSettings','open')"
         >
           Game Settings
@@ -41,13 +41,13 @@
     <div id="authArea">
       <p>Username: <input type="text" id="authUsername" /></p>
       <p>Password: <input type="password" id="authPassword" /></p>
-      <div id="authAreaLoginButton">Login</div>
+      <div id="authAreaLoginButton" class="clickable">Login</div>
     </div>
 
     <div id="tabGameRules" class="tempFloatingTab">
       <div
         id="tabGameRulesTableToggle"
-        class="rulesList"
+        class="rulesList clickable"
         onClick="toggleElementDisplayOpen('tabGameRulesTable','displayed')"
       >
         Table
@@ -61,7 +61,7 @@
       </div>
       <div
         id="tabGameRulesPiecesToggle"
-        class="rulesList"
+        class="rulesList clickable"
         onClick="toggleElementDisplayOpen('tabGameRulesPieces','displayed')"
       >
         Pieces
@@ -73,7 +73,7 @@
       </div>
       <div
         id="tabGameRulesStartToggle"
-        class="rulesList"
+        class="rulesList clickable"
         onClick="toggleElementDisplayOpen('tabGameRulesStart','displayed')"
       >
         Start
@@ -84,7 +84,7 @@
       </div>
       <div
         id="tabGameRulesPlayToggle"
-        class="rulesList"
+        class="rulesList clickable"
         onClick="toggleElementDisplayOpen('tabGameRulesPlay','displayed')"
       >
         Play
@@ -99,7 +99,7 @@
       </div>
       <div
         id="tabGameRulesSeedToggle"
-        class="rulesList"
+        class="rulesList clickable"
         onClick="toggleElementDisplayOpen('tabGameRulesSeed','displayed')"
       >
         Seed
@@ -112,7 +112,7 @@
       </div>
       <div
         id="tabGameRulesContinueSeedingToggle"
-        class="rulesList"
+        class="rulesList clickable"
         onClick="toggleElementDisplayOpen('tabGameRulesContinueSeeding','displayed')"
       >
         Continue Seeding
@@ -125,7 +125,7 @@
       </div>
       <div
         id="tabGameRulesLastContainerToggle"
-        class="rulesList"
+        class="rulesList clickable"
         onClick="toggleElementDisplayOpen('tabGameRulesLastContainer','displayed')"
       >
         Last Container
@@ -139,7 +139,7 @@
       </div>
       <div
         id="tabGameRulesLastEmptyToggle"
-        class="rulesList"
+        class="rulesList clickable"
         onClick="toggleElementDisplayOpen('tabGameRulesLastEmpty','displayed')"
       >
         Last Seed
@@ -154,7 +154,7 @@
       </div>
       <div
         id="tabGameRulesEndToggle"
-        class="rulesList"
+        class="rulesList clickable"
         onClick="toggleElementDisplayOpen('tabGameRulesEnd','displayed')"
       >
         End
@@ -172,7 +172,10 @@
         </p>
       </div>
     </div>
-    <div id="tabGameScores" class="tempFloatingTab"></div>
+    <div id="tabGameScores" class="tempFloatingTab">
+      <div><span>Player:</span><span id="playerScore"> 0</span></div>
+      <div><span>Opponent:</span><span id="opponentScore"> 0</span></div>
+    </div>
     <div id="tabGameSettings" class="tempFloatingTab">
       <form action="settingsRegister" method="post">
         <div id="settingsPits">
@@ -258,7 +261,7 @@
             name="settingsFirstTurnRadio"
           /><label for="gameStartOpponent">Opponent</label>
         </div>
-        <div id="settingsStartGameButton" onClick="startGame()" >Start Game</div>
+        <div id="settingsStartGameButton" class="clickable" onClick="startGame()" >Start Game</div>
       </form>
     </div>
 
@@ -269,7 +272,9 @@
         <div id="gameBoard">
         </div>
       </div>
-      <div id="gameStatus" class="pageContentItem"></div>
+      <div id="gameStatus" class="pageContentItem">
+        <div id="gameStatusBox"></div>
+      </div>
     </div>
   </body>
 </html>

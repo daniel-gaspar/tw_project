@@ -1,20 +1,24 @@
 .topBar {
-  height: 30px;
+  height: 2vh;
   position: relative;
   z-index: 9999;
   display: flex;
 }
 
+.clickable:hover {
+  cursor: pointer;
+}
+
 #authAreaButton {
   display: inline-block;
-  height: 30px;
-  width: 20px;
+  height: 2vh;
+  width: 2vh;
   margin-right: 10px;
 }
 
-#authAreaButton:hover {
+/*#authAreaButton:hover {
   cursor: pointer;
-}
+}*/
 
 #authAreaButton > span {
   display: block;
@@ -61,6 +65,7 @@
   color: white;
   border-radius: 10px;
   border-top-left-radius: 0px;
+  padding: 1vh;
 }
 
 #authArea.open {
@@ -69,6 +74,7 @@
 }
 
 #authAreaLoginButton {
+  margin:auto;
   width: 100px;
   height: 20px;
   text-align: center;
@@ -81,7 +87,10 @@
 }
 
 .tempFloatingTab {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   opacity: 0.9;
   z-index: 888;
@@ -101,12 +110,16 @@
   border-style: solid;
   border-radius: 10px;
   padding: 2px;
-  width: 100px;
+  width: 10vh;
   text-align: center;
 }
 
+/*.selectionBarItem:hover{
+  cursor: pointer;
+}*/
+
 #tabGameRules {
-  left: 50px;
+  left: 4.1vh;
 }
 
 #tabGameRules.open {
@@ -118,11 +131,13 @@
 }
 
 .rulesListContainer.displayed {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 #tabGameScores {
-  left: 155px;
+  left: 14.8vh;
 }
 
 #tabGameScores.open {
@@ -130,7 +145,7 @@
 }
 
 #tabGameSettings {
-  left: 265px;
+  left: 25.3vh;
 }
 
 #tabGameSettings.open {
@@ -159,50 +174,94 @@
 
 #playTable {
   margin-right: 1px;
-  width: 70%;
+  width: 80%;
+  display: flex;
+  flex-direction: column;
 }
 
 #gameBoard {
-  top: 50%;
-  left: 50%;
+  margin:auto;
   border: 1px;
-  border-style: solid;
+  padding: 10px;
+  height: 19vh;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .storeOpponent, .storePlayer {
   border: 1px;
   border-style: solid;
-  height: 50px;
-  width: 50px;
+  border-radius: 50px;
+  margin: 0.1cm;
+  width: 4.5vw;
+  height: 18vh;
 }
 
-.gamePitsOpponent, .gamePitsPlayer {
+.gamePitsOpponent, .gamePitsPlayer, .gamePitsOpponentStatus, .gamePitsPlayerStatus {
   display: flex;
   flex-wrap: wrap;
 }
 
-.gamePitsOpponent {
+.gamePitsOpponent, .gamePitsOpponentStatus {
   flex-direction: row-reverse;
 }
 
 .pitPlayer, .pitOpponent {
+  margin: 0.1cm;
   border: 1px;
   border-style: solid;
-  height: 25px;
-  width: 25px;
+  border-radius: 50px;
+  height: 9vh;
+  width: 4.5vw;
 }
 
+/*.pitPlayer:hover, .pitOpponent:hover{
+  cursor: pointer;
+}*/
+
 .seed {
-  position: relative;
+  position: absolute;
+  background: red;
   border: 1px;
   border-style: solid;
-  height: 2px;
-  width: 2px;
+  border-color: darkred;
+  border-radius: 100px / 200px;
+  height: 3vh;
+  width: 1vh;
+}
+
+.gameMessages {
+  margin:auto;
+}
+
+.forfeitButton {
+  margin:auto;
 }
 
 #gameStatus{
   margin-left: 1px;
-  width: 30%;
+  width: 20%;
+  display: flex;
+}
+
+#gameStatusBox {
+  margin:auto;
+  margin-top: 20%;
+  height: 4vh;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.storeOpponentStatus, .storePlayerStatus, .pitPlayerStatus, .pitOpponentStatus {
+  border: 1px;
+  border-style: solid;
+  width: 2vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pitPlayerStatus, .pitOpponentStatus {
+  height: 2vh;
 }
