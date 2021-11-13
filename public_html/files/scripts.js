@@ -1,7 +1,52 @@
-// to do change declarations of onclick to window.onload
-// sets pits to relative, to have absolute positioning inside
+// to do
+//
 
-"use strict";
+window.addEventListener("load", function () {
+  document
+    .getElementById("authAreaButton")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("selectionBarItemGameRules")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("selectionBarItemGameScores")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("selectionBarItemGameSettings")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesTableToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesPiecesToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesStartToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesPlayToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesSeedToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesContinueSeedingToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesLastContainerToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesLastEmptyToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesEndToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("settingsStartGameButton")
+    .addEventListener("click", startGame);
+});
+
+("use strict");
 
 class Mancala {
   constructor() {
@@ -126,12 +171,31 @@ const game = new Mancala();
 let gamesWonByPlayer = 0;
 let gamesWonByPC = 0;
 
-function toggleElementDisplayOpen(elementId, openOrDisplay) {
-  const x = document.getElementById(elementId);
-  x.classList.toggle(openOrDisplay);
+function toggleElementDisplayOpen(event) {
+  const x = event.srcElement;
+  if (x.classList.contains("rulesList")) {
+    const y = document.getElementById(x.id.replace("Toggle", ""));
+    y.classList.toggle("display");
+  } else {
+    if (x.id == "settingsStartGameButton") {
+      const y = document.getElementById("tabGameSettings");
+      y.classList.toggle("open");
+    } else {
+      if (x.classList.contains("selectionBarItem")) {
+        const y = document.getElementById(
+          x.id.replace("selectionBarItem", "tab")
+        );
+        y.classList.toggle("open");
+      } else {
+        const y = document.getElementById(x.id.replace("Button", ""));
+        x.classList.toggle("open");
+        y.classList.toggle("open");
+      }
+    }
+  }
 }
 
-function startGame() {
+function startGame(event) {
   const numberOfPits = parseInt(
     document.querySelector('input[name="settingsPitsRadio"]:checked').value
   );
@@ -166,7 +230,7 @@ function startGame() {
     gameStarter
   );
   updateDisplay();
-  toggleElementDisplayOpen("tabGameSettings", "open");
+  toggleElementDisplayOpen(event);
 }
 
 function drawBoard(
@@ -265,7 +329,11 @@ function drawBoard(
 function createPit(playerOrOpponent, i) {
   const pit = document.createElement("div");
   pit.id = "pit" + playerOrOpponent + i;
-  pit.classList.add("pit" + playerOrOpponent, "clickable");
+  pit.classList.add("pit" + playerOrOpponent);
+  if (!pit.id.includes("Status")) {
+    pit.classList.add("clickable");
+    pit.style.position = "relative";
+  }
   if (playerOrOpponent == "Player") {
     pit.addEventListener("click", game.gamePlayerPlay);
   }
@@ -278,15 +346,20 @@ function createSeed(parent) {
   const parentBoundBox = parent.getBoundingClientRect();
 
   seed.className = "seed";
-  const x = Math.floor(
+  /*const x = Math.floor(
     getRandomNumber(parentBoundBox.left + 40, parentBoundBox.right - 40)
   );
   const y = Math.floor(
     getRandomNumber(parentBoundBox.top + 20, parentBoundBox.bottom - 45)
-  );
+  );*/
+  const x = Math.floor(getRandomNumber(20, 60));
+  const y = Math.floor(getRandomNumber(20, 65));
   const deg = Math.floor(getRandomNumber(0, 360));
-  seed.style.left = x + "px";
-  seed.style.top = y + "px";
+
+  /*seed.style.left = x + "px";
+  seed.style.top = y + "px";*/
+  seed.style.left = x + "%";
+  seed.style.top = y + "%";
   seed.style.transform = "rotate(" + deg + "deg)";
   return seed;
 }
@@ -353,7 +426,7 @@ function gameMove(playerOrOpponent, numberOfSeeds, pit) {
     }
   })(game.turn);
 
-  game.pits[pit+offset] = 0;
+  game.pits[pit + offset] = 0;
 
   console.log(seedsInPit);
   let lastPlayed = {
@@ -367,24 +440,23 @@ function gameMove(playerOrOpponent, numberOfSeeds, pit) {
     const currentPosition = pit + i;
     const relativePosition = currentPosition % (game.pits.length + 1);
     console.log(relativePosition);
-    if (relativePosition+offset == middle) {
-      if(offset == 0) {
-      game.storePlayer++;
-      lastPlayed.event = "storePlayer";
-      lastPlayed.eventPosition = currentPosition;
-      lastPlayed.eventRelativePosition = relativePosition;
-      }
-      else{
+    if (relativePosition + offset == middle) {
+      if (offset == 0) {
+        game.storePlayer++;
+        lastPlayed.event = "storePlayer";
+        lastPlayed.eventPosition = currentPosition;
+        lastPlayed.eventRelativePosition = relativePosition;
+      } else {
         game.storeOpponent++;
-      lastPlayed.event = "storeOpponent";
-      lastPlayed.eventPosition = currentPosition;
-      lastPlayed.eventRelativePosition = relativePosition;
+        lastPlayed.event = "storeOpponent";
+        lastPlayed.eventPosition = currentPosition;
+        lastPlayed.eventRelativePosition = relativePosition;
       }
     } else {
-      if (relativePosition+offset > middle) {
-        game.pits[relativePosition+offset - 1]++;
+      if (relativePosition + offset > middle) {
+        game.pits[relativePosition + offset - 1]++;
       } else {
-        if (game.pits[relativePosition+offset] == 0) {
+        if (game.pits[relativePosition + offset] == 0) {
           lastPlayed.event = "emptyPitPlayer";
           lastPlayed.eventPosition = currentPosition;
           lastPlayed.eventRelativePosition = relativePosition;

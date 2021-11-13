@@ -11,7 +11,6 @@
       <div
         class="topBarItem clickable"
         id="authAreaButton"
-        onClick="toggleElementDisplayOpen('authAreaButton','open');toggleElementDisplayOpen('authArea','open')"
       >
         <span></span>
         <span></span>
@@ -19,20 +18,20 @@
       </div>
       <div class="topBarItem" id="selectionBar">
         <div
+          id="selectionBarItemGameRules"
           class="selectionBarItem barButton clickable"
-          onClick="toggleElementDisplayOpen('tabGameRules','open')"
         >
           Rules
         </div>
         <div
+          id="selectionBarItemGameScores"
           class="selectionBarItem barButton clickable"
-          onClick="toggleElementDisplayOpen('tabGameScores','open')"
         >
           Scores
         </div>
         <div
+          id="selectionBarItemGameSettings"
           class="selectionBarItem barButton clickable"
-          onClick="toggleElementDisplayOpen('tabGameSettings','open')"
         >
           Game Settings
         </div>
@@ -48,7 +47,6 @@
       <div
         id="tabGameRulesTableToggle"
         class="rulesList clickable"
-        onClick="toggleElementDisplayOpen('tabGameRulesTable','displayed')"
       >
         Table
       </div>
@@ -62,7 +60,6 @@
       <div
         id="tabGameRulesPiecesToggle"
         class="rulesList clickable"
-        onClick="toggleElementDisplayOpen('tabGameRulesPieces','displayed')"
       >
         Pieces
       </div>
@@ -74,7 +71,6 @@
       <div
         id="tabGameRulesStartToggle"
         class="rulesList clickable"
-        onClick="toggleElementDisplayOpen('tabGameRulesStart','displayed')"
       >
         Start
       </div>
@@ -85,7 +81,6 @@
       <div
         id="tabGameRulesPlayToggle"
         class="rulesList clickable"
-        onClick="toggleElementDisplayOpen('tabGameRulesPlay','displayed')"
       >
         Play
       </div>
@@ -100,7 +95,6 @@
       <div
         id="tabGameRulesSeedToggle"
         class="rulesList clickable"
-        onClick="toggleElementDisplayOpen('tabGameRulesSeed','displayed')"
       >
         Seed
       </div>
@@ -113,7 +107,6 @@
       <div
         id="tabGameRulesContinueSeedingToggle"
         class="rulesList clickable"
-        onClick="toggleElementDisplayOpen('tabGameRulesContinueSeeding','displayed')"
       >
         Continue Seeding
       </div>
@@ -126,7 +119,6 @@
       <div
         id="tabGameRulesLastContainerToggle"
         class="rulesList clickable"
-        onClick="toggleElementDisplayOpen('tabGameRulesLastContainer','displayed')"
       >
         Last Container
       </div>
@@ -140,7 +132,6 @@
       <div
         id="tabGameRulesLastEmptyToggle"
         class="rulesList clickable"
-        onClick="toggleElementDisplayOpen('tabGameRulesLastEmpty','displayed')"
       >
         Last Seed
       </div>
@@ -155,7 +146,6 @@
       <div
         id="tabGameRulesEndToggle"
         class="rulesList clickable"
-        onClick="toggleElementDisplayOpen('tabGameRulesEnd','displayed')"
       >
         End
       </div>
@@ -261,7 +251,7 @@
             name="settingsFirstTurnRadio"
           /><label for="gameStartOpponent">Opponent</label>
         </div>
-        <div id="settingsStartGameButton" class="clickable" onClick="startGame()" >Start Game</div>
+        <div id="settingsStartGameButton" class="clickable">Start Game</div>
       </form>
     </div>
 
