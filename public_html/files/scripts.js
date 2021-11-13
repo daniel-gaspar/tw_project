@@ -1,51 +1,6 @@
 // to do
 //
 
-window.addEventListener("load", function () {
-  document
-    .getElementById("authAreaButton")
-    .addEventListener("click", toggleElementDisplayOpen);
-  document
-    .getElementById("selectionBarItemGameRules")
-    .addEventListener("click", toggleElementDisplayOpen);
-  document
-    .getElementById("selectionBarItemGameScores")
-    .addEventListener("click", toggleElementDisplayOpen);
-  document
-    .getElementById("selectionBarItemGameSettings")
-    .addEventListener("click", toggleElementDisplayOpen);
-  document
-    .getElementById("tabGameRulesTableToggle")
-    .addEventListener("click", toggleElementDisplayOpen);
-  document
-    .getElementById("tabGameRulesPiecesToggle")
-    .addEventListener("click", toggleElementDisplayOpen);
-  document
-    .getElementById("tabGameRulesStartToggle")
-    .addEventListener("click", toggleElementDisplayOpen);
-  document
-    .getElementById("tabGameRulesPlayToggle")
-    .addEventListener("click", toggleElementDisplayOpen);
-  document
-    .getElementById("tabGameRulesSeedToggle")
-    .addEventListener("click", toggleElementDisplayOpen);
-  document
-    .getElementById("tabGameRulesContinueSeedingToggle")
-    .addEventListener("click", toggleElementDisplayOpen);
-  document
-    .getElementById("tabGameRulesLastContainerToggle")
-    .addEventListener("click", toggleElementDisplayOpen);
-  document
-    .getElementById("tabGameRulesLastEmptyToggle")
-    .addEventListener("click", toggleElementDisplayOpen);
-  document
-    .getElementById("tabGameRulesEndToggle")
-    .addEventListener("click", toggleElementDisplayOpen);
-  document
-    .getElementById("settingsStartGameButton")
-    .addEventListener("click", startGame);
-});
-
 ("use strict");
 
 class Mancala {
@@ -77,15 +32,16 @@ class Mancala {
         "It's not your turn. Please allow the Opponent to finish his play."
       );
     } else {
-      const element = ((event) => {
-        if (event.path[0].classList.value == "seed") {
-          return event.path[0].parentElement;
+      const element = ((x) => {
+        if (x.path[0].classList.value == "seed") {
+          return x.path[0].parentElement;
         } else {
-          return event.srcElement;
+          return x.srcElement;
         }
       })(event);
       console.log(event);
       console.log(element);
+      console.log("logging"+this);
 
       const pit = parseInt(element.id.slice(-1));
 
@@ -97,7 +53,8 @@ class Mancala {
           "You can't select an empty pit to play. Please play again."
         );
       } else {
-        game.pits[pit] = 0;
+        game.gameMove(seedsInPit, pit);
+        /*game.pits[pit] = 0;
 
         console.log(seedsInPit);
         let lastPlayed = {
@@ -156,7 +113,117 @@ class Mancala {
           );
           updateDisplay();
           game.opponentTurn();
+        }*/
+      }
+    }
+  }
+
+  gameMove(seedsInPit, pit) {
+    console.log(seedsInPit);
+
+    let lastPlayed = {
+      event: "",
+      eventPosition: 0,
+      eventRelativePosition: 0,
+      lastPosition: 0,
+    };
+    const middle = this.pits.length / 2;
+    const offset = ((x) => {
+      if (x == "Player") {
+        return 0;
+      } else {
+        return middle;
+      }
+    })(this.turn);
+
+    this.pits[pit + offset] = 0;
+
+    for (let i = 1; i <= seedsInPit; i++) {
+      const currentPosition = pit + i;
+      const relativePosition =
+        (currentPosition + offset) % (this.pits.length + 1);
+      console.log(relativePosition);
+
+      if (relativePosition == middle && offset == 0) {
+        this.storePlayer++;
+        lastPlayed.event = "storePlayer";
+        lastPlayed.eventPosition = currentPosition + offset;
+        lastPlayed.eventRelativePosition = relativePosition;
+      } else {
+        if (relativePosition == 0 && offset == middle) {
+          this.storeOpponent++;
+          lastPlayed.event = "storeOpponent";
+          lastPlayed.eventPosition = currentPosition + offset;
+          lastPlayed.eventRelativePosition = relativePosition;
+        } else {
+          if (
+            (offset == 0 && relativePosition > middle) ||
+            (offset == middle && relativePosition <= middle)
+          ) {
+            this.pits[relativePosition - 1]++;
+          } else {
+            if (
+              offset == 0 &&
+              this.pits[relativePosition] == 0 &&
+              relativePosition < middle
+            ) {
+              lastPlayed.event = "emptyPitPlayer";
+              lastPlayed.eventPosition = currentPosition + offset;
+              lastPlayed.eventRelativePosition = relativePosition;
+            }
+            if (
+              offset == middle &&
+              this.pits[relativePosition] == 0 &&
+              relativePosition > middle
+            ) {
+              lastPlayed.event = "emptyPitOpponent";
+              lastPlayed.eventPosition = currentPosition + offset;
+              lastPlayed.eventRelativePosition = relativePosition;
+            }
+            this.pits[relativePosition]++;
+          }
         }
+      }
+      lastPlayed.lastPosition = currentPosition + offset;
+    }
+
+    if (
+      lastPlayed.eventPosition == lastPlayed.lastPosition &&
+      lastPlayed.event.includes("store")
+    ) {
+      replaceGameMessages("The " + this.turn + " may play again");
+      updateDisplay();
+      if (this.turn == "Opponent") {
+        this.opponentTurn();
+      }
+    } else {
+      if (
+        lastPlayed.event.includes("empty") &&
+        lastPlayed.eventPosition == lastPlayed.lastPosition
+      ) {
+        if (offset == 0) {
+          this.storePlayer++;
+          this.storePlayer +=
+            this.pits[middle + middle - lastPlayed.eventRelativePosition - 1];
+          this.pits[middle + middle - lastPlayed.eventRelativePosition - 1] = 0;
+          this.pits[lastPlayed.eventRelativePosition] = 0;
+        } else {
+          this.storeOpponent++;
+          this.storeOpponent +=
+            this.pits[middle - (lastPlayed.eventRelativePosition - middle) - 1];
+          this.pits[lastPlayed.eventRelativePosition - middle - 1] = 0;
+          this.pits[lastPlayed.eventRelativePosition] = 0;
+        }
+      }
+      if (offset == 0) {
+        this.turn = "Opponent";
+      } else {
+        this.turn = "Player";
+      }
+      replaceGameMessages("It is now the " + this.turn + "'s turn to play.");
+      updateDisplay();
+      if (offset == 0) {
+        this.opponentTurn();
       }
     }
   }
@@ -164,8 +231,58 @@ class Mancala {
   opponentTurn() {
     console.log(this);
     console.log("ThisIsTheOpponent'sTurn");
+
+    const middle = this.pits.length / 2;
+    const seedsInPit = this.pits[middle];
+
+    this.gameMove(seedsInPit, 0);
   }
 }
+
+window.addEventListener("load", function () {
+  document
+    .getElementById("authAreaButton")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("selectionBarItemGameRules")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("selectionBarItemGameScores")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("selectionBarItemGameSettings")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesTableToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesPiecesToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesStartToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesPlayToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesSeedToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesContinueSeedingToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesLastContainerToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesLastEmptyToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("tabGameRulesEndToggle")
+    .addEventListener("click", toggleElementDisplayOpen);
+  document
+    .getElementById("settingsStartGameButton")
+    .addEventListener("click", startGame);
+});
 
 const game = new Mancala();
 let gamesWonByPlayer = 0;
@@ -415,78 +532,4 @@ function forfeit() {
 function replaceGameMessages(message) {
   const gameMessages = document.getElementById("gameMessages");
   gameMessages.innerHTML = message;
-}
-
-function gameMove(playerOrOpponent, numberOfSeeds, pit) {
-  const offset = ((x) => {
-    if (x == "Player") {
-      return 0;
-    } else {
-      return game.pits.length / 2;
-    }
-  })(game.turn);
-
-  game.pits[pit + offset] = 0;
-
-  console.log(seedsInPit);
-  let lastPlayed = {
-    event: "",
-    eventPosition: 0,
-    eventRelativePosition: 0,
-    lastPosition: 0,
-  };
-  const middle = game.pits.length / 2;
-  for (let i = 1; i <= seedsInPit; i++) {
-    const currentPosition = pit + i;
-    const relativePosition = currentPosition % (game.pits.length + 1);
-    console.log(relativePosition);
-    if (relativePosition + offset == middle) {
-      if (offset == 0) {
-        game.storePlayer++;
-        lastPlayed.event = "storePlayer";
-        lastPlayed.eventPosition = currentPosition;
-        lastPlayed.eventRelativePosition = relativePosition;
-      } else {
-        game.storeOpponent++;
-        lastPlayed.event = "storeOpponent";
-        lastPlayed.eventPosition = currentPosition;
-        lastPlayed.eventRelativePosition = relativePosition;
-      }
-    } else {
-      if (relativePosition + offset > middle) {
-        game.pits[relativePosition + offset - 1]++;
-      } else {
-        if (game.pits[relativePosition + offset] == 0) {
-          lastPlayed.event = "emptyPitPlayer";
-          lastPlayed.eventPosition = currentPosition;
-          lastPlayed.eventRelativePosition = relativePosition;
-        }
-        game.pits[relativePosition]++;
-      }
-    }
-    lastPlayed.lastPosition = currentPosition;
-  }
-
-  if (
-    lastPlayed.eventPosition == lastPlayed.lastPosition &&
-    lastPlayed.event == "storePlayer"
-  ) {
-    replaceGameMessages("The Player may play again");
-    updateDisplay();
-  } else {
-    if (
-      lastPlayed.event == "emptyPitPlayer" &&
-      lastPlayed.eventPosition == lastPlayed.lastPosition
-    ) {
-      game.storePlayer++;
-      game.storePlayer +=
-        game.pits[middle + middle - lastPlayed.eventRelativePosition - 1];
-      game.pits[middle + middle - lastPlayed.eventRelativePosition - 1] = 0;
-      game.pits[lastPlayed.eventRelativePosition] = 0;
-    }
-    game.turn = "Opponent";
-    replaceGameMessages("It is now the " + game.turn + "'s turn to play.");
-    updateDisplay();
-    game.opponentTurn();
-  }
 }
