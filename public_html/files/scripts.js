@@ -26,102 +26,10 @@ class Mancala {
     this.turn = gameStarter;
   }
 
-  gamePlayerPlay(event) {
-    if (game.turn == "Opponent") {
-      replaceGameMessages(
-        "It's not your turn. Please allow the Opponent to finish his play."
-      );
-    } else {
-      const element = ((x) => {
-        if (x.path[0].classList.value == "seed") {
-          return x.path[0].parentElement;
-        } else {
-          return x.srcElement;
-        }
-      })(event);
-      console.log(event);
-      console.log(element);
-      console.log("logging"+this);
-
-      const pit = parseInt(element.id.slice(-1));
-
-      console.log(pit);
-
-      const seedsInPit = game.pits[pit];
-      if (seedsInPit == 0) {
-        replaceGameMessages(
-          "You can't select an empty pit to play. Please play again."
-        );
-      } else {
-        game.gameMove(seedsInPit, pit);
-        /*game.pits[pit] = 0;
-
-        console.log(seedsInPit);
-        let lastPlayed = {
-          event: "",
-          eventPosition: 0,
-          eventRelativePosition: 0,
-          lastPosition: 0,
-        };
-        const middle = game.pits.length / 2;
-        for (let i = 1; i <= seedsInPit; i++) {
-          const currentPosition = pit + i;
-          const relativePosition = currentPosition % (game.pits.length + 1);
-          console.log(relativePosition);
-          if (relativePosition == middle) {
-            game.storePlayer++;
-            lastPlayed.event = "storePlayer";
-            lastPlayed.eventPosition = currentPosition;
-            lastPlayed.eventRelativePosition = relativePosition;
-          } else {
-            if (relativePosition > middle) {
-              game.pits[relativePosition - 1]++;
-            } else {
-              if (game.pits[relativePosition] == 0) {
-                lastPlayed.event = "emptyPitPlayer";
-                lastPlayed.eventPosition = currentPosition;
-                lastPlayed.eventRelativePosition = relativePosition;
-              }
-              game.pits[relativePosition]++;
-            }
-          }
-          lastPlayed.lastPosition = currentPosition;
-        }
-
-        if (
-          lastPlayed.eventPosition == lastPlayed.lastPosition &&
-          lastPlayed.event == "storePlayer"
-        ) {
-          replaceGameMessages("The Player may play again");
-          updateDisplay();
-        } else {
-          if (
-            lastPlayed.event == "emptyPitPlayer" &&
-            lastPlayed.eventPosition == lastPlayed.lastPosition
-          ) {
-            game.storePlayer++;
-            game.storePlayer +=
-              game.pits[middle + middle - lastPlayed.eventRelativePosition - 1];
-            game.pits[
-              middle + middle - lastPlayed.eventRelativePosition - 1
-            ] = 0;
-            game.pits[lastPlayed.eventRelativePosition] = 0;
-          }
-          game.turn = "Opponent";
-          replaceGameMessages(
-            "It is now the " + game.turn + "'s turn to play."
-          );
-          updateDisplay();
-          game.opponentTurn();
-        }*/
-      }
-    }
-  }
-
   gameMove(seedsInPit, pit) {
     console.log(seedsInPit);
 
-    let lastPlayed = {
+    const lastPlayed = {
       event: "",
       eventPosition: 0,
       eventRelativePosition: 0,
@@ -136,30 +44,38 @@ class Mancala {
       }
     })(this.turn);
 
+    console.log("offset is" + offset);
+    console.log("middle is" + middle);
     this.pits[pit + offset] = 0;
+    console.log(offset == middle);
+    const length = this.pits.length + 1;
 
     for (let i = 1; i <= seedsInPit; i++) {
       const currentPosition = pit + i;
-      const relativePosition =
-        (currentPosition + offset) % (this.pits.length + 1);
+      console.log("currentPosition is" + currentPosition);
+      const relativePosition = (currentPosition + offset) % length;
       console.log(relativePosition);
 
-      if (relativePosition == middle && offset == 0) {
+      if (offset == 0 && relativePosition == middle) {
+        console.log("offset = 0 and relativePosition = middle");
         this.storePlayer++;
         lastPlayed.event = "storePlayer";
         lastPlayed.eventPosition = currentPosition + offset;
         lastPlayed.eventRelativePosition = relativePosition;
       } else {
-        if (relativePosition == 0 && offset == middle) {
+        if (offset == middle && relativePosition == length - 1) {
+          console.log("relativePosition = 0 and offset = middle");
           this.storeOpponent++;
           lastPlayed.event = "storeOpponent";
           lastPlayed.eventPosition = currentPosition + offset;
           lastPlayed.eventRelativePosition = relativePosition;
         } else {
           if (
-            (offset == 0 && relativePosition > middle) ||
-            (offset == middle && relativePosition <= middle)
+            (offset == 0 && relativePosition > middle)
           ) {
+            console.log(
+              "offset = 0 & relative position > middle | offset = middle & relativePosition <= middle"
+            );
             this.pits[relativePosition - 1]++;
           } else {
             if (
@@ -167,6 +83,9 @@ class Mancala {
               this.pits[relativePosition] == 0 &&
               relativePosition < middle
             ) {
+              console.log(
+                "offset = 0 & pit is empty & relativePosition < middle"
+              );
               lastPlayed.event = "emptyPitPlayer";
               lastPlayed.eventPosition = currentPosition + offset;
               lastPlayed.eventRelativePosition = relativePosition;
@@ -176,56 +95,45 @@ class Mancala {
               this.pits[relativePosition] == 0 &&
               relativePosition > middle
             ) {
+              console.log(
+                "offset = middle & pit is empty & relativePosition > middle"
+              );
               lastPlayed.event = "emptyPitOpponent";
               lastPlayed.eventPosition = currentPosition + offset;
               lastPlayed.eventRelativePosition = relativePosition;
             }
+            console.log("at least I'm doing this");
             this.pits[relativePosition]++;
           }
         }
       }
+      console.log("and I'm also doing this");
       lastPlayed.lastPosition = currentPosition + offset;
+      console.log(this.pits);
     }
 
     if (
       lastPlayed.eventPosition == lastPlayed.lastPosition &&
-      lastPlayed.event.includes("store")
+      lastPlayed.event.includes("empty")
     ) {
-      replaceGameMessages("The " + this.turn + " may play again");
-      updateDisplay();
-      if (this.turn == "Opponent") {
-        this.opponentTurn();
-      }
-    } else {
-      if (
-        lastPlayed.event.includes("empty") &&
-        lastPlayed.eventPosition == lastPlayed.lastPosition
-      ) {
-        if (offset == 0) {
-          this.storePlayer++;
-          this.storePlayer +=
-            this.pits[middle + middle - lastPlayed.eventRelativePosition - 1];
-          this.pits[middle + middle - lastPlayed.eventRelativePosition - 1] = 0;
-          this.pits[lastPlayed.eventRelativePosition] = 0;
-        } else {
-          this.storeOpponent++;
-          this.storeOpponent +=
-            this.pits[middle - (lastPlayed.eventRelativePosition - middle) - 1];
-          this.pits[lastPlayed.eventRelativePosition - middle - 1] = 0;
-          this.pits[lastPlayed.eventRelativePosition] = 0;
-        }
-      }
       if (offset == 0) {
-        this.turn = "Opponent";
+        console.log("emptying the Oppponent's pit");
+        this.storePlayer++;
+        this.storePlayer +=
+          this.pits[middle + middle - lastPlayed.eventRelativePosition - 1];
+        this.pits[middle + middle - lastPlayed.eventRelativePosition - 1] = 0;
+        this.pits[lastPlayed.eventRelativePosition] = 0;
       } else {
-        this.turn = "Player";
-      }
-      replaceGameMessages("It is now the " + this.turn + "'s turn to play.");
-      updateDisplay();
-      if (offset == 0) {
-        this.opponentTurn();
+        console.log("emptying the player's pit");
+        this.storeOpponent++;
+        this.storeOpponent +=
+          this.pits[middle - (lastPlayed.eventRelativePosition - middle) - 1];
+        this.pits[lastPlayed.eventRelativePosition - middle - 1] = 0;
+        this.pits[lastPlayed.eventRelativePosition] = 0;
       }
     }
+    console.log("I managed to reach the end");
+    return lastPlayed;
   }
 
   opponentTurn() {
@@ -235,7 +143,46 @@ class Mancala {
     const middle = this.pits.length / 2;
     const seedsInPit = this.pits[middle];
 
-    this.gameMove(seedsInPit, 0);
+    const lastPlayed = this.gameMove(seedsInPit, 0);
+
+    console.log("I made it this far");
+    this.turn = "Player";
+    updateDisplay();
+  }
+
+  evaluateStatus(repeatOrNot){
+    const middle = this.pits.length;
+    let seedsPlayer = 0;
+    let seedsOpponent = 0;
+    for (let i = 0; i < middle; i++) {
+      seedsPlayer += this.pits[i];
+      seedsOpponent += this.pits[i+middle];
+    }
+    if(seedsPlayer == 0 || seedsOpponent == 0) {
+      if(seedsPlayer+this.storePlayer > seedsOpponent+this.storeOpponent) {
+        return [1,10];
+      }
+      else { 
+        if (seedsPlayer+this.storePlayer == seedsOpponent+this.storeOpponent) {
+          return [1,0];
+        }
+        else { return [1,-10]; }
+      }
+    } else{
+      if(repeatOrNot == "Player") {
+        if(this.seedsPlayer > this.seedsOpponent) return [0,7];
+        if(this.seedsPlayer == this.seedsOpponent) return [0,6];
+        if(this.seedsPlayer < this.seedsOpponent) return [0,5];
+      }
+      if(repeatOrNot == "Opponent") {
+        if(this.seedsPlayer < this.seedsOpponent) return [0,-7];
+        if(this.seedsPlayer == this.seedsOpponent) return [0,-6];
+        if(this.seedsPlayer > this.seedsOpponent) return [0,-5];
+      }
+      if(this.seedsPlayer > this.seedsOpponent) return [0,1];
+      if(this.seedsPlayer == this.seedsOpponent) return [0,0];
+      if(this.seedsPlayer < this.seedsOpponent) return [0,-1];
+    }
   }
 }
 
@@ -452,7 +399,7 @@ function createPit(playerOrOpponent, i) {
     pit.style.position = "relative";
   }
   if (playerOrOpponent == "Player") {
-    pit.addEventListener("click", game.gamePlayerPlay);
+    pit.addEventListener("click", gamePlayerPlay);
   }
 
   return pit;
@@ -532,4 +479,74 @@ function forfeit() {
 function replaceGameMessages(message) {
   const gameMessages = document.getElementById("gameMessages");
   gameMessages.innerHTML = message;
+}
+
+function gamePlayerPlay(event) {
+  if (game.turn == "Opponent") {
+    replaceGameMessages(
+      "It's not your turn. Please allow the Opponent to finish his play."
+    );
+  } else {
+    const element = ((x) => {
+      if (x.path[0].classList.value == "seed") {
+        return x.path[0].parentElement;
+      } else {
+        return x.srcElement;
+      }
+    })(event);
+    console.log(event);
+    console.log(element);
+    console.log("logging" + this);
+
+    const pit = parseInt(element.id.slice(-1));
+
+    console.log(pit);
+
+    const seedsInPit = game.pits[pit];
+    if (seedsInPit == 0) {
+      replaceGameMessages(
+        "You can't select an empty pit to play. Please play again."
+      );
+    } else {
+      const lastPlayed = game.gameMove(seedsInPit, pit);
+
+      const event = repeatPlay(lastPlayed);
+      const eval = game.evaluateStatus(event);
+      if (eval[0] == 0){
+        if (event == "Player") {
+          replaceGameMessages("The " + event + " may play again");
+          updateDisplay();
+        } else {
+          game.turn = "Opponent";
+          replaceGameMessages("It is now the " + game.turn + "'s turn to play.");
+          updateDisplay();
+          game.opponentTurn();
+      }
+    } else{
+      if(eval[1] == 10){
+        replaceGameMessages("The Game Is Over. Player Wins.");
+        gamesWonByPlayer++;
+        document.getElementById("playerScore").innerHTML = gamesWonByPlayer;
+      }
+      if(eval[1]== 0){
+        replaceGameMessages("The Game Is Over. It's a Tie.");
+      }
+      if(eval[1]==-10){
+        gamesWonByPC++;
+        document.getElementById("opponentScore").innerHTML = gamesWonByPC;
+      }
+      updateDisplay();
+    }
+    }
+  }
+}
+
+function repeatPlay(lastPlayed) {
+  if (
+    lastPlayed.eventPosition == lastPlayed.lastPosition &&
+    lastPlayed.event.includes("store")
+  ) {
+    console.log("I did return stuff");
+    return lastPlayed.event.replace("store", "");
+  }
 }
