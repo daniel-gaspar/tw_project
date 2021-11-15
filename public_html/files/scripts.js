@@ -4,12 +4,23 @@
 ("use strict");
 
 class Mancala {
-  constructor() {
-    this.storeOpponent = 0;
-    this.pits = new Array(1);
-    this.storePlayer = 0;
-    this.difficultyAI = 0;
-    this.turn = "";
+  constructor(storeOpponentStatus=0,pitsStatus=[],storePlayerStatus=0,difficultyAI=0,gameStarter="") {
+    this.storeOpponent = storeOpponentStatus;
+    this.pits = pitsStatus;
+    this.storePlayer = storePlayerStatus;
+    this.difficultyAI = difficultyAI;
+    this.turn = gameStarter;
+  }
+
+  copy(){
+    const storeOpponent = this.storeOpponent;
+    const pits = new Array(this.pits.length);
+    for(let i = 0; i < pits.length; i++)  pits[i] = this.pits[i];
+    const storePlayer = this.storePlayer;
+    const difficultyAI = this.difficultyAI;
+    const turn = this.turn;
+
+    return (new Mancala(storeOpponent,pits,storePlayer,difficultyAI,turn));
   }
 
   updateMancala(
