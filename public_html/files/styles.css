@@ -53,7 +53,7 @@
   margin-left: 10px;
 }
 
-#authArea{
+#authArea {
   display: inline-block;
   position: absolute;
   opacity: 0.9;
@@ -74,14 +74,14 @@
 }
 
 #authAreaLoginButton {
-  margin:auto;
+  margin: auto;
   width: 100px;
   height: 20px;
   text-align: center;
   vertical-align: middle;
   border: 2px;
   border-style: solid;
-  background:white;
+  background: white;
   color: black;
   align-self: center;
 }
@@ -114,16 +114,17 @@
   text-align: center;
 }
 
-/*.selectionBarItem:hover{
-  cursor: pointer;
-}*/
-
 #tabGameRules {
   left: 4.1vh;
 }
 
 #tabGameRules.open {
   top: 40px;
+}
+
+.rulesList {
+  font-size: 110%;
+  font-weight: bold;
 }
 
 .rulesListContainer {
@@ -161,6 +162,27 @@
   vertical-align: bottom;
 }
 
+#settingsStartGameButton {
+  margin: auto;
+  left: 50%;
+  color: black;
+  background: linear-gradient(
+    124deg,
+    #ff2400,
+    #e81d1d,
+    #e8b71d,
+    #e3e81d,
+    #1de840,
+    #1ddde8,
+    #2b1de8,
+    #dd00f3,
+    #dd00f3
+  );
+  border-radius: 10px;
+  display: inline-block;
+  padding: 2px;
+}
+
 .pageContent {
   display: flex;
   background: black;
@@ -180,48 +202,55 @@
 }
 
 #gameBoard {
-  margin:auto;
+  margin: auto;
   border: 1px;
   padding: 10px;
   height: 19vh;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  background-image: url("wood.png");
 }
 
-.storeOpponent, .storePlayer {
-  position:relative;
+.storeOpponent,
+.storePlayer {
+  position: relative;
   border: 1px;
   border-style: solid;
   border-radius: 50px;
   margin: 0.1cm;
   width: 4.5vw;
   height: 18vh;
+  background-color: rgba(0, 0, 0, 0.15);
 }
 
-.gamePitsOpponent, .gamePitsPlayer, .gamePitsOpponentStatus, .gamePitsPlayerStatus {
+.gamePitsOpponent,
+.gamePitsPlayer,
+.gamePitsOpponentStatus,
+.gamePitsPlayerStatus {
   display: flex;
   flex-wrap: wrap;
 }
 
-.gamePitsOpponent, .gamePitsOpponentStatus {
+.gamePitsOpponent,
+.gamePitsOpponentStatus {
   flex-direction: row-reverse;
 }
 
-.pitPlayer, .pitOpponent {
+.pitPlayer,
+.pitOpponent {
+  z-index: 100;
   margin: 0.1cm;
   border: 1px;
   border-style: solid;
   border-radius: 50px;
   height: 9vh;
   width: 4.5vw;
+  background-color: rgba(0, 0, 0, 0.15);
 }
 
-/*.pitPlayer:hover, .pitOpponent:hover{
-  cursor: pointer;
-}*/
-
 .seed {
+  z-index: 200;
   position: absolute;
   background: red;
   border: 1px;
@@ -233,28 +262,31 @@
 }
 
 .gameMessages {
-  margin:auto;
+  margin: auto;
 }
 
 .forfeitButton {
-  margin:auto;
+  margin: auto;
 }
 
-#gameStatus{
+#gameStatus {
   margin-left: 1px;
   width: 20%;
   display: flex;
 }
 
 #gameStatusBox {
-  margin:auto;
+  margin: auto;
   margin-top: 20%;
   height: 4vh;
   display: flex;
   flex-wrap: wrap;
 }
 
-.storeOpponentStatus, .storePlayerStatus, .pitPlayerStatus, .pitOpponentStatus {
+.storeOpponentStatus,
+.storePlayerStatus,
+.pitPlayerStatus,
+.pitOpponentStatus {
   border: 1px;
   border-style: solid;
   width: 2vh;
@@ -263,6 +295,7 @@
   align-items: center;
 }
 
-.pitPlayerStatus, .pitOpponentStatus {
+.pitPlayerStatus,
+.pitOpponentStatus {
   height: 2vh;
 }

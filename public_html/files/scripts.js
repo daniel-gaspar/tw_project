@@ -138,7 +138,9 @@ class Mancala {
     //console.log("I managed to reach the end");
 
     const event = repeatPlay(lastPlayed);
+    console.log("event is"+event);
     this.value = this.evaluateStatus(event);
+    console.log("value of play"+this.value);
   }
 
   opponentTurn() {
@@ -149,7 +151,7 @@ class Mancala {
     const position = Math.floor(Math.random*middle);
 
     //const bestchild = this.getMin(1);
-    const bestchild = this.getMin();
+    const bestchild = this.getMin(this);
 
     this.updateMancala(bestchild.storeOpponent,bestchild.pits,bestchild.storePlayer,bestchild.difficultyAI,bestchild.turn);
 
@@ -158,29 +160,23 @@ class Mancala {
     updateDisplay();
   }
 
-  getMin(){
-    const length = this.pits.length/2;
+  getMin(parent){
+    const length = parent.pits.length/2;
     const children = new Array(length);
     for(let i = 0; i < length; i++){
-      children[i] = new Mancala();
-      children[i].updateMancala(this.storeOpponent,this.pits,this.storePlayer,this.difficultyAI,this.turn);
+      children[i] = parent.copy();
+      console.log(children[i]);
     
         children[i].gameMove(children[i].pits[i+length],i);
         if(children[i].value[0] == 0 && !(children[i].value[1] >= -7 && children[i].value[1]<=-5)) children[i].turn = "Player";
         console.log(game);
         console.log(children[i]);
       }
-    let bestchild = new Mancala();
-    bestchild.updateMancala(children[0].storeOpponent,children[0].pits,children[0].storePlayer,children[0].difficultyAI,children[0].turn);
-    bestchild.value = [0,0];
-    bestchild.value[0] = children[0].value[0];
-    bestchild.value[1] = children[0].value[1];
+    let bestchild = children[0].copy();
     for (let i = 1; i < length; i++) {
-        if(children[i].value[1]<bestchild.value[1]) { bestchild.updateMancala(children[i].storeOpponent,children[i].pits,children[i].storePlayer,children[i].difficultyAI,children[i].turn);
-          bestchild.value[0] = children[i].value[0];
-          bestchild.value[1] = children[i].value[1];
+        if(children[i].value[1]<bestchild.value[1]) { bestchild = children[i].copy(); }
     }
-  }
+  
       return bestchild;
     
   }
@@ -254,7 +250,7 @@ class Mancala {
 
 
   evaluateStatus(repeatOrNot){
-    const middle = this.pits.length;
+    const middle = this.pits.length/2;
     let seedsPlayer = 0;
     let seedsOpponent = 0;
     for (let i = 0; i < middle; i++) {
@@ -342,7 +338,7 @@ function toggleElementDisplayOpen(event) {
   const x = event.srcElement;
   if (x.classList.contains("rulesList")) {
     const y = document.getElementById(x.id.replace("Toggle", ""));
-    y.classList.toggle("display");
+    y.classList.toggle("displayed");
   } else {
     if (x.id == "settingsStartGameButton") {
       const y = document.getElementById("tabGameSettings");
@@ -352,7 +348,20 @@ function toggleElementDisplayOpen(event) {
         const y = document.getElementById(
           x.id.replace("selectionBarItem", "tab")
         );
+        if(!y.classList.contains("open")){
+          const tabs = document.getElementsByClassName("tempFloatingTab");
+          for(let i of tabs) {
+            if (i.id != y.id) {
+              if (i.classList.contains("open")) i.classList.toggle("open");
+            }
+          }
+        }
         y.classList.toggle("open");
+        if (x.id == "selectionBarItemGameRules") { 
+          for(let i of y.children) {
+            if (i.classList.contains("displayed")) i.classList.toggle("displayed");
+          }
+        }
       } else {
         const y = document.getElementById(x.id.replace("Button", ""));
         x.classList.toggle("open");
@@ -367,6 +376,11 @@ function startGame(event) {
   while(element.firstChild) element.removeChild(element.lastChild);
   const element2 = document.getElementById("gameStatusBox");
   while(element2.firstChild) element2.removeChild(element2.lastChild);
+  const forfeitButton = document.getElementById("forfeitButton");
+  if (forfeitButton != null) forfeitButton.remove();
+  const gameMessages = document.getElementById("gameMessages");
+  if (gameMessages != null) gameMessages.remove();
+
   const numberOfPits = parseInt(
     document.querySelector('input[name="settingsPitsRadio"]:checked').value
   );
