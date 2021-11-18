@@ -36,15 +36,15 @@ function toggleElementDisplayOpen(event) {
   }
   
   function startGame(event) {
-    const element = document.getElementById("gameBoard");
-    while(element.firstChild) element.removeChild(element.lastChild);
-    const element2 = document.getElementById("gameStatusBox");
-    while(element2.firstChild) element2.removeChild(element2.lastChild);
-    const forfeitButton = document.getElementById("forfeitButton");
-    if (forfeitButton != null) forfeitButton.remove();
-    const gameMessages = document.getElementById("gameMessages");
-    if (gameMessages != null) gameMessages.remove();
-  
+
+    const playTableElement = document.getElementById("playTable");
+
+    while(playTableElement.firstChild) playTableElement.removeChild(playTableElement.lastChild);
+
+    const gameStatusElement = document.getElementById("gameStatus");
+
+    while(gameStatusElement.firstChild) gameStatusElement.removeChild(gameStatusElement.lastChild);
+
     const numberOfPits = parseInt(
       document.querySelector('input[name="settingsPitsRadio"]:checked').value
     );
@@ -54,65 +54,65 @@ function toggleElementDisplayOpen(event) {
     const difficultyAI = parseInt(
       document.querySelector('select[name="difficultySelector"]').value
     );
-    const gameStarter = ((starter) => {
-      if (starter == "gameStartedByPlayer") {
-        return "Player";
-      } else {
-        return "Opponent";
-      }
-    })(
-      document.querySelector('input[name="settingsFirstTurnRadio"]:checked').value
-    );
+    
+    const gameStarter = (document.querySelector('input[name="settingsFirstTurnRadio"]:checked').value == "gameStartedByPlayer") ? "Player" : "Opponent";
+    
     const returnObject = drawBoard(
-      "gameBoard",
-      "gameStatusBox",
-      "playTable",
       numberOfPits,
       initialSeedNumber,
-      gameStarter
+      gameStarter,
+      playTableElement,
+      gameStatusElement
     );
+
     game.updateMancala(
-      returnObject.storeOpponentStatus,
       returnObject.pitsStatus,
-      returnObject.storePlayerStatus,
-      difficultyAI,
-      gameStarter
+      gameStarter,
+      [0,0],
+      numberOfPits,
+      returnObject.storePlayerPosition,
+      returnObject.storeOpponentPosition,
+      difficultyAI
     );
     updateDisplay();
+
     toggleElementDisplayOpen(event);
+
     if(game.turn == "Opponent") game.opponentTurn();
   }
   
   function drawBoard(
-    boardId,
-    statusId,
-    playTableId,
     numberOfPits,
     initialSeedNumber,
-    gameStarter
+    gameStarter,
+    playTableElement,
+    gameStatusElement
   ) {
-    const parentBoard = document.getElementById(boardId);
-    const parentStatus = document.getElementById(statusId);
-    const parentTableId = document.getElementById(playTableId);
-  
-    const pitsBoardStatus = new Array(numberOfPits * 2);
-    const storePlayerBoardStatus = 0;
-    const storeOpponentBoardStatus = 0;
+
+    const gameBoardElement = document.createElement("div");
+    gameBoardElement.id = "gameBoard";
+    playTableElement.appendChild(gameBoardElement);
+
+    const gameStatusBoxElement = document.createElement("div");
+    gameStatusBoxElement.id = "gameStatusBox";
+    gameStatusElement.appendChild(gameStatusBoxElement);
+
+    const pitsBoardStatus = [];
   
     const storeOpponent = document.createElement("div");
     storeOpponent.classList.add("storeOpponent", "clickable");
-    parentBoard.appendChild(storeOpponent);
+    gameBoardElement.appendChild(storeOpponent);
     const storeOpponentStatus = document.createElement("div");
     storeOpponentStatus.className = "storeOpponentStatus";
     storeOpponentStatus.innerHTML = 0;
-    parentStatus.appendChild(storeOpponentStatus);
+    gameStatusBoxElement.appendChild(storeOpponentStatus);
   
     const gamePits = document.createElement("div");
     gamePits.className = "gamePits";
-    parentBoard.appendChild(gamePits);
+    gameBoardElement.appendChild(gamePits);
     const gamePitsStatus = document.createElement("div");
     gamePitsStatus.className = "gamePitsStatus";
-    parentStatus.appendChild(gamePitsStatus);
+    gameStatusBoxElement.appendChild(gamePitsStatus);
   
     const gamePitsOpponent = document.createElement("div");
     gamePitsOpponent.className = "gamePitsOpponent";
@@ -130,15 +130,15 @@ function toggleElementDisplayOpen(event) {
   
     const storePlayer = document.createElement("div");
     storePlayer.classList.add("storePlayer", "clickable");
-    parentBoard.appendChild(storePlayer);
+    gameBoardElement.appendChild(storePlayer);
     const storePlayerStatus = document.createElement("div");
     storePlayerStatus.className = "storePlayerStatus";
     storePlayerStatus.innerHTML = 0;
-    parentStatus.appendChild(storePlayerStatus);
+    gameStatusBoxElement.appendChild(storePlayerStatus);
   
     for (let i = 0; i < numberOfPits; i++) {
       pitsBoardStatus[i] = initialSeedNumber;
-      pitsBoardStatus[i + numberOfPits] = initialSeedNumber;
+      pitsBoardStatus[i + numberOfPits + 1] = initialSeedNumber;
   
       const pitPlayer = createPit("Player", i);
       gamePitsPlayer.appendChild(pitPlayer);
@@ -152,27 +152,32 @@ function toggleElementDisplayOpen(event) {
       pitOpponentStatus.innerHTML = initialSeedNumber;
       gamePitsOpponentStatus.appendChild(pitOpponentStatus);
     }
+
+    const storePlayerPosition = numberOfPits;
+    const storeOpponentPosition = 2*numberOfPits+1;
+    pitsBoardStatus[storePlayerPosition] = 0;
+    pitsBoardStatus[storeOpponentPosition] = 0;
   
     const gameMessages = document.createElement("div");
     gameMessages.id = "gameMessages";
     gameMessages.className = "gameMessages";
     gameMessages.innerHTML = "It is now the " + gameStarter + "'s turn to play.";
-    parentTableId.appendChild(gameMessages);
+    playTableElement.appendChild(gameMessages);
   
     const forfeitButton = document.createElement("div");
     forfeitButton.id = "forfeitButton";
     forfeitButton.classList.add("forfeitButton", "clickable");
     forfeitButton.addEventListener("click", forfeit);
     forfeitButton.innerHTML = "Forfeit";
-    parentTableId.appendChild(forfeitButton);
+    playTableElement.appendChild(forfeitButton);
   
     const returnObject = {
-      storeOpponentStatus: storeOpponentBoardStatus,
       pitsStatus: pitsBoardStatus,
-      storePlayerStatus: storePlayerBoardStatus,
+      storePlayerPosition: storePlayerPosition,
+      storeOpponentPosition: storeOpponentPosition
     };
   
-    parentBoard.style.borderStyle = "solid";
+    gameBoardElement.style.borderStyle = "solid";
   
     return returnObject;
   }
@@ -199,18 +204,11 @@ function toggleElementDisplayOpen(event) {
     const parentBoundBox = parent.getBoundingClientRect();
   
     seed.className = "seed";
-    /*const x = Math.floor(
-      getRandomNumber(parentBoundBox.left + 40, parentBoundBox.right - 40)
-    );
-    const y = Math.floor(
-      getRandomNumber(parentBoundBox.top + 20, parentBoundBox.bottom - 45)
-    );*/
+
     const x = Math.floor(getRandomNumber(20, 60));
     const y = Math.floor(getRandomNumber(20, 65));
     const deg = Math.floor(getRandomNumber(0, 360));
   
-    /*seed.style.left = x + "px";
-    seed.style.top = y + "px";*/
     seed.style.left = x + "%";
     seed.style.top = y + "%";
     seed.style.transform = "rotate(" + deg + "deg)";
@@ -230,20 +228,20 @@ function toggleElementDisplayOpen(event) {
     const storePlayer = document.getElementsByClassName("storePlayer")[0];
     const storeOpponent = document.getElementsByClassName("storeOpponent")[0];
   
-    storePlayerStatus.innerHTML = game.storePlayer;
-    updateSeeds(storePlayer, game.storePlayer);
-    storeOpponentStatus.innerHTML = game.storeOpponent;
-    updateSeeds(storeOpponent, game.storeOpponent);
+    storePlayerStatus.innerHTML = game.pits[game.storePlayerPosition];
+    updateSeeds(storePlayer, game.pits[game.storePlayerPosition]);
+    storeOpponentStatus.innerHTML = game.pits[game.storeOpponentPosition];
+    updateSeeds(storeOpponent, game.pits[game.storeOpponentPosition]);
   
-    for (let i = 0; i < game.pits.length / 2; i++) {
+    for (let i = 0; i < game.numberOfPits ; i++) {
       const pitPlayerStatus = document.getElementById("pitPlayerStatus" + i);
       pitPlayerStatus.innerHTML = game.pits[i];
       const pitPlayer = document.getElementById("pitPlayer" + i);
       updateSeeds(pitPlayer, game.pits[i]);
       const pitOpponentStatus = document.getElementById("pitOpponentStatus" + i);
-      pitOpponentStatus.innerHTML = game.pits[i + game.pits.length / 2];
+      pitOpponentStatus.innerHTML = game.pits[i + game.numberOfPits + 1];
       const pitOpponent = document.getElementById("pitOpponent" + i);
-      updateSeeds(pitOpponent, game.pits[i + game.pits.length / 2]);
+      updateSeeds(pitOpponent, game.pits[i + game.numberOfPits + 1]);
     }
   }
   
@@ -279,10 +277,11 @@ function toggleElementDisplayOpen(event) {
       
       const element = (event.path[0].classList.value == "seed") ? event.path[0].parentElement : event.srcElement;
       
-      console.log(event);
-      console.log(element);
+      //console.log(event);
+      //console.log(element);
 
-      console.log("logging" + this);
+      //console.log("logging" + this);
+      
       game.playerTurn(element);
       
     
