@@ -269,6 +269,10 @@ function toggleElementDisplayOpen(event) {
   }
   
   function gamePlayerPlay(event) {
+    if(game.value[0] == 1) { replaceGameMessages(
+      "The game is over. You may start a new game."
+    ); } else {
+
     if (game.turn == "Opponent") {
       replaceGameMessages(
         "It's not your turn. Please allow the Opponent to finish his play."
@@ -286,7 +290,7 @@ function toggleElementDisplayOpen(event) {
       
     
       }
-    }
+    } }
    
   
   function validPlay(event){

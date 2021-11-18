@@ -250,13 +250,16 @@ class Mancala {
   opponentTurn() {
     //console.log(this);
     //console.log("This is the Opponent'sTurn");
+    
 
     const bestchild = this.getMin(1);
+    console.log("best child");
+    console.log(bestchild);
 
-    this.updateMancala(
-      bestchild.pits,
-      bestchild.turn,
-    );
+    const pit = bestchild.i;
+    const seedsInPit = this.pits[bestchild.i + this.numberOfPits + 1];
+
+    this.gameMove(seedsInPit,pit);
 
     updateDisplay();
 
@@ -296,6 +299,7 @@ class Mancala {
       } /* end of verifying it's a Draw */
       /* if the Opponent won, print it */
       if (this.value[1] == -10) {
+        replaceGameMessages("The Game Is Over. Opponent Wins.");
         gamesWonByPC++;
         document.getElementById("opponentScore").innerHTML = gamesWonByPC;
       } /* end of verifying if the Opponent won */
@@ -312,9 +316,11 @@ class Mancala {
           children[i].gameMove(children[i].pits[i+this.numberOfPits+1],i);
           //console.log("this is a child");
         }
+        console.log(children[i]);
       } /* end of for loop */
 
       //console.log("depth = AI"+(depth == this.difficultyAI));
+
 
       /* checks if the depth already matches the difficulty. If it doesn't,
       use getMin and getMax on children */
@@ -322,17 +328,21 @@ class Mancala {
         //console.log("I managed to get here");
         /* for each child, if it's a pleyer's turn, use the getMax method, otherwise, use the getMin method */
         for(let i=0; i < this.numberOfPits; i++) {
-          if(children[i].value[0] == 0 && children[i].turn == "Player") { children[i] = children[i].getMax(depth+1); }
-          if(children[i].value[0] == 0 && children[i].turn == "Opponent") { children[i] = children[i].getMin(depth+1); }
+          if(children[i].value[0] == 0) { if (children[i].turn == "Player") { children[i].bestChild = children[i].getMax(depth+1); }
+        } else { children[i].bestChild = children[i].getMin(depth+1); }
         } /* end of for loop of getMin and getMax */
-      } /* end of checking if depth already matches the difficulty */
+      } /* end of checking if depth already matches the difficulty */ 
+    
 
-      let bestchild = children[0].copy();
+      const bestchild = {
+        i: 0,
+        bestValue: (children[0].bestChild == null) ? children[0].value.slice() : children[0].bestChild.bestValue.slice()
+      }
       /* for loop to check which child has the lowest value */
       for (let i = 1; i < this.numberOfPits; i++) {
-        if(children[i].value[1]<bestchild.value[1]) bestchild = children[i].copy();
+        if(((children[i].bestChild == null) ? children[i].value[1] : children[i].bestChild.bestValue[1])<bestchild.bestValue[1]) { bestchild.i = i; bestchild.bestValue = (children[i].bestChild == null) ? children[i].value.slice() : children[i].bestChild.bestValue.slice(); }
       } /* end of foor loop checking lowest value */
-      return bestchild.copy();
+      return bestchild;
     } /* end of getMin method */
   
     /* returns the child with the Maximum score */
@@ -353,16 +363,21 @@ class Mancala {
       if(!(depth == this.difficultyAI)) {
         /* for each child, if it's a pleyer's turn, use the getMax method, otherwise, use the getMin method */
         for(let i=0; i < this.numberOfPits; i++) {
-          if(children[i].value[0] == 0 && children[i].turn == "Player") { children[i] = children[i].getMax(depth+1); }
-          if(children[i].value[0] == 0 && children[i].turn == "Opponent") { children[i] = children[i].getMin(depth+1); }
+          if(children[i].value[0] == 0) { if (children[i].turn == "Player") { children[i].bestChild = children[i].getMax(depth+1); }
+        } else { children[i].bestChild = children[i].getMin(depth+1); }
         } /* end of for loop of getMin and getMax */
       } /* end of checking if depth already matches the difficulty */
 
-      let bestchild = children[0].copy();
+      
+
+      const bestchild = {
+        i: 0,
+        bestValue: (children[0].bestChild == null) ? children[0].value.slice() : children[0].bestChild.bestValue.slice()
+      }
       /* for loop to check which child has the highest value */
       for (let i = 1; i < this.numberOfPits; i++) {
-        if(children[i].value[1]>bestchild.value[1]) bestchild = children[i].copy();
+        if(((children[i].bestChild == null) ? children[i].value[1] : children[i].bestChild.bestValue[1])>bestchild.bestValue[1]) { bestchild.i = i; bestchild.bestValue = (children[i].bestChild == null) ? children[i].value.slice() : children[i].bestChild.bestValue.slice(); }
       } /* end of foor loop checking lowest value */
-      return bestchild.copy();
+      return bestchild;
     } /* end of getMax method */
 }
