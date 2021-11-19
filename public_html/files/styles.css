@@ -191,37 +191,61 @@
 .pageContentItem {
   margin: 2px;
   background: white;
-  height: 50vh;
+  height: 60vh;
+
+}
+
+#playTable, #gameStatus {
+  display: flex;
+  flex-direction: column;
 }
 
 #playTable {
   margin-right: 1px;
   width: 80%;
+}
+
+#gameStatus {
+  margin-left: 1px;
+  width: 20%;
+}
+
+#gameBoard, #gameStatusBox {
+  margin: auto;
+  width: 90%;
+  border: 1px;
+  padding: 10px;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 #gameBoard {
-  margin: auto;
-  border: 1px;
-  padding: 10px;
-  height: 19vh;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  height: 40%;
   background-image: url("wood.png");
 }
 
+#gameStatusBox {
+  height: 10%;
+}
+
 .storeOpponent,
-.storePlayer {
+.storePlayer,
+.storeOpponentStatus,
+.storePlayerStatus {
   position: relative;
+  width: 8.3%;
   border: 1px;
-  border-style: solid;
-  border-radius: 50px;
-  margin: 0.1cm;
-  width: 4.5vw;
-  height: 18vh;
-  background-color: rgba(0, 0, 0, 0.15);
+  height: 99%;
+  margin: auto;
+}
+
+.storeOpponent {
+  margin-right: 2px;
+}
+
+.storePlayer {
+  margin-left: 2px;
 }
 
 .gamePitsOpponent,
@@ -237,15 +261,33 @@
   flex-direction: row-reverse;
 }
 
+.gamePitsOpponent,
+.gamePitsPlayer,
+.gamePitsOpponentStatus,
+.gamePitsPlayerStatus {
+  width: 100%;
+  align-content: center;
+  justify-content: center;
+  height: 49%;
+}
+
 .pitPlayer,
-.pitOpponent {
+.pitOpponent,
+.pitPlayerStatus,
+.pitOpponentStatus {
+  position: relative;
   z-index: 100;
-  margin: 0.1cm;
+  height: 95%;
+  margin: auto;
   border: 1px;
   border-style: solid;
+}
+
+.pitPlayer,
+.pitOpponent,
+.storeOpponent,
+.storePlayer {
   border-radius: 50px;
-  height: 9vh;
-  width: 4.5vw;
   background-color: rgba(0, 0, 0, 0.15);
 }
 
@@ -267,35 +309,4 @@
 
 .forfeitButton {
   margin: auto;
-}
-
-#gameStatus {
-  margin-left: 1px;
-  width: 20%;
-  display: flex;
-}
-
-#gameStatusBox {
-  margin: auto;
-  margin-top: 20%;
-  height: 4vh;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.storeOpponentStatus,
-.storePlayerStatus,
-.pitPlayerStatus,
-.pitOpponentStatus {
-  border: 1px;
-  border-style: solid;
-  width: 2vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.pitPlayerStatus,
-.pitOpponentStatus {
-  height: 2vh;
 }
