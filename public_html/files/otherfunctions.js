@@ -1,3 +1,5 @@
+("use strict");
+
 function toggleElementDisplayOpen(event) {
     const x = event.srcElement;
     if (x.classList.contains("rulesList")) {

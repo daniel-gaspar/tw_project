@@ -51,11 +51,11 @@ class Mancala {
   updateMancala(
     pitsStatus,
     gameTurnStatus,
-    gameValueStatus=this.value,
-    numberOfPitsStatus=this.numberOfPits,
-    storePlayerPositionStatus=this.storePlayerPosition,
-    storeOpponentPositionStatus=this.storeOpponentPosition,
-    difficultyAIStatus=this.difficultyAI
+    gameValueStatus = this.value,
+    numberOfPitsStatus = this.numberOfPits,
+    storePlayerPositionStatus = this.storePlayerPosition,
+    storeOpponentPositionStatus = this.storeOpponentPosition,
+    difficultyAIStatus = this.difficultyAI
   ) {
     this.numberOfPits = numberOfPitsStatus;
 
@@ -88,41 +88,54 @@ class Mancala {
 
     /* check if either player has 0 seeds in their pits, to point that the game is over */
     if (seedsPlayer == 0 || seedsOpponent == 0) {
+      for (let i = 0; i < this.numberOfPits; i++) {
+        this.pits[this.storePlayerPosition] += this.pits[i];
+        this.pits[i] = 0;
+        this.pits[this.storeOpponentPosition] +=
+          this.pits[i + this.numberOfPits + 1];
+        this.pits[i + this.numberOfPits + 1] = 0;
+      }
       if (
-        seedsPlayer + seedsInStorePlayer >
-        seedsOpponent + seedsInStoreOpponent
+        this.pits[this.storePlayerPosition] >
+        this.pits[this.storeOpponentPosition]
       )
-        return [1, 10];
+        return [1, this.WINNING_SCORE];
       if (
-        seedsPlayer + seedsInStorePlayer ==
-        seedsOpponent + seedsInStoreOpponent
+        this.pits[this.storePlayerPosition] ==
+        this.pits[this.storeOpponentPosition]
       )
-        return [1, 0];
-      return [1, -10];
+        return [1, this.SAME_NUMBER];
+      return [1, this.LOSING_SCORE];
     } /* end of condition for end of gaming checking */
 
     /* check if the player will play again and evaluate considering the seeds in the stores */
     if (repeatOrNot == "storePlayer") {
-      if (seedsInStorePlayer > seedsInStoreOpponent) return [0, 7];
-      if (seedsInStorePlayer == seedsInStoreOpponent) return [0, 6];
-      return [0, 5];
+      if (seedsInStorePlayer > seedsInStoreOpponent)
+        return [0, this.PLAYER_HIGHER_NUMBER_AND_REPEAT];
+      if (seedsInStorePlayer == seedsInStoreOpponent)
+        return [0, this.PLAYER_SAME_NUMBER_AND_REPEAT];
+      return [0, this.PLAYER_LOWER_NUMBER_AND_REPEAT];
     } /* end of checking if the player will play again */
     /* check if the opponent will play again and evaluate considering the seeds in the stores */
     if (repeatOrNot == "storeOpponent") {
-      if (seedsInStorePlayer > seedsInStoreOpponent) return [0, -5];
-      if (seedsInStorePlayer == seedsInStoreOpponent) return [0, -6];
-      return [0, -7];
+      if (seedsInStorePlayer > seedsInStoreOpponent)
+        return [0, this.OPPONENT_LOWER_NUMBER_AND_REPEAT];
+      if (seedsInStorePlayer == seedsInStoreOpponent)
+        return [0, this.OPPONENT_SAME_NUMBER_AND_REPEAT];
+      return [0, this.OPPONENT_HIGHER_NUMBER_AND_REPEAT];
     } /* end of checking if the opponent will play again */
 
     /* if neither plays again, evaluate only based on the amount of seeds in the stores */
     if (seedsInStorePlayer > seedsInStoreOpponent) {
-      this.turn = (this.turn == "Player") ? "Opponent" : "Player";
-      return [0, 1]; }
+      this.turn = this.turn == "Player" ? "Opponent" : "Player";
+      return [0, this.PLAYER_HIGHER_NUMBER];
+    }
     if (seedsInStorePlayer == seedsInStoreOpponent) {
-      this.turn = (this.turn == "Player") ? "Opponent" : "Player";
-      return [0, 0]; }
-    this.turn = (this.turn == "Player") ? "Opponent" : "Player";
-    return [0, -1];
+      this.turn = this.turn == "Player" ? "Opponent" : "Player";
+      return [0, this.SAME_NUMBER];
+    }
+    this.turn = this.turn == "Player" ? "Opponent" : "Player";
+    return [0, this.OPPONENT_HIGHER_NUMBER];
   } /* end of evaluate method */
 
   /* processes the game Move within the Object, given which pit it starts at, and the number of Seeds in it */
@@ -179,16 +192,15 @@ class Mancala {
           relativePosition == this.storeOpponentPosition
         ) {
           lastPlayed.event =
-            (relativePosition == this.storePlayerPosition) ? "storePlayer" : "storeOpponent";
+            relativePosition == this.storePlayerPosition
+              ? "storePlayer"
+              : "storeOpponent";
         } /* end of verifying if the last seed was placed in a Store */ else {
           /* if the last play wasn't in a Store ... */
           /* ... and previously the last seeded pit was empty ... */
           if (seedsInCurrentPit == 0) {
             /* ... if it was the Player and it was one of their pits, steal the Opponent's seeds */
             if (offset == 0 && relativePosition < this.storePlayerPosition) {
-              console.log("Player Stealing Opponent Seeds");
-              console.log("Player Relative Position " + relativePosition);
-              console.log("Opponent Relative Position " + (2 * this.storePlayerPosition - relativePosition))
               this.pits[relativePosition]--;
               this.pits[this.storePlayerPosition]++;
               this.pits[this.storePlayerPosition] +=
@@ -198,14 +210,12 @@ class Mancala {
             } /* end of stealing Opponent's seeds */
             /* if it was the Opponent and it was one of their pits, steal the Player's seeds */
             if (offset != 0 && relativePosition > this.storePlayerPosition) {
-              console.log("Opponent Stealing Player Seeds");
-              console.log("Opponent Relative Position " + relativePosition);
-              console.log("Player Relative Position " + (this.storeOpponentPosition - relativePosition - 1));
+              console.log("Opponent Stealing Seeds");
               this.pits[relativePosition]--;
               this.pits[this.storeOpponentPosition]++;
               this.pits[this.storeOpponentPosition] +=
-                this.pits[this.storeOpponentPosition - relativePosition - 1];
-              this.pits[this.storeOpponentPosition - relativePosition - 1] = 0;
+                this.pits[2 * this.storePlayerPosition - relativePosition];
+              this.pits[2 * this.storePlayerPosition - relativePosition] = 0;
               lastPlayed.event = "emptiedPlayerPit";
             } /* end of stealing Player's seeds */
           } /* end of verifying if the last seeded pit was empty */
@@ -232,9 +242,8 @@ class Mancala {
       replaceGameMessages(
         "You can't select an empty pit to play. Please play again."
       );
-    } /* end of verifying if the play was invalid */
-    /* if the play was valid */
-    else {
+    } /* end of verifying if the play was invalid */ else {
+      /* if the play was valid */
       this.gameMove(seedsInPit, pit);
 
       updateDisplay();
@@ -250,16 +259,15 @@ class Mancala {
   opponentTurn() {
     //console.log(this);
     //console.log("This is the Opponent'sTurn");
-    
 
     const bestchild = this.getMin(1);
     console.log("best child");
     console.log(bestchild);
 
-    const pit = bestchild.i;
-    const seedsInPit = this.pits[bestchild.i + this.numberOfPits + 1];
+    const pit = bestchild[0];
+    const seedsInPit = this.pits[pit + this.numberOfPits + 1];
 
-    this.gameMove(seedsInPit,pit);
+    this.gameMove(seedsInPit, pit);
 
     updateDisplay();
 
@@ -275,30 +283,35 @@ class Mancala {
     /* if it's not game over */
     if (this.value[0] == 0) {
       /* if it's a repeat Play for the player */
-      if ((this.value[1] >= 5 && this.value[1] <= 7) || (this.value[1] >= -7 && this.value[1] <= -5)) {
+      if (
+        this.value[1] == this.PLAYER_HIGHER_NUMBER_AND_REPEAT ||
+        this.value[1] == this.PLAYER_SAME_NUMBER_AND_REPEAT ||
+        this.value[1] == this.PLAYER_LOWER_NUMBER_AND_REPEAT ||
+        this.value[1] == this.OPPONENT_HIGHER_NUMBER_AND_REPEAT ||
+        this.value[1] == this.OPPONENT_SAME_NUMBER_AND_REPEAT ||
+        this.value[1] == this.OPPONENT_LOWER_NUMBER_AND_REPEAT
+      ) {
         replaceGameMessages("The " + this.turn + " may play again");
-        if(this.turn == "Opponent") this.opponentTurn();
-      } /* end of verifying if it's a repeat Play */
-      /* if it isn't a repeat Play, then let the other player Play */
-      else {
+        if (this.turn == "Opponent") this.opponentTurn();
+      } /* end of verifying if it's a repeat Play */ else {
+        /* if it isn't a repeat Play, then let the other player Play */
         replaceGameMessages("It is now the " + this.turn + "'s turn to play.");
-        if(this.turn == "Opponent") this.opponentTurn();
+        if (this.turn == "Opponent") this.opponentTurn();
       }
-    } /* end of verifying if it's game over */
-    /* if it is game over */
-    else {
-      /* if the Player won, print it */  
-      if (this.value[1] == 10) {
+    } /* end of verifying if it's game over */ else {
+      /* if it is game over */
+      /* if the Player won, print it */
+      if (this.value[1] == this.WINNING_SCORE) {
         replaceGameMessages("The Game Is Over. Player Wins.");
         gamesWonByPlayer++;
         document.getElementById("playerScore").innerHTML = gamesWonByPlayer;
       } /* end of verifying if the Player won */
       /* if it's a Draw, print it */
-      if (this.value[1] == 0) {
+      if (this.value[1] == this.SAME_NUMBER) {
         replaceGameMessages("The Game Is Over. It's a Draw.");
       } /* end of verifying it's a Draw */
       /* if the Opponent won, print it */
-      if (this.value[1] == -10) {
+      if (this.value[1] == this.LOSING_SCORE) {
         replaceGameMessages("The Game Is Over. Opponent Wins.");
         gamesWonByPC++;
         document.getElementById("opponentScore").innerHTML = gamesWonByPC;
@@ -307,77 +320,161 @@ class Mancala {
   } /* end of evaluateNext method */
 
   /* returns the child with the Minimum Score */
-  getMin(depth){
-      const children = [];
-      /* for loop to create a new Mancala Object for each possible play, and proceeds on it */
-      for(let i = 0; i < this.numberOfPits; i++){
-        children[i] = this.copy();
-        if(children[i].pits[i+this.numberOfPits+1] > 0) {
-          children[i].gameMove(children[i].pits[i+this.numberOfPits+1],i);
-          //console.log("this is a child");
-        }
-        console.log(children[i]);
-      } /* end of for loop */
-
-      //console.log("depth = AI"+(depth == this.difficultyAI));
-
-
-      /* checks if the depth already matches the difficulty. If it doesn't,
-      use getMin and getMax on children */
-      if(!(depth == this.difficultyAI)) {
-        //console.log("I managed to get here");
-        /* for each child, if it's a pleyer's turn, use the getMax method, otherwise, use the getMin method */
-        for(let i=0; i < this.numberOfPits; i++) {
-          if(children[i].value[0] == 0) { if (children[i].turn == "Player") { children[i].bestChild = children[i].getMax(depth+1); }
-        } else { children[i].bestChild = children[i].getMin(depth+1); }
-        } /* end of for loop of getMin and getMax */
-      } /* end of checking if depth already matches the difficulty */ 
-    
-
-      const bestchild = {
-        i: 0,
-        bestValue: (children[0].bestChild == null) ? children[0].value.slice() : children[0].bestChild.bestValue.slice()
+  getMin(depth) {
+    const children = [];
+    /* for loop to create a new Mancala Object for each possible play, and proceeds on it */
+    for (let i = 0; i < this.numberOfPits; i++) {
+      children[i] = this.copy();
+      console.log(children[i]);
+      if (children[i].pits[i + this.numberOfPits + 1] > 0) {
+        children[i].gameMove(children[i].pits[i + this.numberOfPits + 1], i);
+        //console.log("this is a child");
+      } else {
+        children[i] = null;
       }
-      /* for loop to check which child has the lowest value */
-      for (let i = 1; i < this.numberOfPits; i++) {
-        if(((children[i].bestChild == null) ? children[i].value[1] : children[i].bestChild.bestValue[1])<bestchild.bestValue[1]) { bestchild.i = i; bestchild.bestValue = (children[i].bestChild == null) ? children[i].value.slice() : children[i].bestChild.bestValue.slice(); }
-      } /* end of foor loop checking lowest value */
-      return bestchild;
-    } /* end of getMin method */
-  
-    /* returns the child with the Maximum score */
-    getMax(depth){
-      const children = [];
-      /* for loop to create a new Mancala Object for each possible play, and proceeds on it */
-      for(let i = 0; i < this.numberOfPits; i++){
-        children[i] = this.copy();
-        if(children[i].pits[i] > 0) {
-          children[i].gameMove(children[i].pits[i],i);
-        }
-      } /* end of for loop */
+      //console.log(children[i]);
+    } /* end of for loop */
 
-      //console.log("depth = AI"+(depth == this.difficultyAI));
+    //console.log("depth = AI"+(depth == this.difficultyAI));
 
-      /* checks if the depth already matches the difficulty. If it doesn't,
+    /* checks if the depth already matches the difficulty. If it doesn't,
       use getMin and getMax on children */
-      if(!(depth == this.difficultyAI)) {
-        /* for each child, if it's a pleyer's turn, use the getMax method, otherwise, use the getMin method */
-        for(let i=0; i < this.numberOfPits; i++) {
-          if(children[i].value[0] == 0) { if (children[i].turn == "Player") { children[i].bestChild = children[i].getMax(depth+1); }
-        } else { children[i].bestChild = children[i].getMin(depth+1); }
-        } /* end of for loop of getMin and getMax */
-      } /* end of checking if depth already matches the difficulty */
+    if (!(depth == this.difficultyAI)) {
+      //console.log("I managed to get here");
+      /* for each child, if it's a pleyer's turn, use the getMax method, otherwise, use the getMin method */
+      for (let i = 0; i < this.numberOfPits; i++) {
+        if (children[i] != null) {
+          if (children[i].value[0] == 0) {
+            if (children[i].turn == "Player") {
+              children[i].bestChild = children[i].getMax(depth + 1);
+            }
+          } else {
+            children[i].bestChild = children[i].getMin(depth + 1);
+          }
+        }
+      } /* end of for loop of getMin and getMax */
 
-      
+      const bestchild = [-1, 0, 0];
 
-      const bestchild = {
-        i: 0,
-        bestValue: (children[0].bestChild == null) ? children[0].value.slice() : children[0].bestChild.bestValue.slice()
+      for (let i = 0; i < this.numberOfPits; i++) {
+        if (children[i] != null && children[i].bestChild != null) {
+          if (children[i].bestChild[2] < bestchild[2] || bestchild[0] == -1) {
+            bestchild[0] = i;
+            bestchild[1] = children[i].bestChild[1];
+            bestchild[2] = children[i].bestChild[2];
+          }
+        }
       }
-      /* for loop to check which child has the highest value */
-      for (let i = 1; i < this.numberOfPits; i++) {
-        if(((children[i].bestChild == null) ? children[i].value[1] : children[i].bestChild.bestValue[1])>bestchild.bestValue[1]) { bestchild.i = i; bestchild.bestValue = (children[i].bestChild == null) ? children[i].value.slice() : children[i].bestChild.bestValue.slice(); }
-      } /* end of foor loop checking lowest value */
-      return bestchild;
-    } /* end of getMax method */
+      return bestchild.slice();
+    } /* end of checking if depth already matches the difficulty */
+
+    const bestchild = [-1, 0, 0];
+
+    /* for loop to check which child has the lowest value */
+    for (let i = 0; i < this.numberOfPits; i++) {
+      if (children[i] != null) {
+        if (children[i].value[1] < bestchild[2] || bestchild[0] == -1) {
+          bestchild[0] = i;
+          bestchild[1] = children[i].value[0];
+          bestchild[2] = children[i].value[1];
+        }
+      }
+      //console.log("this child has this");
+      //console.log(children[i]);
+    } /* end of foor loop checking lowest value */
+    return bestchild.slice();
+  } /* end of getMin method */
+
+  /* returns the child with the Maximum score */
+  getMax(depth) {
+    const children = [];
+    /* for loop to create a new Mancala Object for each possible play, and proceeds on it */
+    for (let i = 0; i < this.numberOfPits; i++) {
+      children[i] = this.copy();
+      if (children[i].pits[i] > 0) {
+        children[i].gameMove(children[i].pits[i], i);
+      } else {
+        children[i] = null;
+      }
+    } /* end of for loop */
+
+    //console.log("depth = AI"+(depth == this.difficultyAI));
+
+    /* checks if the depth already matches the difficulty. If it doesn't,
+      use getMin and getMax on children */
+    if (!(depth == this.difficultyAI)) {
+      /* for each child, if it's a pleyer's turn, use the getMax method, otherwise, use the getMin method */
+      for (let i = 0; i < this.numberOfPits; i++) {
+        if (children[i] != null) {
+          if (children[i].value[0] == 0) {
+            if (children[i].turn == "Player") {
+              children[i].bestChild = children[i].getMax(depth + 1);
+            }
+          } else {
+            children[i].bestChild = children[i].getMin(depth + 1);
+          }
+        }
+
+        const bestchild = [-1, 0, 0];
+
+        for (let i = 0; i < this.numberOfPits; i++) {
+          if (children[i] != null && children[i].bestChild != null) {
+            if (children[i].bestChild[2] > bestchild[2] || bestchild[0] == -1) {
+              bestchild[0] = i;
+              bestchild[1] = children[i].bestChild[1];
+              bestchild[2] = children[i].bestChild[2];
+            }
+          }
+        }
+        return bestchild.slice();
+      } /* end of for loop of getMin and getMax */
+    } /* end of checking if depth already matches the difficulty */
+
+    const bestchild = [-1, 0, 0];
+    /* for loop to check which child has the highest value */
+    for (let i = 0; i < this.numberOfPits; i++) {
+      if (children[i] != null) {
+        if (children[i].value[1] > bestchild[2] || bestchild[0] == -1) {
+          bestchild[0] = i;
+          bestchild[1] = children[i].value[0];
+          bestchild[2] = children[i].value[1];
+        }
+      }
+    } /* end of foor loop checking lowest value */
+    return bestchild.slice();
+  } /* end of getMax method */
+
+  get WINNING_SCORE() {
+    return 100;
+  }
+  get PLAYER_HIGHER_NUMBER_AND_REPEAT() {
+    return 70;
+  }
+  get PLAYER_HIGHER_NUMBER() {
+    return 60;
+  }
+  get PLAYER_SAME_NUMBER_AND_REPEAT() {
+    return 50;
+  }
+  get PLAYER_LOWER_NUMBER_AND_REPEAT() {
+    return 40;
+  }
+  get SAME_NUMBER() {
+    return 0;
+  }
+  get OPPONENT_LOWER_NUMBER_AND_REPEAT() {
+    return -40;
+  }
+  get OPPONENT_SAME_NUMBER_AND_REPEAT() {
+    return -50;
+  }
+  get OPPONENT_HIGHER_NUMBER() {
+    return -60;
+  }
+  get OPPONENT_HIGHER_NUMBER_AND_REPEAT() {
+    return -70;
+  }
+  get LOSING_SCORE() {
+    return -100;
+  }
 }
