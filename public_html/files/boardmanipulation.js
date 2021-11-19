@@ -19,43 +19,51 @@ function drawBoard(
 
   const storeOpponent = document.createElement("div");
   storeOpponent.id = "storeOpponent";
-  storeOpponent.classList.add("storeOpponent", "pit", "store");
+  storeOpponent.classList.add("pit", "store");
   gameBoardElement.appendChild(storeOpponent);
   const storeOpponentStatus = document.createElement("div");
   storeOpponentStatus.id = "storeOpponentStatus";
-  storeOpponentStatus.classList.add("storeOpponentStatus","pit", "store");
+  storeOpponentStatus.classList.add("pit", "store", "pitStatus", "storeStatus");
   storeOpponentStatus.innerHTML = 0;
   gameStatusBoxElement.appendChild(storeOpponentStatus);
 
   const gamePits = document.createElement("div");
   gamePits.id = "gamePits";
+  gamePits.classList.add("pitsBox");
   const x = 8*numberOfPits;
   gamePits.style.width = x + "%";
   gameBoardElement.appendChild(gamePits);
   const gamePitsStatus = document.createElement("div");
   gamePitsStatus.id = "gamePitsStatus";
+  gamePitsStatus.classList.add("pitsBox","pitsBoxStatus");
   gamePitsStatus.style.width = x + "%";
   gameStatusBoxElement.appendChild(gamePitsStatus);
 
   const gamePitsOpponent = document.createElement("div");
-  gamePitsOpponent.className = "gamePitsOpponent";
+  gamePitsOpponent.id = "gamePitsOpponent";
+  gamePitsOpponent.classList.add("pitsRow");
   gamePits.appendChild(gamePitsOpponent);
   const gamePitsOpponentStatus = document.createElement("div");
-  gamePitsOpponentStatus.className = "gamePitsOpponentStatus";
+  gamePitsOpponentStatus.id = "gamePitsOpponentStatus";
+  gamePitsOpponentStatus.classList.add("pitsRow","pitsRowStatus");
   gamePitsStatus.appendChild(gamePitsOpponentStatus);
 
   const gamePitsPlayer = document.createElement("div");
-  gamePitsPlayer.className = "gamePitsPlayer";
+  gamePitsPlayer.id = "gamePitsPlayer";
+  gamePitsPlayer.classList.add("pitsRow");
   gamePits.appendChild(gamePitsPlayer);
   const gamePitsPlayerStatus = document.createElement("div");
-  gamePitsPlayerStatus.className = "gamePitsPlayerStatus";
+  gamePitsPlayerStatus.id = "gamePitsPlayerStatus";
+  gamePitsPlayerStatus.classList.add("pitsRow","pitsRowStatus");
   gamePitsStatus.appendChild(gamePitsPlayerStatus);
 
   const storePlayer = document.createElement("div");
-  storePlayer.classList.add("storePlayer", "pit", "store");
+  storePlayer.id = "storePlayer";
+  storePlayer.classList.add("pit", "store");
   gameBoardElement.appendChild(storePlayer);
   const storePlayerStatus = document.createElement("div");
-  storePlayerStatus.classList.add("storePlayerStatus","pit","store");
+  storePlayerStatus.id = "storePlayerStatus";
+  storePlayerStatus.classList.add("pit","store", "pitStatus", "storeStatus");
   storePlayerStatus.innerHTML = 0;
   gameStatusBoxElement.appendChild(storePlayerStatus);
 
@@ -89,7 +97,7 @@ function drawBoard(
 
   const forfeitButton = document.createElement("div");
   forfeitButton.id = "forfeitButton";
-  forfeitButton.classList.add("forfeitButton", "clickable");
+  forfeitButton.classList.add("button", "clickable");
   forfeitButton.addEventListener("click", forfeit);
   forfeitButton.innerHTML = "Forfeit";
   playTableElement.appendChild(forfeitButton);
@@ -108,11 +116,14 @@ function drawBoard(
 function createPit(playerOrOpponent, i, numberOfPits) {
   const pit = document.createElement("div");
   pit.id = "pit" + playerOrOpponent + i;
-  pit.classList.add("pit" + playerOrOpponent);
-  pit.classList.add("pit");
+  pit.classList.add("pit" + playerOrOpponent, "pit");
   if (!pit.id.includes("Status")) {
     pit.classList.add("clickable");
   }
+  else { 
+    pit.classList.add("pitStatus");
+  }
+
   pit.style.width = (((1/numberOfPits) * 100) - (12/numberOfPits)) + "%";
   if (playerOrOpponent == "Player") {
     pit.addEventListener("click", gamePlayerPlay);
@@ -141,12 +152,12 @@ function createSeed(parent) {
 
 function updateDisplay() {
   const storePlayerStatus =
-    document.getElementsByClassName("storePlayerStatus")[0];
-  const storeOpponentStatus = document.getElementsByClassName(
+    document.getElementById("storePlayerStatus");
+  const storeOpponentStatus = document.getElementById(
     "storeOpponentStatus"
-  )[0];
-  const storePlayer = document.getElementsByClassName("storePlayer")[0];
-  const storeOpponent = document.getElementsByClassName("storeOpponent")[0];
+  );
+  const storePlayer = document.getElementById("storePlayer");
+  const storeOpponent = document.getElementById("storeOpponent");
 
   storePlayerStatus.innerHTML = game.pits[game.storePlayerPosition];
   updateSeeds(storePlayer, game.pits[game.storePlayerPosition]);
