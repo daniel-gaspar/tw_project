@@ -28,23 +28,19 @@ body {
   margin: auto;
   width: 40px;
   background-color: blue;
-  -webkit-transition-timing-function: linear;
   transition-timing-function: linear;
   transition-duration: 1s;
 }
 
 #authAreaButton.open > span:first-child {
-  -webkit-transform: translateY(6px) rotate(45deg);
   transform: translateY(6px) rotate(45deg);
 }
 
 #authAreaButton.open > span:nth-child(2) {
-  -webkit-transform: rotateY(90deg);
   transform: rotateY(90deg);
 }
 
 #authAreaButton.open > span:last-child {
-  -webkit-transform: translateY(-6px) rotate(-45deg);
   transform: translateY(-6px) rotate(-45deg);
 }
 
@@ -184,7 +180,7 @@ body {
   margin: auto;
   width: 50%;
   color: white;
-  font-style: bold;
+  font-weight: bold;
   font-size: 120%;
   background: linear-gradient(
     124deg,
@@ -245,6 +241,7 @@ body {
 
 #gameBoard {
   height: 40%;
+  background-color: rgba(204,102,0,0.7);
   background-image: url("wood.png");
 }
 
