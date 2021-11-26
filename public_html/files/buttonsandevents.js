@@ -106,9 +106,10 @@ function gamePlayerPlay(event) {
         "It's not your turn. Please allow the Opponent to finish his play."
       );
     } else {
+      const path = event.composedPath();
       const element =
-        event.path[0].classList.value == "seed"
-          ? event.path[0].parentElement
+        path[0].classList.value == "seed"
+          ? path[0].parentElement
           : event.srcElement;
 
       //console.log(event);
@@ -122,13 +123,11 @@ function gamePlayerPlay(event) {
 }
 
 function validPlay(event) {
-  const element = ((x) => {
-    if (x.path[0].classList.value == "seed") {
-      return x.path[0].parentElement;
-    } else {
-      return x.srcElement;
-    }
-  })(event);
+  const path = event.composedPath();
+  const element =
+    path[0].classList.value == "seed"
+          ? path[0].parentElement
+          : event.srcElement; 
 
   const pit = parseInt(element.id.slice(-1));
 
@@ -141,13 +140,11 @@ function validPlay(event) {
 }
 
 function clearValidPlay(event) {
-  const element = ((x) => {
-    if (x.path[0].classList.value == "seed") {
-      return x.path[0].parentElement;
-    } else {
-      return x.srcElement;
-    }
-  })(event);
+  const path = event.composedPath();
+  const element =
+  path[0].classList.value == "seed"
+          ? path[0].parentElement
+          : event.srcElement;
 
   const pit = parseInt(element.id.slice(-1));
 
