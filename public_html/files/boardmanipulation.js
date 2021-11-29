@@ -1,5 +1,6 @@
 ("use strict");
 
+/* creates all the necessary elements for the Game Board and the Game Status */
 function drawBoard(
   numberOfPits,
   initialSeedNumber,
@@ -111,8 +112,9 @@ function drawBoard(
   gameBoardElement.style.borderStyle = "solid";
 
   return returnObject;
-}
+} /* end of drawBoard function */
 
+/* generalized function to create Pits */
 function createPit(playerOrOpponent, i, numberOfPits) {
   const pit = document.createElement("div");
   pit.id = "pit" + playerOrOpponent + i;
@@ -132,24 +134,27 @@ function createPit(playerOrOpponent, i, numberOfPits) {
   }
 
   return pit;
-}
+} /* end of createPit function */
 
+
+/* generalized function to create Seeds */
 function createSeed(parent) {
   const seed = document.createElement("div");
   const parentBoundBox = parent.getBoundingClientRect();
 
   seed.className = "seed";
 
-  const x = Math.floor(getRandomNumber(20, 60));
-  const y = Math.floor(getRandomNumber(20, 65));
-  const deg = Math.floor(getRandomNumber(0, 360));
+  const x = getRandomNumber(20, 60);
+  const y = getRandomNumber(20, 65);
+  const deg = getRandomNumber(0, 360);
 
   seed.style.left = x + "%";
   seed.style.top = y + "%";
   seed.style.transform = "rotate(" + deg + "deg)";
   return seed;
-}
+} /* end of createSeed function */
 
+/* function to update the Game Board and Game Status based on the game Object (class Mancala) */
 function updateDisplay() {
   const storePlayerStatus =
     document.getElementById("storePlayerStatus");
@@ -174,8 +179,9 @@ function updateDisplay() {
     const pitOpponent = document.getElementById("pitOpponent" + i);
     updateSeeds(pitOpponent, game.pits[i + game.numberOfPits + 1]);
   }
-}
+} /* end of updateDisplay fuinction */
 
+/* generalized function to update the Number of Seeds inside a pit (graphical) */
 function updateSeeds(parent, targetNumber) {
   while (parent.childElementCount != targetNumber) {
     if (parent.childElementCount > targetNumber) {
@@ -184,9 +190,10 @@ function updateSeeds(parent, targetNumber) {
       parent.appendChild(createSeed(parent));
     }
   }
-}
+} /* end of updateSeeds function */
 
+/* generalized function to update the text inside the Div with the Game Messages */
 function replaceGameMessages(message) {
   const gameMessages = document.getElementById("gameMessages");
   gameMessages.innerHTML = message;
-}
+} /* end of replaceGameMessages function */

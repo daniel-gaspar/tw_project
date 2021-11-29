@@ -1,5 +1,6 @@
 ("use strict");
 
+/* function to toggle some elements between their CSS classes, namely to display them or not */
 function toggleElementDisplayOpen(event) {
   const x = event.srcElement;
   if (x.classList.contains("rulesList")) {
@@ -36,8 +37,9 @@ function toggleElementDisplayOpen(event) {
       }
     }
   }
-}
+} /* end of toggle function */
 
+/* function to Start Game. Triggered by Start Game Button */
 function startGame(event) {
   const playTableElement = document.getElementById("playTable");
 
@@ -87,16 +89,18 @@ function startGame(event) {
   toggleElementDisplayOpen(event);
 
   if (game.turn == "Opponent") game.opponentTurn();
-}
+} /* end of Start Game function */
 
+/* function to Forfeit. Increments number of games won by PC and writes a forfeit message */
 function forfeit() {
   gamesWonByPC++;
   replaceGameMessages(
     "You have forfeited the game. This point goes to the Opponent."
   );
   document.getElementById("opponentScore").innerHTML = gamesWonByPC;
-}
+} /* end of forfeit function */
 
+/* function to start player Play. Triggered by clicking one of the Player's pits */
 function gamePlayerPlay(event) {
   if (game.value[0] == 1) {
     replaceGameMessages("The game is over. You may start a new game.");
@@ -111,17 +115,12 @@ function gamePlayerPlay(event) {
         path[0].classList.value == "seed"
           ? path[0].parentElement
           : event.srcElement;
-
-      //console.log(event);
-      //console.log(element);
-
-      //console.log("logging" + this);
-
       game.playerTurn(element);
     }
   }
-}
+} /* end of gamePlayerPlay function */
 
+/* function that verifies if it's a valid play. Triggered on Mouse Hover over pit */
 function validPlay(event) {
   const path = event.composedPath();
   const element =
@@ -137,8 +136,9 @@ function validPlay(event) {
     element.style.backgroundColor = "green";
   }
   element.style.opacity = 0.5;
-}
+} /* end of function to verify a valid play */
 
+/* function that clears the valid play check. Triggered when Mouse isn't hovering anymore over pit */
 function clearValidPlay(event) {
   const path = event.composedPath();
   const element =
@@ -150,4 +150,4 @@ function clearValidPlay(event) {
 
   element.style.backgroundColor = "";
   element.style.opacity = "";
-}
+} /* end of clearValidPlay function */

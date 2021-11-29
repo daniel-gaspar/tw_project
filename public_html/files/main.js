@@ -1,5 +1,6 @@
 ("use strict");
 
+/* adds Event Listeners to each "reactable" element, upon loading the page */
 window.addEventListener("load", function () {
     document
       .getElementById("authAreaButton")
@@ -43,7 +44,7 @@ window.addEventListener("load", function () {
     document
       .getElementById("settingsStartGameButton")
       .addEventListener("click", startGame);
-  });
+  }); /* end of window loading */
   
   const game = new Mancala();
   let gamesWonByPlayer = 0;
