@@ -37,6 +37,7 @@ function toggleElementDisplayOpen(event) {
       }
     }
   }
+  event.stopPropagation();
 } /* end of toggle function */
 
 /* function to Start Game. Triggered by Start Game Button */

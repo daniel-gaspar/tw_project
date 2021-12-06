@@ -4,7 +4,7 @@
 window.addEventListener("load", function () {
     document
       .getElementById("authAreaButton")
-      .addEventListener("click", toggleElementDisplayOpen);
+      .addEventListener("click", toggleElementDisplayOpen,true);
     document
       .getElementById("selectionBarItemGameRules")
       .addEventListener("click", toggleElementDisplayOpen);
