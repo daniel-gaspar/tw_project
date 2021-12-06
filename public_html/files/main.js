@@ -44,6 +44,7 @@ window.addEventListener("load", function () {
     document
       .getElementById("settingsStartGameButton")
       .addEventListener("click", startGame);
+    document.getElementById("authAreaLoginButton").addEventListener("click",login);
   }); /* end of window loading */
   
   const game = new Mancala();

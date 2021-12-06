@@ -9,6 +9,7 @@
     <script src="files/buttonsandevents.js"></script>
     <script src="files/boardmanipulation.js"></script>
     <script src="files/auxfunctions.js"></script>
+    <script src="files/comms.js"></script>
     <meta charset="UTF-8" />
   </head>
   <body>
@@ -247,16 +248,32 @@
           <input
             type="radio"
             id="gameStartPlayer"
-            value="gameStartedByPlayer"
+            value="Player"
             name="settingsFirstTurnRadio"
             checked
           /><label for="gameStartPlayer">Player</label>
           <input
             type="radio"
             id="gameStartOpponent"
-            value="gameStartedByOpponent"
+            value="Opponent"
             name="settingsFirstTurnRadio"
           /><label for="gameStartOpponent">Opponent</label>
+        </div>
+        <div id="settingsGameOnline">
+          Play Online:
+          <input
+            type="radio"
+            id="gameOnlineYes"
+            value="Yes"
+            name="settingsGameOnline"
+            /><label for="gameOnlineYes">Yes</label>
+          <input 
+            type="radio"
+            id="gameOnlineNo"
+            value="No"
+            name="settingsGameOnline"
+            checked
+          /><label for="gameOnlineNo">No</label>
         </div>
         <div id="settingsStartGameButton" class="clickable">Start Game</div>
       </form>

@@ -42,6 +42,9 @@ function toggleElementDisplayOpen(event) {
 
 /* function to Start Game. Triggered by Start Game Button */
 function startGame(event) {
+
+  toggleElementDisplayOpen(event);
+
   const playTableElement = document.getElementById("playTable");
 
   while (playTableElement.firstChild)
@@ -64,9 +67,17 @@ function startGame(event) {
 
   const gameStarter =
     document.querySelector('input[name="settingsFirstTurnRadio"]:checked')
-      .value == "gameStartedByPlayer"
-      ? "Player"
-      : "Opponent";
+      .value;
+  
+  const playOnline = document.querySelector('input[name="settingsGameOnline"]:checked').value;
+
+  if(playOnline == "Yes") {
+    const nick = document.getElementById("authUsername").value;
+    const pass = document.getElementById("authPassword").value;
+
+    join(nick,pass,numberOfPits,initialSeedNumber);
+
+  }
 
   const returnObject = drawBoard(
     numberOfPits,
@@ -85,11 +96,12 @@ function startGame(event) {
     returnObject.storeOpponentPosition,
     difficultyAI
   );
+
+  game.playOnline = playOnline;
+  
   updateDisplay();
 
-  toggleElementDisplayOpen(event);
-
-  if (game.turn == "Opponent") game.opponentTurn();
+  if (playOnline == "No" && game.turn == "Opponent") game.opponentTurn();
 } /* end of Start Game function */
 
 /* function to Forfeit. Increments number of games won by PC and writes a forfeit message */
@@ -116,7 +128,8 @@ function gamePlayerPlay(event) {
         path[0].classList.value == "seed"
           ? path[0].parentElement
           : event.srcElement;
-      game.playerTurn(element);
+      if(game.playOnline == "Yes") { notify(game.nick,game.pass,game.hash,parseInt(element.id.slice(-1))); }
+      else { game.playerTurn(element); }
     }
   }
 } /* end of gamePlayerPlay function */
@@ -152,3 +165,10 @@ function clearValidPlay(event) {
   element.style.backgroundColor = "";
   element.style.opacity = "";
 } /* end of clearValidPlay function */
+
+function login(event) {
+  game.nick = document.getElementById("authUsername").value;
+  game.pass = document.getElementById("authPassword").value;
+
+  register(game.nick,game.pass);
+}
