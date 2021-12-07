@@ -1,50 +1,46 @@
 ("use strict");
 
 /* function to toggle some elements between their CSS classes, namely to display them or not */
-function toggleElementDisplayOpen(event) {
-  const x = event.srcElement;
-  if (x.classList.contains("rulesList")) {
-    const y = document.getElementById(x.id.replace("Toggle", ""));
-    y.classList.toggle("displayed");
-  } else {
-    if (x.id == "settingsStartGameButton") {
-      const y = document.getElementById("tabGameSettings");
-      y.classList.toggle("open");
-    } else {
-      if (x.classList.contains("selectionBarItem")) {
-        const y = document.getElementById(
-          x.id.replace("selectionBarItem", "tab")
-        );
-        if (!y.classList.contains("open")) {
-          const tabs = document.getElementsByClassName("tempFloatingTab");
-          for (let i of tabs) {
-            if (i.id != y.id) {
-              if (i.classList.contains("open")) i.classList.toggle("open");
-            }
-          }
+function toggleElementDisplayOpen() {
+  let toggleElement = this;
+
+  if (this.id == "settingsStartGameButton") {
+    toggleElement = document.getElementById("tabGameSettings");
+  }
+  if (this.classList.contains("selectionBarItem")) {
+    closeRules();
+    toggleElement = document.getElementById(
+      this.id.replace("selectionBarItem", "tab")
+    );
+    if (!toggleElement.classList.contains("open")) {
+      const tabs = document.getElementsByClassName("tempFloatingTab");
+      for (let i of tabs) {
+        if (i.id != toggleElement.id && i.classList.contains("open")) {
+          i.classList.toggle("open");
         }
-        y.classList.toggle("open");
-        if (x.id == "selectionBarItemGameRules") {
-          for (let i of y.children) {
-            if (i.classList.contains("displayed"))
-              i.classList.toggle("displayed");
-          }
-        }
-      } else {
-        const y = document.getElementById(x.id.replace("Button", ""));
-        x.classList.toggle("open");
-        y.classList.toggle("open");
       }
     }
   }
-  event.stopPropagation();
+  if (this.id == "authAreaButton") {
+    const tab = document.getElementById(this.id.replace("Button", ""));
+    tab.classList.toggle("open");
+  }
+  if (this.classList.contains("rulesList")) {
+    toggleElement = document.getElementById(this.id.replace("Toggle", ""));
+  }
+
+  toggleElement.classList.toggle("open");
 } /* end of toggle function */
 
+function closeRules() {
+  const tabGameRules = document.getElementById("tabGameRules");
+  for (let i of tabGameRules.children) {
+    if (i.classList.contains("open")) i.classList.toggle("open");
+  }
+}
+
 /* function to Start Game. Triggered by Start Game Button */
-function startGame(event) {
-
-  toggleElementDisplayOpen(event);
-
+function startGame() {
   const playTableElement = document.getElementById("playTable");
 
   while (playTableElement.firstChild)
@@ -65,18 +61,19 @@ function startGame(event) {
     document.querySelector('select[name="difficultySelector"]').value
   );
 
-  const gameStarter =
-    document.querySelector('input[name="settingsFirstTurnRadio"]:checked')
-      .value;
-  
-  const playOnline = document.querySelector('input[name="settingsGameOnline"]:checked').value;
+  const gameStarter = document.querySelector(
+    'input[name="settingsFirstTurnRadio"]:checked'
+  ).value;
 
-  if(playOnline == "Yes") {
+  const playOnline = document.querySelector(
+    'input[name="settingsGameOnline"]:checked'
+  ).value;
+
+  if (playOnline == "Yes") {
     const nick = document.getElementById("authUsername").value;
     const pass = document.getElementById("authPassword").value;
 
-    join(nick,pass,numberOfPits,initialSeedNumber);
-
+    join(nick, pass, numberOfPits, initialSeedNumber);
   }
 
   const returnObject = drawBoard(
@@ -98,7 +95,7 @@ function startGame(event) {
   );
 
   game.playOnline = playOnline;
-  
+
   updateDisplay();
 
   if (playOnline == "No" && game.turn == "Opponent") game.opponentTurn();
@@ -114,7 +111,7 @@ function forfeit() {
 } /* end of forfeit function */
 
 /* function to start player Play. Triggered by clicking one of the Player's pits */
-function gamePlayerPlay(event) {
+function gamePlayerPlay() {
   if (game.value[0] == 1) {
     replaceGameMessages("The game is over. You may start a new game.");
   } else {
@@ -123,52 +120,38 @@ function gamePlayerPlay(event) {
         "It's not your turn. Please allow the Opponent to finish his play."
       );
     } else {
-      const path = event.composedPath();
-      const element =
-        path[0].classList.value == "seed"
-          ? path[0].parentElement
-          : event.srcElement;
-      if(game.playOnline == "Yes") { notify(game.nick,game.pass,game.hash,parseInt(element.id.slice(-1))); }
-      else { game.playerTurn(element); }
+      if (game.playOnline == "Yes") {
+        notify(game.nick, game.pass, game.hash, parseInt(this.id.slice(-1)));
+      } else {
+        game.playerTurn(this);
+      }
     }
   }
 } /* end of gamePlayerPlay function */
 
 /* function that verifies if it's a valid play. Triggered on Mouse Hover over pit */
-function validPlay(event) {
-  const path = event.composedPath();
-  const element =
-    path[0].classList.value == "seed"
-          ? path[0].parentElement
-          : event.srcElement; 
-
-  const pit = parseInt(element.id.slice(-1));
+function validPlay() {
+  const pit = parseInt(this.id.slice(-1));
 
   if (game.pits[pit] == 0) {
-    element.style.backgroundColor = "red";
+    this.style.backgroundColor = "red";
   } else {
-    element.style.backgroundColor = "green";
+    this.style.backgroundColor = "green";
   }
-  element.style.opacity = 0.5;
+  this.style.opacity = 0.5;
 } /* end of function to verify a valid play */
 
 /* function that clears the valid play check. Triggered when Mouse isn't hovering anymore over pit */
-function clearValidPlay(event) {
-  const path = event.composedPath();
-  const element =
-  path[0].classList.value == "seed"
-          ? path[0].parentElement
-          : event.srcElement;
+function clearValidPlay() {
+  const pit = parseInt(this.id.slice(-1));
 
-  const pit = parseInt(element.id.slice(-1));
-
-  element.style.backgroundColor = "";
-  element.style.opacity = "";
+  this.style.backgroundColor = "";
+  this.style.opacity = "";
 } /* end of clearValidPlay function */
 
 function login(event) {
   game.nick = document.getElementById("authUsername").value;
   game.pass = document.getElementById("authPassword").value;
 
-  register(game.nick,game.pass);
+  register(game.nick, game.pass);
 }

@@ -128,9 +128,9 @@ function createPit(playerOrOpponent, i, numberOfPits) {
 
   pit.style.width = (((1/numberOfPits) * 100) - (12/numberOfPits)) + "%";
   if (playerOrOpponent == "Player") {
-    pit.addEventListener("click", gamePlayerPlay);
-    pit.addEventListener("mouseover", validPlay);
-    pit.addEventListener("mouseout", clearValidPlay);
+    pit.addEventListener("click", gamePlayerPlay.bind(pit));
+    pit.addEventListener("mouseover", validPlay.bind(pit));
+    pit.addEventListener("mouseout", clearValidPlay.bind(pit));
   }
 
   return pit;
@@ -140,7 +140,6 @@ function createPit(playerOrOpponent, i, numberOfPits) {
 /* generalized function to create Seeds */
 function createSeed(parent) {
   const seed = document.createElement("div");
-  const parentBoundBox = parent.getBoundingClientRect();
 
   seed.className = "seed";
 
@@ -170,14 +169,16 @@ function updateDisplay() {
   updateSeeds(storeOpponent, game.pits[game.storeOpponentPosition]);
 
   for (let i = 0; i < game.numberOfPits; i++) {
+    const seedsPlayer = game.pits[i];
     const pitPlayerStatus = document.getElementById("pitPlayerStatus" + i);
-    pitPlayerStatus.innerHTML = game.pits[i];
+    pitPlayerStatus.innerHTML = seedsPlayer;
     const pitPlayer = document.getElementById("pitPlayer" + i);
-    updateSeeds(pitPlayer, game.pits[i]);
+    updateSeeds(pitPlayer, seedsPlayer);
+    const seedsOpponent = game.pits[i + game.numberOfPits + 1];
     const pitOpponentStatus = document.getElementById("pitOpponentStatus" + i);
-    pitOpponentStatus.innerHTML = game.pits[i + game.numberOfPits + 1];
+    pitOpponentStatus.innerHTML = seedsOpponent;
     const pitOpponent = document.getElementById("pitOpponent" + i);
-    updateSeeds(pitOpponent, game.pits[i + game.numberOfPits + 1]);
+    updateSeeds(pitOpponent, seedsOpponent);
   }
 } /* end of updateDisplay fuinction */
 

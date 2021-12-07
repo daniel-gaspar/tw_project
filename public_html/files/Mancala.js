@@ -236,8 +236,6 @@ class Mancala {
       /* if the play was valid */
       this.gameMove(seedsInPit, pit);
 
-      updateDisplay();
-
       this.evaluateNext();
     } /* end of actions if the play was valid */
   } /* end of Player's Turn method */
@@ -250,8 +248,6 @@ class Mancala {
     const seedsInPit = this.pits[pit + this.numberOfPits + 1];
 
     this.gameMove(seedsInPit, pit);
-
-    updateDisplay();
 
     this.evaluateNext();
   } /* end of Opponent's Turn method */
@@ -271,10 +267,12 @@ class Mancala {
       ) {
         replaceGameMessages("The " + this.turn + " may play again");
         if (this.turn == "Opponent") this.opponentTurn();
+        else updateDisplay();
       } /* end of verifying if it's a repeat Play */ else {
         /* if it isn't a repeat Play, then let the other player Play */
         replaceGameMessages("It is now the " + this.turn + "'s turn to play.");
         if (this.turn == "Opponent") this.opponentTurn();
+        else updateDisplay();
       }
     } /* end of verifying if it's game over */ else {
       /* if it is game over */
@@ -294,6 +292,7 @@ class Mancala {
         gamesWonByPC++;
         document.getElementById("opponentScore").innerHTML = gamesWonByPC;
       } /* end of verifying if the Opponent won */
+      updateDisplay();
     } /* end of game over */
   } /* end of evaluateNext method */
 
