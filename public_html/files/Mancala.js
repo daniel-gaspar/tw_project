@@ -61,6 +61,10 @@ class Mancala {
 
     this.pits = pitsStatus.slice();
 
+    this.pits[storePlayerPositionStatus] = 0;
+
+    this.pits[storeOpponentPositionStatus] = 0;
+
     this.storePlayerPosition = storePlayerPositionStatus;
 
     this.storeOpponentPosition = storeOpponentPositionStatus;
@@ -72,6 +76,20 @@ class Mancala {
     this.value = gameValueStatus.slice();
   } /* end of the update method */
 
+  updateFromBoard(board) {
+    const offset = this.numberOfPits+1;
+
+    this.pits[this.storePlayerPosition] = board.sides[this.nick].store;
+    this.pits[this.storeOpponentPosition] = board.sides[this.nickOpponent].store;
+    for(let i=0; i<this.numberOfPits; i++) {
+      this.pits[i] = board.sides[this.nick].pits[i];
+      this.pits[i+offset] = board.sides[this.nickOpponent].pits[i];
+    }
+    this.turn = (board.turn == this.nick) ? "Player" : "Opponent";
+
+    updateDisplay();
+  }
+
   /* returns a value for the current status of the game, depending on the current this.pits configuration (and whether there's anyone playing again) */
   evaluateStatus(repeatOrNot) {
     let seedsPlayer = 0;
@@ -80,10 +98,12 @@ class Mancala {
     const seedsInStorePlayer = this.pits[this.storePlayerPosition];
     const seedsInStoreOpponent = this.pits[this.storeOpponentPosition];
 
+    const offset = this.numberOfPits + 1;
+
     /* for loop to check how many seeds each player has in their pits */
     for (let i = 0; i < this.numberOfPits; i++) {
       seedsPlayer += this.pits[i];
-      seedsOpponent += this.pits[i + this.numberOfPits + 1];
+      seedsOpponent += this.pits[i + offset];
     } /* end of for loop to check for seeds in pits */
 
     /* check if either player has 0 seeds in their pits, to point that the game is over */
@@ -92,8 +112,8 @@ class Mancala {
         this.pits[this.storePlayerPosition] += this.pits[i];
         this.pits[i] = 0;
         this.pits[this.storeOpponentPosition] +=
-          this.pits[i + this.numberOfPits + 1];
-        this.pits[i + this.numberOfPits + 1] = 0;
+          this.pits[i + offset];
+        this.pits[i + offset] = 0;
       }
       if (
         this.pits[this.storePlayerPosition] >
@@ -297,11 +317,12 @@ class Mancala {
   /* returns the child with the Minimum Score */
   getMin(depth) {
     const children = [];
+    const offset = this.numberOfPits+1;
     /* for loop to create a new Mancala Object for each possible play, and proceeds on it */
     for (let i = 0; i < this.numberOfPits; i++) {
       children[i] = this.copy();
-      if (children[i].pits[i + this.numberOfPits + 1] > 0) {
-        children[i].gameMove(children[i].pits[i + this.numberOfPits + 1], i);
+      if (children[i].pits[i + offset] > 0) {
+        children[i].gameMove(children[i].pits[i + offset], i);
       } else {
         children[i] = null;
       }
