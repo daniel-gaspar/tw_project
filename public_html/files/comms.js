@@ -8,7 +8,7 @@ async function ranking() {
 
   const getFetchResult = await getfetch("ranking", object);
 
-  console.log(getFetchResult);
+  //console.log(getFetchResult);
 } /* end of ranking function */
 
 /* Retrieves nick and password, sends Server a request.
@@ -26,7 +26,7 @@ async function register(nick = "dgaspar", password = "123456789") {
     game.password = password;
   }
 
-  console.log(getFetchResult);
+  //console.log(getFetchResult);
 } /* end of register function */
 
 /* Retrieves nick and password, sends Server a request.
@@ -36,13 +36,13 @@ async function join(nick, password, size, initial, group = "999") {
 
   const getFetchResult = await getfetch("join", object);
 
-  if(!('error' in getFetchResult)) {
-      game.hash = getFetchResult.game;
-      game.statusPair = "Pairing";
-      update(game.nick,game.hash);
+  if (!("error" in getFetchResult)) {
+    game.hash = getFetchResult.game;
+    game.statusPair = "Pairing";
+    update(game.nick, game.hash);
   }
 
-  console.log(getFetchResult);
+  //console.log(getFetchResult);
 } /* end of join function */
 
 /* Retrieves nick, pass and game, sends Server a request.
@@ -52,45 +52,64 @@ async function leave(nick, password, game) {
 
   const getFetchResult = await getfetch("leave", object);
 
-  console.log(getFetchResult);
+  //console.log(getFetchResult);
 } /* end of leave function */
 
 /*
  */
-async function notify(nick, pass, game, move) {
+async function notify(nick, password, game, move) {
   const object = mkObject({ nick, password, game, move });
 
   const getFetchResult = await getfetch("notify", object);
 
-  console.log(getFetchResult);
+  //console.log(getFetchResult);
 } /* end of notify function */
 
 /*
  */
-async function update(nick, game) {
-  const url = serverurl + "update?nick=" + nick + "&game=" + game;
+async function update(nick, gamehash) {
+  const url = serverurl + "update?nick=" + nick + "&game=" + gamehash;
 
-  var eventSource = new EventSource(url);
+  const eventSource = new EventSource(url);
 
   eventSource.onmessage = function (event) {
     const data = JSON.parse(event.data);
 
-    if (!('error' in data)) {
+    if (!("error" in data)) {
+      if ("board" in data) {
+        if (game.statusPair == "Pairing") {
+          game.statusPair = "Paired";
 
-        if ('turn' in data) {
+          for (player in data.board.sides) {
+            if (player != game.nick) game.nickOpponent = player;
+          }
 
+          game.turn = game.nick == data.board.turn ? "Player" : "Opponent";
+        } else {
+          game.updateFromBoard(data.board);
         }
+      }
 
-        if ('winner' in data) {
-
-
+      if ("winner" in data) {
+        if ("board" in data) {
+          if (data.winner == game.nick) {
+            replaceGameMessages("The Game Is Over. Player Wins.");
+          } else if (data.winner == game.nickOpponent) {
+            replaceGameMessages("The Game Is Over. Opponent Wins.");
+          } else {
+            replaceGameMessages("The Game Is Over. It's a Draw.");
+          }
+        } else {
+          if(data.winner == null) {
+            const serverMessages = document.getElementById("serverMessages");
+            serverMessages.innerHTML = "You have left the pairing process.";
+          }
+          else { replaceGameMessages("You have forfeited. Opponent Wins."); }
         }
-
-        if (!('winner' in data) && !('turn' in data)) {
-            game.statusPair = "Paired";
-        }
+        game.statusPair = null;
+        eventSource.close();
+      }
     }
-
   };
 } /* end of update function */
 
