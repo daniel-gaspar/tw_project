@@ -69,48 +69,57 @@ function startGame() {
     'input[name="settingsGameOnline"]:checked'
   ).value;
 
-  if (playOnline == "Yes") {
-    if (game.onlineStatus == "LoggedIn") {
-      game.playOnline = playOnline;
+  game.updateMancala(
+    Array(2*numberOfPits+2).fill(initialSeedNumber),
+    gameStarter,
+    [0, 0],
+    numberOfPits,
+    numberOfPits,
+    2*numberOfPits+1,
+    difficultyAI
+  );
 
+  if (playOnline == "Yes") {
+    const serverMessages = document.getElementById("serverMessages");
+
+    if (game.onlineStatus == "LoggedIn") {
+
+      game.playOnline = "Yes";
+
+      serverMessages.innerHTML = "Entering pairing mode";
+      
       join(game.nick, game.password, numberOfPits, initialSeedNumber);
+
     } else {
-      const serverMessages = document.getElementById("serverMessages");
       serverMessages.innerHTML =
         "To start an online game, please authenticate yourself first";
+      return ;
     }
   }
 
-  const returnObject = drawBoard(
+  drawBoard(
     numberOfPits,
     initialSeedNumber,
-    gameStarter,
     playTableElement,
     gameStatusElement
   );
 
-  game.updateMancala(
-    returnObject.pitsStatus,
-    gameStarter,
-    [0, 0],
-    numberOfPits,
-    returnObject.storePlayerPosition,
-    returnObject.storeOpponentPosition,
-    difficultyAI
-  );
-
-  updateDisplay();
-
   if (playOnline == "No" && game.turn == "Opponent") game.opponentTurn();
+  else updateDisplay();
 } /* end of Start Game function */
 
 /* function to Forfeit. Increments number of games won by PC and writes a forfeit message */
 function forfeit() {
-  gamesWonByPC++;
+  if(game.playOnline == "Yes"){
+    leave(game.nick,game.password,game.hash);
+  }else {
+  gamesWonByPC++; 
   replaceGameMessages(
     "You have forfeited the game. This point goes to the Opponent."
   );
   document.getElementById("opponentScore").innerHTML = gamesWonByPC;
+  }
+  
 } /* end of forfeit function */
 
 /* function to start player Play. Triggered by clicking one of the Player's pits */
@@ -124,7 +133,7 @@ function gamePlayerPlay(pit) {
       );
     } else {
       if (game.playOnline == "Yes") {
-        notify(game.nick, game.pass, game.hash, pit);
+        notify(game.nick, game.password, game.hash, pit);
       } else {
         game.playerTurn(pit);
       }
