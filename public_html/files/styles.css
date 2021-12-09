@@ -14,10 +14,13 @@ body {
   cursor: pointer;
 }
 
+.topBarItem{
+  height: 100%;
+}
+
 #authAreaButton {
   display: flex;
   flex-direction: column;
-  height: 100%;
   width: 5%;
   margin-right: 20px;
 }
@@ -42,13 +45,6 @@ body {
 
 #authAreaButton.open > span:last-child {
   transform: translateY(-6px) rotate(-45deg);
-}
-
-#selectionBar {
-  height: 100%;
-  width: 90%;
-  display: flex;
-  margin-left: 20px;
 }
 
 #authArea {
@@ -116,13 +112,22 @@ body {
 }
 
 .selectionBarItem {
-  margin: auto;
-  height: 100%;
+  margin-left: 10px;
+  margin-right: 10px;
   background: orange;
   border: 2px;
   border-style: solid;
   border-radius: 10px;
   width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#serverMessages {
+  margin-left: auto;
+  margin-right: 0;
+  border: 2px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -195,7 +200,6 @@ body {
     #dd00f3
   );
   border-radius: 10px;
-  display: inline-block;
   padding: 5px;
   display: flex;
   justify-content: center;

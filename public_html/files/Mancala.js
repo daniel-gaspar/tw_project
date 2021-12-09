@@ -222,9 +222,7 @@ class Mancala {
   } /* end of game Move method */
 
   /* computes the Player's turn, given the element (pit) where the click occurred */
-  playerTurn(element) {
-    const pit = parseInt(element.id.slice(-1));
-
+  playerTurn(pit) {
     const seedsInPit = this.pits[pit];
 
     /* verifies if the Player didn't try an invalid play */
@@ -328,26 +326,26 @@ class Mancala {
 
     const bestchild = [0, 0, 9999];
 
-      /* for loop to check which child has the lowest value */
-      for (let i = 0; i < this.numberOfPits; i++) {
-        if (children[i] != null) {
-          if (children[i].bestChild != null) {
-            if (children[i].bestChild[2] < bestchild[2]) {
-              bestchild[0] = i;
-              bestchild[1] = children[i].bestChild[1];
-              bestchild[2] = children[i].bestChild[2];
-            }
-          } else {
-            if (children[i].value[1] < bestchild[2]) {
-              bestchild[0] = i;
-              bestchild[1] = children[i].value[0];
-              bestchild[2] = children[i].value[1];
-            }
+    /* for loop to check which child has the lowest value */
+    for (let i = 0; i < this.numberOfPits; i++) {
+      if (children[i] != null) {
+        if (children[i].bestChild != null) {
+          if (children[i].bestChild[2] < bestchild[2]) {
+            bestchild[0] = i;
+            bestchild[1] = children[i].bestChild[1];
+            bestchild[2] = children[i].bestChild[2];
+          }
+        } else {
+          if (children[i].value[1] < bestchild[2]) {
+            bestchild[0] = i;
+            bestchild[1] = children[i].value[0];
+            bestchild[2] = children[i].value[1];
           }
         }
-        /* end of foor loop checking lowest value */
       }
-      return bestchild.slice();
+      /* end of foor loop checking lowest value */
+    }
+    return bestchild.slice();
   } /* end of getMin method */
 
   /* returns the child with the Maximum score */
@@ -377,30 +375,30 @@ class Mancala {
             children[i].bestChild = children[i].getMin(depth + 1);
           }
         }
-    } /* end of checking if depth already matches the difficulty */
+      } /* end of checking if depth already matches the difficulty */
 
-    const bestchild = [0, 0, -9999];
+      const bestchild = [0, 0, -9999];
 
-        /* for loop to check which child has the highest value */
-        for (let i = 0; i < this.numberOfPits; i++) {
-          if (children[i] != null) {
-            if (children[i].bestChild != null) {
-              if (children[i].bestChild[2] > bestchild[2]) {
-                bestchild[0] = i;
-                bestchild[1] = children[i].bestChild[1];
-                bestchild[2] = children[i].bestChild[2];
-              }
-            } else {
-              if (children[i].value[1] > bestchild[2]) {
-                bestchild[0] = i;
-                bestchild[1] = children[i].value[0];
-                bestchild[2] = children[i].value[1];
-              }
+      /* for loop to check which child has the highest value */
+      for (let i = 0; i < this.numberOfPits; i++) {
+        if (children[i] != null) {
+          if (children[i].bestChild != null) {
+            if (children[i].bestChild[2] > bestchild[2]) {
+              bestchild[0] = i;
+              bestchild[1] = children[i].bestChild[1];
+              bestchild[2] = children[i].bestChild[2];
+            }
+          } else {
+            if (children[i].value[1] > bestchild[2]) {
+              bestchild[0] = i;
+              bestchild[1] = children[i].value[0];
+              bestchild[2] = children[i].value[1];
             }
           }
-        } /* end of foor loop checking highest value */
-        return bestchild.slice();
-      } /* end of for loop of getMin and getMax */
+        }
+      } /* end of foor loop checking highest value */
+      return bestchild.slice();
+    } /* end of for loop of getMin and getMax */
   } /* end of getMax method */
 
   /* A list of static methods to make scores textual */

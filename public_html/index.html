@@ -14,35 +14,33 @@
   </head>
   <body>
     <div class="topBar">
+      <div class="topBarItem clickable" id="authAreaButton">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+
       <div
-        class="topBarItem clickable"
-        id="authAreaButton"
+        id="selectionBarItemGameRules"
+        class="selectionBarItem clickable topBarItem"
       >
-        <span></span>
-        <span></span>
-        <span></span>
+        Rules
       </div>
-      <div class="topBarItem" id="selectionBar">
-        <div
-          id="selectionBarItemGameRules"
-          class="selectionBarItem clickable"
-        >
-          Rules
-        </div>
-        <div
-          id="selectionBarItemGameScores"
-          class="selectionBarItem clickable"
-        >
-          Scores
-        </div>
-        <div
-          id="selectionBarItemGameSettings"
-          class="selectionBarItem clickable"
-        >
-          Game Settings
-        </div>
+      <div
+        id="selectionBarItemGameScores"
+        class="selectionBarItem clickable topBarItem"
+      >
+        Scores
       </div>
+      <div
+        id="selectionBarItemGameSettings"
+        class="selectionBarItem clickable topBarItem"
+      >
+        Game Settings
+      </div>
+      <div id="serverMessages" class="topBarItem"></div>
     </div>
+
     <div id="authArea">
       <p>Username: <input type="text" id="authUsername" /></p>
       <p>Password: <input type="password" id="authPassword" /></p>
@@ -50,12 +48,7 @@
     </div>
 
     <div id="tabGameRules" class="tempFloatingTab">
-      <div
-        id="tabGameRulesTableToggle"
-        class="rulesList clickable"
-      >
-        Table
-      </div>
+      <div id="tabGameRulesTableToggle" class="rulesList clickable">Table</div>
       <div id="tabGameRulesTable" class="rulesListContainer">
         <p>2 sets of central pits aligned</p>
         <p>Sided by 2 containers - larger pits</p>
@@ -63,10 +56,7 @@
         <p>... as well as the container to their right</p>
         <p>The number of central cavities may vary</p>
       </div>
-      <div
-        id="tabGameRulesPiecesToggle"
-        class="rulesList clickable"
-      >
+      <div id="tabGameRulesPiecesToggle" class="rulesList clickable">
         Pieces
       </div>
       <div id="tabGameRulesPieces" class="rulesListContainer">
@@ -74,22 +64,12 @@
         <p>Visually represented by discs or elipses</p>
         <p>They should be displayed inside the pits</p>
       </div>
-      <div
-        id="tabGameRulesStartToggle"
-        class="rulesList clickable"
-      >
-        Start
-      </div>
+      <div id="tabGameRulesStartToggle" class="rulesList clickable">Start</div>
       <div id="tabGameRulesStart" class="rulesListContainer">
         <p>The containers are empty (without seeds)</p>
         <p>The remaining pits have the same amount of seeds</p>
       </div>
-      <div
-        id="tabGameRulesPlayToggle"
-        class="rulesList clickable"
-      >
-        Play
-      </div>
+      <div id="tabGameRulesPlayToggle" class="rulesList clickable">Play</div>
       <div id="tabGameRulesPlay" class="rulesListContainer">
         <p>Players seed their seeds alternatedly</p>
         <p>On their turn, they seed starting with one of their pits</p>
@@ -98,22 +78,14 @@
         <p>take the opponent's seeds</p>
         <p>The game is over once one of the players has no seeds left</p>
       </div>
-      <div
-        id="tabGameRulesSeedToggle"
-        class="rulesList clickable"
-      >
-        Seed
-      </div>
+      <div id="tabGameRulesSeedToggle" class="rulesList clickable">Seed</div>
       <div id="tabGameRulesSeed" class="rulesListContainer">
         <p>Choose a pit from your side (other than the container)</p>
         <p>Take all the N seeds from that pit</p>
         <p>Place 1 seed in the following N pits</p>
         <p>Seeding is done counter-clockwise</p>
       </div>
-      <div
-        id="tabGameRulesContinueSeedingToggle"
-        class="rulesList clickable"
-      >
+      <div id="tabGameRulesContinueSeedingToggle" class="rulesList clickable">
         Continue Seeding
       </div>
       <div id="tabGameRulesContinueSeeding" class="rulesListContainer">
@@ -122,10 +94,7 @@
         <p>If the opponent's container is reached, don't seed</p>
         <p>But continue on your own side, if you still have seeds left</p>
       </div>
-      <div
-        id="tabGameRulesLastContainerToggle"
-        class="rulesList clickable"
-      >
+      <div id="tabGameRulesLastContainerToggle" class="rulesList clickable">
         Last Container
       </div>
       <div id="tabGameRulesLastContainer" class="rulesListContainer">
@@ -135,10 +104,7 @@
           you play again
         </p>
       </div>
-      <div
-        id="tabGameRulesLastEmptyToggle"
-        class="rulesList clickable"
-      >
+      <div id="tabGameRulesLastEmptyToggle" class="rulesList clickable">
         Last Seed
       </div>
       <div id="tabGameRulesLastEmpty" class="rulesListContainer">
@@ -149,12 +115,7 @@
         <p>the opposite pit, of the opponent</p>
         <p>as well as that last seed seeded.</p>
       </div>
-      <div
-        id="tabGameRulesEndToggle"
-        class="rulesList clickable"
-      >
-        End
-      </div>
+      <div id="tabGameRulesEndToggle" class="rulesList clickable">End</div>
       <div id="tabGameRulesEnd" class="rulesListContainer">
         <p>
           The game is over once one of the players is unable to continue playing
@@ -183,7 +144,8 @@
                 type="radio"
                 id="pitsFour"
                 value="4"
-                name="settingsPitsRadio" checked /></label
+                name="settingsPitsRadio"
+                checked /></label
           ></span>
           <span class="settingsPitsSpans"
             ><label for="pitsSix">
@@ -214,7 +176,15 @@
           ></span>
         </div>
         <div id="settingsSeeds">
-          Initial Seed N#: <input type="number" name="numberSeeds" id="numberSeeds" min="1" max="20" value="5" />
+          Initial Seed N#:
+          <input
+            type="number"
+            name="numberSeeds"
+            id="numberSeeds"
+            min="1"
+            max="20"
+            value="5"
+          />
         </div>
         <div id="settingsPlayForm">
           Play against PC:
@@ -266,8 +236,8 @@
             id="gameOnlineYes"
             value="Yes"
             name="settingsGameOnline"
-            /><label for="gameOnlineYes">Yes</label>
-          <input 
+          /><label for="gameOnlineYes">Yes</label>
+          <input
             type="radio"
             id="gameOnlineNo"
             value="No"
@@ -282,10 +252,8 @@
     <h1>Mancala</h1>
 
     <div class="pageContent">
-      <div id="playTable" class="pageContentItem">
-      </div>
-      <div id="gameStatus" class="pageContentItem">
-      </div>
+      <div id="playTable" class="pageContentItem"></div>
+      <div id="gameStatus" class="pageContentItem"></div>
     </div>
   </body>
 </html>

@@ -31,12 +31,12 @@ function drawBoard(
   const gamePits = document.createElement("div");
   gamePits.id = "gamePits";
   gamePits.classList.add("pitsBox");
-  const x = 8*numberOfPits;
+  const x = 8 * numberOfPits;
   gamePits.style.width = x + "%";
   gameBoardElement.appendChild(gamePits);
   const gamePitsStatus = document.createElement("div");
   gamePitsStatus.id = "gamePitsStatus";
-  gamePitsStatus.classList.add("pitsBox","pitsBoxStatus");
+  gamePitsStatus.classList.add("pitsBox", "pitsBoxStatus");
   gamePitsStatus.style.width = x + "%";
   gameStatusBoxElement.appendChild(gamePitsStatus);
 
@@ -46,7 +46,7 @@ function drawBoard(
   gamePits.appendChild(gamePitsOpponent);
   const gamePitsOpponentStatus = document.createElement("div");
   gamePitsOpponentStatus.id = "gamePitsOpponentStatus";
-  gamePitsOpponentStatus.classList.add("pitsRow","pitsRowStatus");
+  gamePitsOpponentStatus.classList.add("pitsRow", "pitsRowStatus");
   gamePitsStatus.appendChild(gamePitsOpponentStatus);
 
   const gamePitsPlayer = document.createElement("div");
@@ -55,7 +55,7 @@ function drawBoard(
   gamePits.appendChild(gamePitsPlayer);
   const gamePitsPlayerStatus = document.createElement("div");
   gamePitsPlayerStatus.id = "gamePitsPlayerStatus";
-  gamePitsPlayerStatus.classList.add("pitsRow","pitsRowStatus");
+  gamePitsPlayerStatus.classList.add("pitsRow", "pitsRowStatus");
   gamePitsStatus.appendChild(gamePitsPlayerStatus);
 
   const storePlayer = document.createElement("div");
@@ -64,7 +64,7 @@ function drawBoard(
   gameBoardElement.appendChild(storePlayer);
   const storePlayerStatus = document.createElement("div");
   storePlayerStatus.id = "storePlayerStatus";
-  storePlayerStatus.classList.add("pit","store", "pitStatus", "storeStatus");
+  storePlayerStatus.classList.add("pit", "store", "pitStatus", "storeStatus");
   storePlayerStatus.innerHTML = 0;
   gameStatusBoxElement.appendChild(storePlayerStatus);
 
@@ -121,21 +121,19 @@ function createPit(playerOrOpponent, i, numberOfPits) {
   pit.classList.add("pit" + playerOrOpponent, "pit");
   if (!pit.id.includes("Status")) {
     pit.classList.add("clickable");
-  }
-  else { 
+  } else {
     pit.classList.add("pitStatus");
   }
 
-  pit.style.width = (((1/numberOfPits) * 100) - (12/numberOfPits)) + "%";
+  pit.style.width = (1 / numberOfPits) * 100 - 12 / numberOfPits + "%";
   if (playerOrOpponent == "Player") {
-    pit.addEventListener("click", gamePlayerPlay.bind(pit));
-    pit.addEventListener("mouseover", validPlay.bind(pit));
-    pit.addEventListener("mouseout", clearValidPlay.bind(pit));
+    pit.addEventListener("click", gamePlayerPlay.bind(pit, i));
+    pit.addEventListener("mouseover", validPlay.bind(pit, i));
+    pit.addEventListener("mouseout", clearValidPlay.bind(pit, i));
   }
 
   return pit;
 } /* end of createPit function */
-
 
 /* generalized function to create Seeds */
 function createSeed(parent) {
@@ -155,11 +153,8 @@ function createSeed(parent) {
 
 /* function to update the Game Board and Game Status based on the game Object (class Mancala) */
 function updateDisplay() {
-  const storePlayerStatus =
-    document.getElementById("storePlayerStatus");
-  const storeOpponentStatus = document.getElementById(
-    "storeOpponentStatus"
-  );
+  const storePlayerStatus = document.getElementById("storePlayerStatus");
+  const storeOpponentStatus = document.getElementById("storeOpponentStatus");
   const storePlayer = document.getElementById("storePlayer");
   const storeOpponent = document.getElementById("storeOpponent");
 

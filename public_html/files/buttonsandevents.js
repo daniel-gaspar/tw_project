@@ -70,10 +70,15 @@ function startGame() {
   ).value;
 
   if (playOnline == "Yes") {
-    const nick = document.getElementById("authUsername").value;
-    const pass = document.getElementById("authPassword").value;
+    if (game.onlineStatus == "LoggedIn") {
+      game.playOnline = playOnline;
 
-    join(nick, pass, numberOfPits, initialSeedNumber);
+      join(game.nick, game.password, numberOfPits, initialSeedNumber);
+    } else {
+      const serverMessages = document.getElementById("serverMessages");
+      serverMessages.innerHTML =
+        "To start an online game, please authenticate yourself first";
+    }
   }
 
   const returnObject = drawBoard(
@@ -94,8 +99,6 @@ function startGame() {
     difficultyAI
   );
 
-  game.playOnline = playOnline;
-
   updateDisplay();
 
   if (playOnline == "No" && game.turn == "Opponent") game.opponentTurn();
@@ -111,7 +114,7 @@ function forfeit() {
 } /* end of forfeit function */
 
 /* function to start player Play. Triggered by clicking one of the Player's pits */
-function gamePlayerPlay() {
+function gamePlayerPlay(pit) {
   if (game.value[0] == 1) {
     replaceGameMessages("The game is over. You may start a new game.");
   } else {
@@ -121,18 +124,16 @@ function gamePlayerPlay() {
       );
     } else {
       if (game.playOnline == "Yes") {
-        notify(game.nick, game.pass, game.hash, parseInt(this.id.slice(-1)));
+        notify(game.nick, game.pass, game.hash, pit);
       } else {
-        game.playerTurn(this);
+        game.playerTurn(pit);
       }
     }
   }
 } /* end of gamePlayerPlay function */
 
 /* function that verifies if it's a valid play. Triggered on Mouse Hover over pit */
-function validPlay() {
-  const pit = parseInt(this.id.slice(-1));
-
+function validPlay(pit) {
   if (game.pits[pit] == 0) {
     this.style.backgroundColor = "red";
   } else {
@@ -142,16 +143,14 @@ function validPlay() {
 } /* end of function to verify a valid play */
 
 /* function that clears the valid play check. Triggered when Mouse isn't hovering anymore over pit */
-function clearValidPlay() {
-  const pit = parseInt(this.id.slice(-1));
-
+function clearValidPlay(pit) {
   this.style.backgroundColor = "";
   this.style.opacity = "";
 } /* end of clearValidPlay function */
 
 function login(event) {
-  game.nick = document.getElementById("authUsername").value;
-  game.pass = document.getElementById("authPassword").value;
+  const nick = document.getElementById("authUsername").value;
+  const password = document.getElementById("authPassword").value;
 
-  register(game.nick, game.pass);
+  register(nick, password);
 }
