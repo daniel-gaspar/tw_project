@@ -164,7 +164,7 @@ body {
   top: 50px;
 }
 
-#onlineScores {
+#onlineScores, #offlineScores {
   display:none;
 }
 
