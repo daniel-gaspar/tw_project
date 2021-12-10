@@ -8,6 +8,8 @@ async function ranking() {
 
   const getFetchResult = await getfetch("ranking", object);
 
+  if(!("error" in getFetchResult)) { updateRankingsTable('online',getFetchResult.ranking); }
+
   //console.log(getFetchResult);
 } /* end of ranking function */
 
