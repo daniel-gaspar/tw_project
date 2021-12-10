@@ -18,6 +18,7 @@ class Mancala {
     this.difficultyAI = difficultyAIStatus;
     this.turn = gameTurnStatus;
     this.value = gameValue.slice();
+    this.nick = 'dgaspar';
   } /* end of constructor */
 
   /* creates a "safe copy" of the Mancala Object */
@@ -295,10 +296,25 @@ class Mancala {
     } /* end of verifying if it's game over */ else {
       /* if it is game over */
       /* if the Player won, print it */
+
+      let posPlayer;
+      let posComputer;
+
+      for (let i = 0; i < offlineRankings.length ; i++) {
+        if (offlineRankings[i].nick == this.nick) posPlayer = i;
+        if (offlineRankings[i].nick == 'computer') posComputer = i;
+      }
+
+      if (posPlayer == null) {
+        posPlayer = offlineRankings.length;
+        offlineRankings[posPlayer] = {nick: this.nick, victories: 0, games: 0};
+      }
+
       if (this.value[1] == Mancala.WINNING_SCORE) {
         replaceGameMessages("The Game Is Over. Player Wins.");
-        gamesWonByPlayer++;
-        document.getElementById("playerScore").innerHTML = gamesWonByPlayer;
+        offlineRankings[posPlayer].victories++;
+        //gamesWonByPlayer++;
+        //document.getElementById("playerScore").innerHTML = gamesWonByPlayer;
       } /* end of verifying if the Player won */
       /* if it's a Draw, print it */
       if (this.value[1] == Mancala.SAME_NUMBER) {
@@ -307,9 +323,17 @@ class Mancala {
       /* if the Opponent won, print it */
       if (this.value[1] == Mancala.LOSING_SCORE) {
         replaceGameMessages("The Game Is Over. Opponent Wins.");
-        gamesWonByPC++;
-        document.getElementById("opponentScore").innerHTML = gamesWonByPC;
+        offlineRankings[posComputer].victories++;
+        //gamesWonByPC++;
+        //document.getElementById("opponentScore").innerHTML = gamesWonByPC;
       } /* end of verifying if the Opponent won */
+
+      offlineRankings[posPlayer].games++;
+      offlineRankings[posComputer].games++;
+
+      sortOfflineRankings();
+      updateRankingsTable('offline',offlineRankings);
+
       updateDisplay();
     } /* end of game over */
   } /* end of evaluateNext method */
