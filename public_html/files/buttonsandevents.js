@@ -113,11 +113,32 @@ function forfeit() {
   if(game.playOnline == "Yes"){
     leave(game.nick,game.password,game.hash);
   }else {
-  gamesWonByPC++; 
+
+    let posPlayer = 0;
+    let posComputer = 0;
+    
+    for(let i = 0; i < offlineRankings.length; i++) {
+      if (offlineRankings[i].nick == game.nick) posPlayer = i;
+      if (offlineRankings[i].nick == 'computer') posComputer = i;
+    }
+
+    if (posPlayer == null) {
+      posPlayer = offlineRankings.length;
+      offlineRankings[posPlayer] = {nick: game.nick, victories: 0, games: 0};
+    }
+    
+    offlineRankings[posPlayer].games++;
+    offlineRankings[posComputer].games++;
+    offlineRankings[posComputer].victories++;
+    
+    sortOfflineRankings();
+
+  //gamesWonByPC++; 
   replaceGameMessages(
     "You have forfeited the game. This point goes to the Opponent."
   );
-  document.getElementById("opponentScore").innerHTML = gamesWonByPC;
+  //document.getElementById("opponentScore").innerHTML = gamesWonByPC;
+  updateRankingsTable('offline',offlineRankings);
   }
   
 } /* end of forfeit function */
