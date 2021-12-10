@@ -115,8 +115,29 @@ window.addEventListener("load", function () {
 
   const authAreaLoginButton = document.getElementById("authAreaLoginButton");
   authAreaLoginButton.addEventListener("click", login);
+
+  const updateOnlineRankings = document.getElementById("updateOnlineRankings");
+  updateOnlineRankings.addEventListener("click", ranking);
+
+  ranking();
+
+  const temp = localStorage.getItem("ranking");
+  if (temp != null) {
+    const data = JSON.parse(temp);
+    offlineRankings.length = data.length;
+    for (let i = 0; i < data.length; i++) {
+      offlineRankings[i] = data[i];
+    }
+  }
 }); /* end of window loading */
 
+window.addEventListener("unload", function () {
+  localStorage.setItem("ranking", JSON.stringify(offlineRankings));
+});
+
 const game = new Mancala();
-let gamesWonByPlayer = 0;
-let gamesWonByPC = 0;
+
+const offlineRankings = [{ nick: "computer", victories: 0, games: 0 }];
+
+//let gamesWonByPlayer = 0;
+//let gamesWonByPC = 0;
