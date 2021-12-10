@@ -70,6 +70,9 @@ async function notify(nick, password, game, move) {
 /*
  */
 async function update(nick, gamehash) {
+
+  const serverMessages = document.getElementById("serverMessages");
+
   const url = serverurl + "update?nick=" + nick + "&game=" + gamehash;
 
   const eventSource = new EventSource(url);
@@ -81,6 +84,8 @@ async function update(nick, gamehash) {
       if ("board" in data) {
         if (game.statusPair == "Pairing") {
           game.statusPair = "Paired";
+
+          serverMessages.innerHTML = "You are now paired with another player";
 
           for (player in data.board.sides) {
             if (player != game.nick) game.nickOpponent = player;
@@ -110,6 +115,7 @@ async function update(nick, gamehash) {
         }
         game.statusPair = null;
         eventSource.close();
+        serverMessages.innerHTML = "This online game is over";
       }
     }
   };
