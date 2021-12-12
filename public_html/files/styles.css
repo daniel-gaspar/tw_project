@@ -134,7 +134,7 @@ body {
 }
 
 #tabGameRules {
-  left: 13.8%;
+  left: 8%;
 }
 
 #tabGameRules.open {
@@ -157,7 +157,7 @@ body {
 }
 
 #tabGameScores {
-  left: 43.5%;
+  left: 29%;
 }
 
 #tabGameScores.open {
@@ -169,7 +169,7 @@ body {
 }
 
 #tabGameSettings {
-  left: 73.2%;
+  left: 50%;
 }
 
 #tabGameSettings.open {
