@@ -21,8 +21,7 @@ async function register(nick = "dgaspar", password = "123456789") {
   const getFetchResult = await getfetch("register", object);
 
   if (!("error" in getFetchResult)) {
-    document.getElementById("serverMessages").innerHTML =
-      "Welcome " + nick + "!";
+    replaceServerMessages("Welcome " + nick + "!");
     game.onlineStatus = "LoggedIn";
     game.nick = nick;
     game.password = password;
@@ -108,7 +107,6 @@ async function update(nick, gamehash) {
           }
         } else {
           if(data.winner == null) {
-            const serverMessages = document.getElementById("serverMessages");
             serverMessages.innerHTML = "You have left the pairing process.";
           }
           else { replaceGameMessages("You have forfeited. Opponent Wins."); }
@@ -117,6 +115,8 @@ async function update(nick, gamehash) {
         eventSource.close();
         serverMessages.innerHTML = "This online game is over";
       }
+    } else {
+      serverMessages.innerHTML = "Error: " + data.error;
     }
   };
 } /* end of update function */
@@ -130,9 +130,7 @@ async function getfetch(command, object) {
   if ("error" in parsed) {
     console.log("this has an error");
 
-    const serverMessages = document.getElementById("serverMessages");
-
-    serverMessages.innerHTML = parsed.error;
+    replaceServerMessages("Error: " + parsed.error);
   }
 
   return parsed;
