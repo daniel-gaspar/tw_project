@@ -100,7 +100,6 @@ body {
   color: white;
   border-radius: 10px;
   border-top-left-radius: 0px;
-  overflow: auto;
   padding: 5px;
 }
 
@@ -150,6 +149,7 @@ body {
 }
 
 #tabGameScores {
+  top: -70%;
   left: 29%;
 }
 
