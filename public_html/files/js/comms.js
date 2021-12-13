@@ -8,7 +8,9 @@ async function ranking() {
 
   const getFetchResult = await getfetch("ranking", object);
 
-  if(!("error" in getFetchResult)) { updateRankingsTable('online',getFetchResult.ranking); }
+  if (!("error" in getFetchResult)) {
+    updateRankingsTable("online", getFetchResult.ranking);
+  }
 
   //console.log(getFetchResult);
 } /* end of ranking function */
@@ -69,7 +71,6 @@ async function notify(nick, password, game, move) {
 /*
  */
 async function update(nick, gamehash) {
-
   const serverMessages = document.getElementById("serverMessages");
 
   const url = serverurl + "update?nick=" + nick + "&game=" + gamehash;
@@ -91,9 +92,8 @@ async function update(nick, gamehash) {
           }
 
           game.turn = game.nick == data.board.turn ? "Player" : "Opponent";
-        } else {
-          game.updateFromBoard(data.board);
         }
+        game.updateFromBoard(data.board);
       }
 
       if ("winner" in data) {
@@ -106,10 +106,15 @@ async function update(nick, gamehash) {
             replaceGameMessages("The Game Is Over. It's a Draw.");
           }
         } else {
-          if(data.winner == null) {
+          if (data.winner == null) {
             serverMessages.innerHTML = "You have left the pairing process.";
+          } else {
+            if (data.winner != game.nick) {
+              replaceGameMessages("You have forfeited. Opponent Wins.");
+            } else {
+              replaceGameMessages("Your Opponent has forfeited. You win!");
+            }
           }
-          else { replaceGameMessages("You have forfeited. Opponent Wins."); }
         }
         game.statusPair = null;
         eventSource.close();
