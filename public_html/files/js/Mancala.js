@@ -88,6 +88,8 @@ class Mancala {
     }
     this.turn = (board.turn == this.nick) ? "Player" : "Opponent";
 
+    replaceGameMessages("It is " + board.turn + "'s turn to play.");
+
     updateDisplay();
   }
 
