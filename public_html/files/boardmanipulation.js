@@ -179,3 +179,8 @@ function replaceGameMessages(message) {
   const gameMessages = document.getElementById("gameMessages");
   gameMessages.innerHTML = message;
 } /* end of replaceGameMessages function */
+
+function replaceServerMessages(message) {
+  const serverMessages = document.getElementById("serverMessages");
+  serverMessages.innerHTML = message;
+}
