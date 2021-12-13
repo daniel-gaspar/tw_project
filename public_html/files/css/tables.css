@@ -1,0 +1,56 @@
+.scoreTable {
+  display: table;
+  width: 100%;
+  border: 1px solid white;
+  border-right: 0;
+  border-bottom: 0;
+}
+
+.scoreTableCaption {
+  display: table-caption;
+
+  color: black;
+  text-align: center;
+  font-size: 120%;
+  font-weight: bold;
+
+  background: lightgray;
+
+  border: 1px solid white;
+  border-bottom: 0;
+
+  padding: 5px;
+
+}
+
+.scoreTableHeader {
+  display: table-header-group;
+}
+
+.scoreTableHeaderCell {
+  display: table-cell;
+  text-align: center;
+  font-size: 110%;
+  font-weight: bold;
+
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
+
+  padding: 5px;
+}
+
+.scoreTableBody {
+  display: table-row-group;
+}
+
+.scoreTableRow {
+  display: table-row;
+}
+
+.scoreTableCell {
+  display: table-cell;
+  text-align: center;
+  border-right: 1px solid white;
+  border-bottom: 1px solid white;
+  padding: 5px;
+}
