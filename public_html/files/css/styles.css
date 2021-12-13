@@ -1,0 +1,328 @@
+body {
+  font-family: helvetica;
+}
+
+.topBar {
+  height: 30px;
+  position: relative;
+  z-index: 9999;
+  display: flex;
+  width: 100%;
+}
+
+.clickable:hover {
+  cursor: pointer;
+}
+
+.topBarItem{
+  height: 100%;
+}
+
+#authAreaButton {
+  display: flex;
+  flex-direction: column;
+  width: 5%;
+  margin-right: 20px;
+}
+
+#authAreaButton > span {
+  display: block;
+  height: 3px;
+  margin: auto;
+  width: 40px;
+  background-color: blue;
+  transition-timing-function: linear;
+  transition-duration: 1s;
+}
+
+#authAreaButton.open > span:first-child {
+  transform: translateY(6px) rotate(45deg);
+}
+
+#authAreaButton.open > span:nth-child(2) {
+  transform: rotateY(90deg);
+}
+
+#authAreaButton.open > span:last-child {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+#authArea {
+  display: inline-block;
+  position: absolute;
+  opacity: 0.9;
+  z-index: 888;
+  top: -20vw;
+  left: -20vw;
+  transition: 1s;
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+  border-top-left-radius: 0px;
+  padding: 1vh;
+}
+
+#authArea.open {
+  top: 50px;
+  left: 2%;
+}
+
+.button {
+  margin: auto;
+  background: lightgray;
+  color: black;
+  border: 2px;
+  border-style: solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 2px 2px 10px black,
+              inset 0px 0px 5px black;
+}
+
+#authAreaLoginButton {
+  width: 100px;
+  height: 20px;
+  box-shadow: 2px 2px 5px white,
+              inset 0px 0px 5px black;
+}
+
+#forfeitButton {
+  width: 10%;
+  height: 5%;
+}
+
+.tempFloatingTab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  opacity: 0.9;
+  z-index: 888;
+  top: -50%;
+  transition: 1s;
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+  border-top-left-radius: 0px;
+  overflow: auto;
+  padding: 5px;
+}
+
+.selectionBarItem {
+  margin-left: 10px;
+  margin-right: 10px;
+  background: orange;
+  border: 2px;
+  border-style: solid;
+  border-radius: 10px;
+  width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#serverMessages {
+  margin-left: auto;
+  margin-right: 0;
+  border: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#tabGameRules {
+  left: 8%;
+}
+
+#tabGameRules.open {
+  top: 50px;
+}
+
+.rulesList {
+  font-size: 110%;
+  font-weight: bold;
+}
+
+.rulesListContainer {
+  display: none;
+}
+
+.rulesListContainer.open {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#tabGameScores {
+  left: 29%;
+}
+
+#tabGameScores.open {
+  top: 50px;
+}
+
+#onlineScores, #offlineScores {
+  display:none;
+}
+
+#tabGameSettings {
+  left: 50%;
+}
+
+#tabGameSettings.open {
+  top: 50px;
+}
+
+#settingsPits {
+  display: flex;
+}
+
+.settingsPitsSpans {
+  text-align: center;
+  vertical-align: bottom;
+}
+
+#settingsStartGameButton {
+  margin: auto;
+  width: 50%;
+  color: white;
+  font-weight: bold;
+  font-size: 120%;
+  background: linear-gradient(
+    124deg,
+    #ff2400,
+    #e81d1d,
+    #e8b71d,
+    #e3e81d,
+    #1de840,
+    #1ddde8,
+    #2b1de8,
+    #dd00f3,
+    #dd00f3
+  );
+  border-radius: 10px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.pageContent {
+  display: flex;
+  background: black;
+}
+
+.pageContentItem {
+  margin: 2px;
+  background: white;
+  height: 60vh;
+}
+
+#playTable, #gameStatus {
+  display: flex;
+  flex-direction: column;
+}
+
+#playTable {
+  margin-right: 1px;
+  width: 80%;
+}
+
+#gameStatus {
+  margin-left: 1px;
+  width: 20%;
+}
+
+#gameBoard, #gameStatusBox {
+  margin: auto;
+  width: 90%;
+  border: 1px;
+  padding: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+#gameBoard {
+  height: 40%;
+  background-color: rgba(204,102,0,0.7);
+  background-image: url("../img/wood.png");
+}
+
+#gameStatusBox {
+  height: 10%;
+  margin-top: 20%;
+}
+
+.pit {
+  position: relative;
+  z-index: 100;
+  margin: auto;
+  border: 1px;
+  border-style: solid;
+  height: 95%;
+  border-radius: 50px;
+  background-color: rgba(0, 0, 0, 0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.store {
+  width: 8.3%;
+  height: 99%;
+}
+
+.pitStatus {
+  border-radius: 0;
+  background-color: transparent;
+}
+
+#storeOpponent {
+  margin-right: 2px;
+}
+
+#storePlayer {
+  margin-left: 2px;
+}
+
+#storeOpponentStatus {
+  margin-right: 0;
+}
+
+#storePlayerStatus {
+  margin-left: 0;
+}
+
+.pitsRow {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  align-content: center;
+  justify-content: center;
+  height: 49%;
+}
+
+#gamePitsOpponent,
+#gamePitsOpponentStatus {
+  flex-direction: row-reverse;
+}
+
+.seed {
+  z-index: 200;
+  position: absolute;
+  background: radial-gradient(circle, rgba(0,14,255,0.5522584033613445) 0%, rgba(255,0,0,1) 54%);
+  border: 1px;
+  border-style: solid;
+  border-color: darkred;
+  border-radius: 100px / 200px;
+  height: 20px;
+  width: 7px;
+}
+
+.gameMessages {
+  margin: auto;
+}
