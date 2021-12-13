@@ -129,11 +129,9 @@ window.addEventListener("load", function () {
       offlineRankings[i] = data[i];
     }
   }
-}); /* end of window loading */
 
-window.addEventListener("unload", function () {
-  localStorage.setItem("ranking", JSON.stringify(offlineRankings));
-});
+  updateRankingsTable('offline',offlineRankings);
+}); /* end of window loading */
 
 const game = new Mancala();
 
