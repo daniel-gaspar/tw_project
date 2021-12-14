@@ -1,4 +1,4 @@
-("use strict");
+"use strict";
 
 /* function to toggle some elements between their CSS classes, namely to display them or not */
 function toggleElementDisplayOpen() {

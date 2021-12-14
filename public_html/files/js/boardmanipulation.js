@@ -1,4 +1,4 @@
-("use strict");
+"use strict";
 
 /* creates all the necessary elements for the Game Board and the Game Status */
 function drawBoard(

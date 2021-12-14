@@ -1,4 +1,4 @@
-("use strict");
+"use strict";
 
 /* function to generate a random number, between a minimum and a Maximum. Used to randomly distribute the seeds inside a pit */
 function getRandomNumber(min, max) {
@@ -52,7 +52,7 @@ function updateRankingsTable(status, rankingsArray) {
   const tableBody = document.createElement("div");
   tableBody.classList.add("scoreTableBody");
 
-  for (player of rankingsArray) {
+  for (let player of rankingsArray) {
     const tableRow = document.createElement("div");
     tableRow.classList.add("scoreTableRow");
     

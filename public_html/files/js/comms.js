@@ -1,4 +1,4 @@
-("use strict");
+"use strict";
 
 const serverurl = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 
@@ -87,7 +87,7 @@ async function update(nick, gamehash) {
 
           serverMessages.innerHTML = "You are now paired with another player";
 
-          for (player in data.board.sides) {
+          for (let player in data.board.sides) {
             if (player != game.nick) game.nickOpponent = player;
           }
 

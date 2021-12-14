@@ -1,4 +1,4 @@
-("use strict");
+"use strict";
 
 class Mancala {
   /* constructs the Mancala object */

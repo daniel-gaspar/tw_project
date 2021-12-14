@@ -1,4 +1,4 @@
-("use strict");
+"use strict";
 
 /* adds Event Listeners to each "reactable" element, upon loading the page */
 window.addEventListener("load", function () {
