@@ -153,6 +153,7 @@ function gamePlayerPlay(pit) {
         "It's not your turn. Please allow the Opponent to finish his play."
       );
     } else {
+      animateSeeds(this,game.pits[pit],pit);
       if (game.playOnline == "Yes") {
         notify(game.nick, game.password, game.hash, pit);
       } else {
