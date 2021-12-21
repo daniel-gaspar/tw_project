@@ -114,6 +114,69 @@ function throwSeed (startingElement,receivingElement) {
 
 }
 
+function fireworks(){
+
+  const body = document.querySelector('body');
+
+  const canvas = document.createElement('canvas');
+  canvas.style.position = 'absolute';
+  canvas.style.top = 0;
+  canvas.style.left = 0;
+  canvas.setAttribute('width', window.innerWidth);
+  canvas.setAttribute('height',window.innerHeight);
+
+  body.appendChild(canvas);
+  
+  const gc = canvas.getContext('2d');
+
+  class Particle {
+    constructor(x,y,radius, color, velocity) {
+      this.x = x;
+      this.y = y;
+      this.radius = radius;
+      this.color = color;
+      this.velocity = velocity;
+    }
+  
+    draw(){
+      gc.beginPath();
+      gc.arc(this.x,this.y,this.radius, 0, Math.PI*2, false);
+      gc.fillStyle = this.color;
+      gc.fill();
+      gc.closePath();
+    }
+
+    update(){
+      this.draw();
+      this.x += this.velocity.x;
+      this.y += this.velocity.y;
+    }
+  }
+
+  const particles = [];
+
+  const x = getRandomNumber(0,window.innerWidth);
+  const y = getRandomNumber(0,window.innerHeight);
+
+  const particleCount = 400;
+
+  const angleIncrement = Math.PI * 2 / particleCount;
+
+  for(let i = 0; i < particleCount; i++){
+    particles.push(new Particle(x,y,5,'red', {x:Math.cos(angleIncrement*i)*Math.random(), y:Math.sin(angleIncrement*i)*Math.random()}));
+  }
+
+  function animateFireworks(){
+    requestAnimationFrame(animateFireworks);
+    gc.clearRect(0,0,canvas.width,canvas.height);
+
+    particles.forEach( (particle) => { particle.update(); });
+  }
+  
+  animateFireworks();
+}
+
+
 
 
 
