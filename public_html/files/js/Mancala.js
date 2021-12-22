@@ -315,6 +315,7 @@ class Mancala {
       if (this.value[1] == Mancala.WINNING_SCORE) {
         replaceGameMessages("The Game Is Over. Player Wins.");
         offlineRankings[posPlayer].victories++;
+        for(let i = 0; i < 10; i++) fireworks();
         //gamesWonByPlayer++;
         //document.getElementById("playerScore").innerHTML = gamesWonByPlayer;
       } /* end of verifying if the Player won */
