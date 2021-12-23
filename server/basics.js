@@ -2,11 +2,12 @@
 
 const fs = require("fs");
 const encryption = require("./encryption.js");
+const errormessages = require("./serverconf.js").errormessages;
 
-const rankings = {};
-const users = {};
-const rankingsFile = "./storage/rankings.txt";
-const usersFile = "./storage/users.txt";
+const rankings = require("./serverconf.js").rankings;
+const users = require("./serverconf.js").users;
+const rankingsFile = require("./serverconf.js").rankingsFile;
+const usersFile = require("./serverconf.js").usersFile;
 
 const encoding = "utf8";
 
@@ -48,7 +49,7 @@ module.exports.login = function (reqBody) {
       if (encryption.verify(users[nick], password)) {
         return {};
       }
-      return { error: "User registered with a different password" };
+      return { error: errormessages['login'] };
     } else {
       const encryptedPassword = encryption.encrypt(password);
       users[nick] = encryptedPassword;
@@ -60,6 +61,6 @@ module.exports.login = function (reqBody) {
       return {};
     }
   } else {
-    return { error: "Invalid Arguments" };
+    return { error: errormessages['arguments'] };
   }
 };
