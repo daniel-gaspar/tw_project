@@ -6,6 +6,7 @@ const conf = require("./serverconf.js");
 const updater = require("./update.js");
 const playerInputs = require("./playerInputs.js");
 const basics = require("./basics.js");
+const errormessages = require("./serverconf.js").errormessages;
 
 const headers = {
   sse: {
@@ -73,26 +74,12 @@ function doPost(pathname, reqBody) {
   switch (pathname) {
     case "/register":
       data = basics.login(reqBody);
-      if ("error" in data) {
-        if (data.error == "Invalid Arguments") {
-          answer.status = 400;
-        } else answer.status = 401;
-      }
-      answer.body = JSON.stringify(data);
       break;
     case "/ranking":
       data = basics.get(reqBody);
-      if ("error" in data) {
-        answer.status = 400;
-      }
-      answer.body = JSON.stringify(data);
       break;
     case "/join":
       data = playerInputs.join(reqBody);
-      if ("error" in data) {
-        answer.status = 400;
-      }
-      answer.body = JSON.stringify(data);
       break;
     case "/notify":
       break;
@@ -101,6 +88,19 @@ function doPost(pathname, reqBody) {
     default:
       answer.status = 404;
       break;
+  }
+
+  answer.body = JSON.stringify(data);
+
+  if ("error" in data) {
+    switch (data.error) {
+      case errormessages["login"]:
+        answer.status = 401;
+        break;
+      default:
+        answer.status = 400;
+        break;
+    }
   }
 
   return answer;
