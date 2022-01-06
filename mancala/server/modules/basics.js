@@ -21,27 +21,31 @@ fs.readFile(rankingsFile, encoding, function (err, data) {
 });
 
 fs.readFile(usersFile, encoding, function (err, data) {
-    if (!err) {
-      const parsedUsers = JSON.parse(data);
-      for (let user in parsedUsers) {
-        users[user] = parsedUsers[user];
-      }
+  if (!err) {
+    const parsedUsers = JSON.parse(data);
+    for (let user in parsedUsers) {
+      users[user] = parsedUsers[user];
     }
-    if (err) {
-      console.log("error" + err);
-    }
-  });
+  }
+  if (err) {
+    console.log("error" + err);
+  }
+});
 
-module.exports.get = function (reqBody) {
+function get(reqBody) {
   if (Object.keys(reqBody).length == 0) {
     return rankings;
   } else {
     return { error: "Invalid Arguments" };
   }
-};
+}
 
-module.exports.login = function (reqBody) {
-  if (Object.keys(reqBody).length == 2 && "nick" in reqBody && "password" in reqBody) {
+function login(reqBody) {
+  if (
+    Object.keys(reqBody).length == 2 &&
+    "nick" in reqBody &&
+    "password" in reqBody
+  ) {
     const nick = reqBody.nick;
     const password = reqBody.password;
 
@@ -49,7 +53,7 @@ module.exports.login = function (reqBody) {
       if (encryption.verify(users[nick], password)) {
         return {};
       }
-      return { error: errormessages['login'] };
+      return { error: errormessages["login"] };
     } else {
       const encryptedPassword = encryption.encrypt(password);
       users[nick] = encryptedPassword;
@@ -61,6 +65,8 @@ module.exports.login = function (reqBody) {
       return {};
     }
   } else {
-    return { error: errormessages['arguments'] };
+    return { error: errormessages["arguments"] };
   }
-};
+}
+
+module.exports = { get, login };

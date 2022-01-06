@@ -1,12 +1,15 @@
 "use strict";
 
 const http = require("http");
+const path = require("path");
 const url = require("url");
+const fs = require("fs");
 const conf = require("./server/modules/serverconf.js");
 const updater = require("./server/modules/update.js");
 const playerInputs = require("./server/modules/playerInputs.js");
 const basics = require("./server/modules/basics.js");
 const errormessages = require("./server/modules/serverconf.js").errormessages;
+const { fsyncSync } = require("fs");
 
 const headers = {
   sse: {
@@ -20,6 +23,11 @@ const headers = {
     "Cache-Control": "no-cache",
     "Access-Control-Allow-Origin": "*",
   },
+  plain: {
+    "Content-Type": "application/javascript",
+    "Cache-Control": "no-cache",
+    "Access-Control-Allow-Origin": "*",
+  },
 };
 
 http
@@ -30,7 +38,7 @@ http
 
     switch (request.method) {
       case "GET":
-        answer = doGet(pathname, request, response);
+        doGet(request, response);
         break;
       case "POST":
         const buffers = [];
@@ -41,33 +49,85 @@ http
 
         const reqBody = JSON.parse(Buffer.concat(buffers).toString());
 
-        answer = doPost(pathname, reqBody);
-
+        doPost(pathname, reqBody, response);
         break;
       default:
         answer.status = 404;
         break;
     }
 
-    if (answer.status === undefined) {
-      answer.status = 200;
-    }
-
-    if (answer.style === undefined) {
-      answer.style = "json";
-    }
+    if (answer.status === undefined) answer.status = 200;
+    if (answer.style === undefined) answer.style = "plain";
 
     response.writeHead(answer.status, headers[answer.style]);
-    response.write(answer.body);
-    if (answer.style === "json") {
-      response.end();
-    }
+    if (answer.style === "plain") response.end();
   })
   .listen(conf.PORT);
 
-function doGet(pathname, request, response) {}
+function doGet(request, response) {
+  const pathname = getPathname(request);
+  if (pathname === null) {
+    response.writeHead(403); // Forbidden
+    response.end();
+  } else
+    fs.stat(pathname, (err, stats) => {
+      if (err) {
+        response.writeHead(500); // Internal Server Error
+        response.end();
+      } else if (stats.isDirectory()) {
+        if (pathname.endsWith("/"))
+          doGetPathname(pathname + conf.defaultIndex, response);
+        else {
+          response.writeHead(
+            301, // Moved Permanently
+            { Location: pathname + "/" }
+          );
+          response.end();
+        }
+      } else doGetPathname(pathname, response);
+    });
+}
 
-function doPost(pathname, reqBody) {
+function getPathname(request) {
+  const purl = url.parse(request.url);
+  let pathname = path.normalize(conf.documentRoot + purl.pathname);
+
+  if (!pathname.startsWith(conf.documentRoot)) pathname = null;
+
+  return pathname;
+}
+
+function doGetPathname(pathname, response) {
+  const mediaType = getMediaType(pathname);
+  const encoding = isText(mediaType) ? "utf8" : null;
+
+  fs.readFile(pathname, encoding, (err, data) => {
+    if (err) {
+      response.writeHead(404); // Not Found
+      response.end();
+    } else {
+      response.writeHead(200, { "Content-Type": mediaType });
+      response.end(data);
+    }
+  });
+}
+
+function getMediaType(pathname) {
+  const pos = pathname.lastIndexOf(".");
+  let mediaType;
+
+  if (pos !== -1) mediaType = conf.mediaTypes[pathname.substring(pos + 1)];
+
+  if (mediaType === undefined) mediaType = "text/plain";
+  return mediaType;
+}
+
+function isText(mediaType) {
+  if (mediaType.startsWith("image")) return false;
+  else return true;
+}
+
+function doPost(pathname, reqBody, response) {
   const answer = {};
   let data;
 
@@ -90,7 +150,11 @@ function doPost(pathname, reqBody) {
       break;
   }
 
+  if (answer.status === undefined) {
+    answer.status = 200;
+  }
   answer.body = JSON.stringify(data);
+  answer.style = "json";
 
   if ("error" in data) {
     switch (data.error) {
@@ -103,5 +167,11 @@ function doPost(pathname, reqBody) {
     }
   }
 
-  return answer;
+  response.writeHead(answer.status, headers[answer.style]);
+  response.write(answer.body);
+  if (answer.style === "json") {
+    response.end();
+  }
+
+  //return answer;
 }

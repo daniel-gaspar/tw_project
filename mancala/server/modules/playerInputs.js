@@ -3,17 +3,15 @@
 const crypto = require("crypto");
 const errormessages = require("./serverconf.js").errormessages;
 
-const groups = require(".serverconf.js").groups;
+const groups = require("./serverconf.js").groups;
 
-module.exports.join = function (reqBody) {
-  if (
-    Object.keys(reqBody).length == 5 &&
+function join(reqBody) {
+  if (Object.keys(reqBody).length == 5 &&
     "nick" in reqBody &&
     "password" in reqBody &&
     "size" in reqBody &&
     "initial" in reqBody &&
-    "group" in reqBody
-  ) {
+    "group" in reqBody) {
     const nick = reqBody.nick;
     const password = reqBody.password;
     const size = reqBody.size;
@@ -24,10 +22,8 @@ module.exports.join = function (reqBody) {
       if (encryption.verify(users[nick], password)) {
         if (group in groups) {
           if (groups[group].players.length == 1) {
-            if (
-              groups[group].size == size &&
-              groups[group].initial == initial
-            ) {
+            if (groups[group].size == size &&
+              groups[group].initial == initial) {
               groups[group].players.push(nick);
             } else {
               return { error: errormessages["invalidconfig"] };
@@ -56,4 +52,13 @@ module.exports.join = function (reqBody) {
   } else {
     return { error: errormessages["arguments"] };
   }
-};
+}
+
+function notify(reqBody){
+
+}
+
+function leave(reqBody) {
+}
+
+module.exports = { join, notify, leave };
