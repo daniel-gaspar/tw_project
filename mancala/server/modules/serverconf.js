@@ -1,5 +1,5 @@
 "use strict";
-const documentRoot = "/home/dgaspar/aulasp/tw/tw_project/mancala"
+const documentRoot = "/home/dgaspar/aulasp/tw/tw_project/mancala";
 const defaultIndex = "index.html";
 const PORT = 8166;
 const mediaTypes = {
@@ -20,14 +20,14 @@ const errormessages = {
   overflow: "There are already two players for this group",
   invalidgame: "Invalid game reference",
   notturn: "Not your turn to play",
-  invalidmove: "invalid move",
+  invalidmove: "Invalid move",
 };
 
 const rankings = {};
 const users = {};
 const rankingsFile = "./server/storage/rankings.txt";
 const usersFile = "./server/storage/users.txt";
-const groups = {};
+const games = {};
 
 module.exports = {
   documentRoot,
@@ -39,5 +39,5 @@ module.exports = {
   users,
   rankingsFile,
   usersFile,
-  groups,
+  games,
 };
