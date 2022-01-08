@@ -9,7 +9,6 @@ const updater = require("./server/modules/update.js");
 const playerInputs = require("./server/modules/playerInputs.js");
 const basics = require("./server/modules/basics.js");
 const errormessages = require("./server/modules/serverconf.js").errormessages;
-const { fsyncSync } = require("fs");
 
 const headers = {
   sse: {
@@ -56,16 +55,17 @@ http
         break;
     }
 
-    if (answer.status === undefined) answer.status = 200;
-    if (answer.style === undefined) answer.style = "plain";
+    //if (answer.status === undefined) answer.status = 200;
+    //if (answer.style === undefined) answer.style = "plain";
 
-    response.writeHead(answer.status, headers[answer.style]);
-    if (answer.style === "plain") response.end();
+    //response.writeHead(answer.status, headers[answer.style]);
+    //if (answer.style === "plain") response.end();
   })
   .listen(conf.PORT);
 
 function doGet(request, response) {
   const pathname = getPathname(request);
+  console.log(pathname);
   if (pathname === null) {
     response.writeHead(403); // Forbidden
     response.end();
@@ -89,7 +89,7 @@ function doGet(request, response) {
 }
 
 function getPathname(request) {
-  const purl = url.parse(request.url);
+  const purl = url.parse(request.url,true);
   let pathname = path.normalize(conf.documentRoot + purl.pathname);
 
   if (!pathname.startsWith(conf.documentRoot)) pathname = null;
