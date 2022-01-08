@@ -18,7 +18,7 @@ class Mancala {
     this.difficultyAI = difficultyAIStatus;
     this.turn = gameTurnStatus;
     this.value = gameValue.slice();
-    this.nick = 'dgaspar';
+    this.nick = "dgaspar";
   } /* end of constructor */
 
   /* creates a "safe copy" of the Mancala Object */
@@ -78,15 +78,16 @@ class Mancala {
   } /* end of the update method */
 
   updateFromBoard(board) {
-    const offset = this.numberOfPits+1;
+    const offset = this.numberOfPits + 1;
 
     this.pits[this.storePlayerPosition] = board.sides[this.nick].store;
-    this.pits[this.storeOpponentPosition] = board.sides[this.nickOpponent].store;
-    for(let i=0; i<this.numberOfPits; i++) {
+    this.pits[this.storeOpponentPosition] =
+      board.sides[this.nickOpponent].store;
+    for (let i = 0; i < this.numberOfPits; i++) {
       this.pits[i] = board.sides[this.nick].pits[i];
-      this.pits[i+offset] = board.sides[this.nickOpponent].pits[i];
+      this.pits[i + offset] = board.sides[this.nickOpponent].pits[i];
     }
-    this.turn = (board.turn == this.nick) ? "Player" : "Opponent";
+    this.turn = board.turn == this.nick ? "Player" : "Opponent";
 
     replaceGameMessages("It is " + board.turn + "'s turn to play.");
 
@@ -114,8 +115,7 @@ class Mancala {
       for (let i = 0; i < this.numberOfPits; i++) {
         this.pits[this.storePlayerPosition] += this.pits[i];
         this.pits[i] = 0;
-        this.pits[this.storeOpponentPosition] +=
-          this.pits[i + offset];
+        this.pits[this.storeOpponentPosition] += this.pits[i + offset];
         this.pits[i + offset] = 0;
       }
       if (
@@ -302,20 +302,24 @@ class Mancala {
       let posPlayer;
       let posComputer;
 
-      for (let i = 0; i < offlineRankings.length ; i++) {
+      for (let i = 0; i < offlineRankings.length; i++) {
         if (offlineRankings[i].nick == this.nick) posPlayer = i;
-        if (offlineRankings[i].nick == 'computer') posComputer = i;
+        if (offlineRankings[i].nick == "computer") posComputer = i;
       }
 
       if (posPlayer == null) {
         posPlayer = offlineRankings.length;
-        offlineRankings[posPlayer] = {nick: this.nick, victories: 0, games: 0};
+        offlineRankings[posPlayer] = {
+          nick: this.nick,
+          victories: 0,
+          games: 0,
+        };
       }
 
       if (this.value[1] == Mancala.WINNING_SCORE) {
         replaceGameMessages("The Game Is Over. Player Wins.");
         offlineRankings[posPlayer].victories++;
-        for(let i = 0; i < 10; i++) fireworks();
+        for (let i = 0; i < 10; i++) fireworks();
         //gamesWonByPlayer++;
         //document.getElementById("playerScore").innerHTML = gamesWonByPlayer;
       } /* end of verifying if the Player won */
@@ -335,7 +339,7 @@ class Mancala {
       offlineRankings[posComputer].games++;
 
       sortOfflineRankings();
-      updateRankingsTable('offline',offlineRankings);
+      updateRankingsTable("offline", offlineRankings);
 
       updateDisplay();
     } /* end of game over */
@@ -344,7 +348,7 @@ class Mancala {
   /* returns the child with the Minimum Score */
   getMin(depth) {
     const children = [];
-    const offset = this.numberOfPits+1;
+    const offset = this.numberOfPits + 1;
     /* for loop to create a new Mancala Object for each possible play, and proceeds on it */
     for (let i = 0; i < this.numberOfPits; i++) {
       children[i] = this.copy();
