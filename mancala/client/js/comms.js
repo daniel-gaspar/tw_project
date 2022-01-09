@@ -2,6 +2,7 @@
 
 //const serverurl = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 const serverurl = "http://localhost:8166/";
+//const serverurl = "http://twserver.alunos.dcc.fc.up.pt:8166/";
 
 /* Sends Server a request for the ranking, converts JSON into object and visualize */
 async function ranking() {
