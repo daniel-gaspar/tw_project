@@ -1,5 +1,7 @@
 "use strict";
-const documentRoot = "/home/dgaspar/aulasp/tw/tw_project/mancala";
+
+const process = require('process');
+const documentRoot = process.cwd();
 const defaultIndex = "index.html";
 const PORT = 8166;
 const mediaTypes = {
