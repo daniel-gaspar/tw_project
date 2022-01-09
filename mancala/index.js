@@ -10,25 +10,6 @@ const playerInputs = require("./server/modules/playerInputs.js");
 const basics = require("./server/modules/basics.js");
 const errormessages = require("./server/modules/serverconf.js").errormessages;
 
-const headers = {
-  sse: {
-    "Content-Type": "text/event-stream",
-    "Cache-Control": "no-cache",
-    "Access-Control-Allow-Origin": "*",
-    Connection: "keep-alive",
-  },
-  json: {
-    "Content-Type": "application/json;",
-    "Cache-Control": "no-cache",
-    "Access-Control-Allow-Origin": "*",
-  },
-  plain: {
-    "Content-Type": "application/javascript",
-    "Cache-Control": "no-cache",
-    "Access-Control-Allow-Origin": "*",
-  },
-};
-
 http
   .createServer(async function (request, response) {
     const parsedURL = url.parse(request.url, true);
@@ -65,11 +46,31 @@ http
 
 function doGet(request, response) {
   const pathname = getPathname(request);
-  console.log(pathname);
   if (pathname === null) {
     response.writeHead(403); // Forbidden
     response.end();
-  } else
+  } else if (pathname == "/home/dgaspar/aulasp/tw/tw_project/mancala/update") {
+    const query = url.parse(request.url,true).query;
+    if ("nick" in query && "game" in query) {
+      const nick = query.nick;
+      const gamehash = query.game;
+      if (nick in conf.users) {
+        if(gamehash in conf.games) {
+          response.writeHead(200, conf.headers["sse"]);
+          updater.remember(response,gamehash);
+          request.on('close', () => updater.forget(response,gamehash));
+          setImmediate(() => updater.update(gamehash));
+        } else {
+
+        }
+      } else {
+
+      }
+    }
+    else {
+
+    }
+  } else {
     fs.stat(pathname, (err, stats) => {
       if (err) {
         response.writeHead(500); // Internal Server Error
@@ -86,10 +87,11 @@ function doGet(request, response) {
         }
       } else doGetPathname(pathname, response);
     });
+  }
 }
 
 function getPathname(request) {
-  const purl = url.parse(request.url,true);
+  const purl = url.parse(request.url, true);
   let pathname = path.normalize(conf.documentRoot + purl.pathname);
 
   if (!pathname.startsWith(conf.documentRoot)) pathname = null;
@@ -142,8 +144,10 @@ function doPost(pathname, reqBody, response) {
       data = playerInputs.join(reqBody);
       break;
     case "/notify":
+      data = playerInputs.notify(reqBody);
       break;
     case "/leave":
+      data = playerInputs.leave(reqBody);
       break;
     default:
       answer.status = 404;
@@ -167,7 +171,7 @@ function doPost(pathname, reqBody, response) {
     }
   }
 
-  response.writeHead(answer.status, headers[answer.style]);
+  response.writeHead(answer.status, conf.headers[answer.style]);
   response.write(answer.body);
   if (answer.style === "json") {
     response.end();
