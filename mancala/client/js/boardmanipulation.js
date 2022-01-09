@@ -66,7 +66,6 @@ function drawBoard(
   gameStatusBoxElement.appendChild(storePlayerStatus);
 
   for (let i = 0; i < numberOfPits; i++) {
-
     const pitPlayer = createPit("Player", i, numberOfPits);
     gamePitsPlayer.appendChild(pitPlayer);
     const pitPlayerStatus = createPit("PlayerStatus", i, numberOfPits);
@@ -78,7 +77,6 @@ function drawBoard(
     const pitOpponentStatus = createPit("OpponentStatus", i, numberOfPits);
     pitOpponentStatus.innerHTML = initialSeedNumber;
     gamePitsOpponentStatus.appendChild(pitOpponentStatus);
-
   }
 
   const gameMessages = document.createElement("div");
@@ -95,7 +93,6 @@ function drawBoard(
   playTableElement.appendChild(forfeitButton);
 
   gameBoardElement.style.borderStyle = "solid";
-
 } /* end of drawBoard function */
 
 /* generalized function to create Pits */
@@ -147,7 +144,7 @@ function updateDisplay() {
   storeOpponentStatus.innerHTML = game.pits[game.storeOpponentPosition];
   updateSeeds(storeOpponent, game.pits[game.storeOpponentPosition]);
 
-  const offset = game.numberOfPits+1;
+  const offset = game.numberOfPits + 1;
 
   for (let i = 0; i < game.numberOfPits; i++) {
     const seedsPlayer = game.pits[i];

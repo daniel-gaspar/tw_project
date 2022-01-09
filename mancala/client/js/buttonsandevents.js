@@ -70,12 +70,12 @@ function startGame() {
   ).value;
 
   game.updateMancala(
-    Array(2*numberOfPits+2).fill(initialSeedNumber),
+    Array(2 * numberOfPits + 2).fill(initialSeedNumber),
     gameStarter,
     [0, 0],
     numberOfPits,
     numberOfPits,
-    2*numberOfPits+1,
+    2 * numberOfPits + 1,
     difficultyAI
   );
 
@@ -83,17 +83,15 @@ function startGame() {
     const serverMessages = document.getElementById("serverMessages");
 
     if (game.onlineStatus == "LoggedIn") {
-
       game.playOnline = "Yes";
 
       serverMessages.innerHTML = "Entering pairing mode";
-      
-      join(game.nick, game.password, numberOfPits, initialSeedNumber);
 
+      join(game.nick, game.password, numberOfPits, initialSeedNumber);
     } else {
       serverMessages.innerHTML =
         "To start an online game, please authenticate yourself first";
-      return ;
+      return;
     }
   }
 
@@ -110,37 +108,35 @@ function startGame() {
 
 /* function to Forfeit. Increments number of games won by PC and writes a forfeit message */
 function forfeit() {
-  if(game.playOnline == "Yes"){
-    leave(game.nick,game.password,game.hash);
-  }else {
-
+  if (game.playOnline == "Yes") {
+    leave(game.nick, game.password, game.hash);
+  } else {
     let posPlayer = 0;
     let posComputer = 0;
-    
-    for(let i = 0; i < offlineRankings.length; i++) {
+
+    for (let i = 0; i < offlineRankings.length; i++) {
       if (offlineRankings[i].nick == game.nick) posPlayer = i;
-      if (offlineRankings[i].nick == 'computer') posComputer = i;
+      if (offlineRankings[i].nick == "computer") posComputer = i;
     }
 
     if (posPlayer == null) {
       posPlayer = offlineRankings.length;
-      offlineRankings[posPlayer] = {nick: game.nick, victories: 0, games: 0};
+      offlineRankings[posPlayer] = { nick: game.nick, victories: 0, games: 0 };
     }
-    
+
     offlineRankings[posPlayer].games++;
     offlineRankings[posComputer].games++;
     offlineRankings[posComputer].victories++;
-    
+
     sortOfflineRankings();
 
-  //gamesWonByPC++; 
-  replaceGameMessages(
-    "You have forfeited the game. This point goes to the Opponent."
-  );
-  //document.getElementById("opponentScore").innerHTML = gamesWonByPC;
-  updateRankingsTable('offline',offlineRankings);
+    //gamesWonByPC++;
+    replaceGameMessages(
+      "You have forfeited the game. This point goes to the Opponent."
+    );
+    //document.getElementById("opponentScore").innerHTML = gamesWonByPC;
+    updateRankingsTable("offline", offlineRankings);
   }
-  
 } /* end of forfeit function */
 
 /* function to start player Play. Triggered by clicking one of the Player's pits */
@@ -153,7 +149,7 @@ function gamePlayerPlay(pit) {
         "It's not your turn. Please allow the Opponent to finish his play."
       );
     } else {
-      animateSeeds(this,game.pits[pit],pit);
+      animateSeeds(this, game.pits[pit], pit);
       if (game.playOnline == "Yes") {
         notify(game.nick, game.password, game.hash, pit);
       } else {

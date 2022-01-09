@@ -106,7 +106,7 @@ function throwSeed(startingElement, receivingElement) {
   function frame(t) {
     const x = x0 + (x1 - x0) * t;
     const y = y0 + (y1 - y0) * t + ((5 * (x1 - x0)) / 2) * (0.5 - t) ** 2;
-    const a = (Math.PI / 2) * (t - 0.5) * ((x1 < x0) ? -1 : 1);
+    const a = (Math.PI / 2) * (t - 0.5) * (x1 < x0 ? -1 : 1);
 
     resetCanvas();
 

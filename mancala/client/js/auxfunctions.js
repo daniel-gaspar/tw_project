@@ -6,7 +6,7 @@ function getRandomNumber(min, max) {
 } /* end of getRandomNumber function */
 
 function sortOfflineRankings() {
-  offlineRankings.sort(function(a, b) {
+  offlineRankings.sort(function (a, b) {
     return b.victories - a.victories;
   });
 
@@ -23,14 +23,14 @@ function updateRankingsTable(status, rankingsArray) {
     element = document.getElementById("onlineScores");
   }
 
-  while(element.firstChild) {
-    element.removeChild(element.lastChild)
+  while (element.firstChild) {
+    element.removeChild(element.lastChild);
   }
 
   const tableCaption = document.createElement("div");
   tableCaption.classList.add("scoreTableCaption");
   tableCaption.innerHTML = capitalizeFirstLetter(status) + " Scores";
-  
+
   const tableHeader = document.createElement("div");
   tableHeader.classList.add("scoreTableHeader");
 
@@ -38,7 +38,7 @@ function updateRankingsTable(status, rankingsArray) {
   tableHeaderNick.classList.add("scoreTableHeaderCell");
   tableHeaderNick.innerHTML = "Nicks";
   tableHeader.appendChild(tableHeaderNick);
-  
+
   const tableHeaderVictories = document.createElement("div");
   tableHeaderVictories.classList.add("scoreTableHeaderCell");
   tableHeaderVictories.innerHTML = "Victories";
@@ -55,7 +55,6 @@ function updateRankingsTable(status, rankingsArray) {
   for (let player of rankingsArray) {
     const tableRow = document.createElement("div");
     tableRow.classList.add("scoreTableRow");
-    
 
     const tableCellNick = document.createElement("div");
     tableCellNick.classList.add("scoreTableCell");
@@ -78,7 +77,6 @@ function updateRankingsTable(status, rankingsArray) {
   element.appendChild(tableCaption);
   element.appendChild(tableHeader);
   element.appendChild(tableBody);
-
 }
 
 function capitalizeFirstLetter(string) {

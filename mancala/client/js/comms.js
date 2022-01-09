@@ -1,6 +1,7 @@
 "use strict";
 
-const serverurl = "http://twserver.alunos.dcc.fc.up.pt:8008/";
+//const serverurl = "http://twserver.alunos.dcc.fc.up.pt:8008/";
+const serverurl = "http://localhost:8166/";
 
 /* Sends Server a request for the ranking, converts JSON into object and visualize */
 async function ranking() {
@@ -100,7 +101,7 @@ async function update(nick, gamehash) {
         if ("board" in data) {
           if (data.winner == game.nick) {
             replaceGameMessages("The Game Is Over. Player Wins.");
-            for(let i = 0; i < 10; i++) fireworks();
+            for (let i = 0; i < 10; i++) fireworks();
           } else if (data.winner == game.nickOpponent) {
             replaceGameMessages("The Game Is Over. Opponent Wins.");
           } else {
@@ -114,7 +115,7 @@ async function update(nick, gamehash) {
               replaceGameMessages("You have forfeited. Opponent Wins.");
             } else {
               replaceGameMessages("Your Opponent has forfeited. You win!");
-              for(let i = 0; i < 10; i++) fireworks();
+              for (let i = 0; i < 10; i++) fireworks();
             }
           }
         }
