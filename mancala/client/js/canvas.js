@@ -98,8 +98,11 @@ function throwSeed(startingElement, receivingElement) {
     gc.translate(x, y);
     gc.rotate(a);
     gc.scale(2, 1);
-    gc.arc(0, 0, 20, 0, 2 * Math.PI);
-    gc.fillStyle = "brown";
+    gc.arc(0, 0, 10, 0, 2 * Math.PI);
+    const grd = gc.createRadialGradient(0, 0, 0, 0, 0, 10);
+    grd.addColorStop(0, "rgba(0, 14, 255, 0.5522584033613445)");
+    grd.addColorStop(1, "rgba(255, 0, 0, 1)");
+    gc.fillStyle = grd;
     gc.fill();
   }
 
@@ -156,11 +159,43 @@ function fireworks() {
     draw() {
       gc.save();
       gc.globalAlpha = this.alpha;
+
+      /* Drawing star code based on https://jsfiddle.net/m1erickson/8j6kdf4o/ */
+
+      let rot = (Math.PI / 2) * 3;
+      const SPIKES = 5;
+      let xx = this.x;
+      let yy = this.y;
+      const step = Math.PI / SPIKES;
+      const outerRadius = 15;
+      const innerRadius = 5;
+
       gc.beginPath();
-      gc.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+
+      gc.moveTo(this.x, this.y - outerRadius);
+
+      for (let i = 0; i < SPIKES; i++) {
+        xx = this.x + Math.cos(rot) * outerRadius;
+        yy = this.y + Math.sin(rot) * outerRadius;
+        gc.lineTo(xx, yy);
+        rot += step;
+
+        xx = this.x + Math.cos(rot) * innerRadius;
+        yy = this.y + Math.sin(rot) * innerRadius;
+        gc.lineTo(xx, yy);
+        rot += step;
+      }
+
+      gc.lineTo(this.x, this.y - outerRadius);
+      gc.closePath();
+      //gc.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+
+      gc.strokeStyle = "blue";
+      gc.stroke();
+
       gc.fillStyle = this.color;
       gc.fill();
-      gc.closePath();
+
       gc.restore();
     }
 
