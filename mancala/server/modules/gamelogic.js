@@ -7,6 +7,7 @@ function gameMove(gamehash, nick, move) {
   const player2 = games[gamehash].players[1];
 
   let remainingSeeds = games[gamehash].sides[nick].pits[move];
+  games[gamehash].sides[nick].pits[move] = 0;
   const numberOfPits = games[gamehash].size;
 
   let currentSide = nick;
@@ -39,7 +40,7 @@ function gameMove(gamehash, nick, move) {
       }
       if (currentSide == nick && seedsInCurrentPit == 0) {
         const opponent = player1 == nick ? player2 : player1;
-        const oppositePit = numberOfPits - move;
+        const oppositePit = numberOfPits - currentPosition - 1;
         games[gamehash].sides[nick].store++;
         games[gamehash].sides[nick].pits[currentPosition] = 0;
         games[gamehash].sides[nick].store +=
