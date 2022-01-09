@@ -12,6 +12,26 @@ const mediaTypes = {
   jpg: "image/jpeg",
 };
 
+const headers = {
+  sse: {
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    "Access-Control-Allow-Origin": "*",
+    "Connection": "keep-alive",
+    "Transfer-Encoding": "chunked",
+  },
+  json: {
+    "Content-Type": "application/json;",
+    "Cache-Control": "no-cache",
+    "Access-Control-Allow-Origin": "*",
+  },
+  plain: {
+    "Content-Type": "application/javascript",
+    "Cache-Control": "no-cache",
+    "Access-Control-Allow-Origin": "*",
+  },
+};
+
 const errormessages = {
   arguments: "Invalid Arguments",
   login: "User registered with a different password",
@@ -34,6 +54,7 @@ module.exports = {
   defaultIndex,
   PORT,
   mediaTypes,
+  headers,
   errormessages,
   rankings,
   users,
