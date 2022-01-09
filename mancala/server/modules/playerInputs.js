@@ -1,9 +1,12 @@
 "use strict";
 
 const crypto = require("crypto");
+const encryption = require("./encryption.js");
 const errormessages = require("./serverconf.js").errormessages;
 
 const games = require("./serverconf.js").games;
+const users = require("./serverconf.js").users;
+const updater = require("./update.js");
 const { gameMove } = require("./gamelogic.js");
 
 function join(reqBody) {
@@ -32,10 +35,15 @@ function join(reqBody) {
             games[gamehash].players.push(nick);
             const player1 = games[gamehash].players[0];
             const player2 = games[gamehash].players[1];
-            games[gamehash].sides[player1].store = 0;
-            games[gamehash].sides[player1].pits = Array(size).fill(initial);
-            games[gamehash].sides[player2].store = 0;
-            games[gamehash].sides[player2].pits = Array(size).fill(initial);
+            games[gamehash].sides = {};
+            games[gamehash].sides[player1] = {
+              store: 0,
+              pits: Array(size).fill(initial),
+            };
+            games[gamehash].sides[player2] = {
+              store: 0,
+              pits: Array(size).fill(initial),
+            };
             games[gamehash].turn =
               games[gamehash].players[Math.round(Math.random())];
           } else {
@@ -43,7 +51,7 @@ function join(reqBody) {
           }
         } else {
           games[gamehash] = {
-            players: [].push(nick),
+            players: [nick],
             size,
             initial,
           };
@@ -77,7 +85,8 @@ function notify(reqBody) {
         if (game in games) {
           if (games[game].turn == nick) {
             if (move >= 0 && move < games[game].size) {
-              gameMove(game,nick,move);
+              gameMove(game, nick, move);
+              updater.update(game);
               return {};
             } else {
               return { error: errormessages["invalidmove"] };
@@ -119,6 +128,7 @@ function leave(reqBody) {
               games[game].player[0] == nick
                 ? games[game].player[1]
                 : games[game].player[0];
+          updater.update(gamehash);
           return {};
         } else {
           return { error: errormessages["invalidgame"] };
