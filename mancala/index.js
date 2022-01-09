@@ -49,7 +49,7 @@ function doGet(request, response) {
   if (pathname === null) {
     response.writeHead(403); // Forbidden
     response.end();
-  } else if (pathname == "/home/dgaspar/aulasp/tw/tw_project/mancala/update") {
+  } else if (pathname == (conf.documentRoot+ '/update')) {
     const query = url.parse(request.url,true).query;
     if ("nick" in query && "game" in query) {
       const nick = query.nick;
