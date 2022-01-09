@@ -125,10 +125,10 @@ function leave(reqBody) {
             games[game].winner = null;
           } else
             games[game].winner =
-              games[game].player[0] == nick
-                ? games[game].player[1]
-                : games[game].player[0];
-          updater.update(gamehash);
+              games[game].players[0] == nick
+                ? games[game].players[1]
+                : games[game].players[0];
+          updater.update(game);
           return {};
         } else {
           return { error: errormessages["invalidgame"] };
